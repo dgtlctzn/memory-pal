@@ -4,3 +4,6 @@ package:
 
 deploy:
 	aws lambda update-function-code --function-name MemoryMan --zip-file fileb://memory-man-2.zip
+
+clean:
+	rm -rf memory-man-2.zip
