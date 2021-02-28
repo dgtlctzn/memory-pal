@@ -10,6 +10,9 @@ login:
 	cd functions && zip ../memory-login.zip login.py
 	aws lambda update-function-code --function-name MemoryLogin --zip-file fileb://memory-login.zip
 
+test:
+	.venv/bin/pytest ./tests/tests.py
+
 clean:
 	rm -rf memory-man-2.zip
 	rm -rf memory-login.zip
