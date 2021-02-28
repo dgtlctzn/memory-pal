@@ -30,6 +30,6 @@ def lambda_handler(event, context):
             'body': 'internal server error'
         }
     return {
-        'statusCode': 200,
+        'statusCode': 201,
         'body': 'inserted new user'
     }
