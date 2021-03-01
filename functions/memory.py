@@ -12,6 +12,21 @@ password = os.getenv('MYSQL_PASS')
 database = 'memory_db'
 
 
+def send_res(status, body):
+    return {
+        'statusCode': status,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Credentials': True,
+            'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+            'X-Requested-With': '*',
+        },
+        'body': body
+    }
+
+
 def lambda_handler(event, context):
     users = []
     try:
@@ -35,10 +50,7 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps(e)
         }
-    return {
-        'statusCode': 200,
-        'body': json.dumps(users)
-    }
+    return send_res(200, json.dumps(users))
 
 
 # if __name__ == '__main__':
