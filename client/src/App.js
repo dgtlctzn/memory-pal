@@ -10,7 +10,7 @@ const App = () => {
         method: "GET",
         url: "https://fd30zc1217.execute-api.us-east-1.amazonaws.com/test/",
       });
-      console.log(data)
+      console.log(data);
       setName(data[0].name + " is cool!");
     } catch (err) {
       console.log(err);

@@ -5,6 +5,7 @@ module.exports = {
   mode: "development",
   entry: path.join(__dirname, "src", "index.js"),
   output: {
+    publicPath: "/",
     path: path.join(__dirname, "dist"),
     filename: "bundle.js",
   },
@@ -44,12 +45,13 @@ module.exports = {
     ],
   },
   devServer: {
-    publicPath: "./dist/"
+    contentBase: "./dist",
+    hot: true
   },
   plugins: [
     new HtmlWebPackPlugin({
-      template: "./public/index.html",
-      filename: "./index.html",
+      template: path.join(__dirname, "public", "index.html"),
+      filename: 'index.html',
     }),
   ],
 };
