@@ -1,10 +1,10 @@
 import json
 import os
 
-import bcrypt
+import jwt
 from dotenv import load_dotenv
-from jwt import JWT
 from mysql.connector import connect, Error
+from passlib.hash import pbkdf2_sha256
 
 load_dotenv()
 
@@ -14,7 +14,6 @@ password = os.getenv('MYSQL_PASS')
 database = 'memory_db'
 
 jwt_secret = os.getenv('JWT_SECRET')
-instance = JWT()
 
 
 def send_res(status, body):
@@ -33,8 +32,8 @@ def send_res(status, body):
 
 
 def lambda_handler(event, context):
-    body = json.loads(event.body)
-    user_pass = body.get('user_pass')
+    body = json.loads(event.get('body'))
+    user_pass = body.get('hash_pass')
     user_email = body.get('user_email')
     user_phone = body.get('user_phone')
     user_name = body.get('user_name')
@@ -46,17 +45,17 @@ def lambda_handler(event, context):
             database=database
         ) as cnx:
             with cnx.cursor() as cursor:
-                cursor.execute(
-                    """SELECT email FROM Users WHERE email = %s""", user_email
-                )
-                if cursor:
-                    return send_res(409, {
+                check_user_query = """SELECT email FROM Users WHERE email = "%s" """ % user_email
+                cursor.execute(check_user_query)
+                if len(cursor.fetchall()):
+                    # if result.with_rows:
+                    return send_res(409, json.dumps({
                         'success': False,
                         'info': None,
                         'message': 'User already exists'
-                    })
+                    }))
                 else:
-                    hash_pass = bcrypt.hashpw(user_pass, bcrypt.gensalt())
+                    hash_pass = pbkdf2_sha256.hash(user_pass)
                     cursor.execute(
                         """INSERT INTO Users (name, email, password, phone) VALUES (%s, %s, %s, %s);""",
                         (user_name, user_email, hash_pass, user_phone)
@@ -67,7 +66,7 @@ def lambda_handler(event, context):
                         'hash_pass': hash_pass,
                         'user_phone': user_phone
                     }
-                    compact_jws = instance.encode(user_info, jwt_secret, alg='RS256')
+                    compact_jws = jwt.encode(user_info, jwt_secret, algorithm='HS256')
                     res_body = {
                         'success': True,
                         'info': compact_jws,
@@ -83,3 +82,13 @@ def lambda_handler(event, context):
             'message': 'Internal server error'
         }
         return send_res(500, json.dumps(res_body))
+
+
+if __name__ == '__main__':
+    event = {
+        "user_name": "Joseph Perry",
+        "user_email": "dgtlctzn7@gmail.com",
+        "user_phone": "404-358-3607",
+        "hash_pass": "katsu"
+    }
+    print(lambda_handler(event, ''))

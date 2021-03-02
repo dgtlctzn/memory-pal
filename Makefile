@@ -1,5 +1,10 @@
+build:
+	virtualenv --python=python3.8 .venv
+
 layer:
-	pip install -r requirements.txt -t ./layer/python/lib/python3.8/site-packages
+	pip freeze > requirements.txt
+	cd layer && mkdir python
+	pip install -r requirements.txt -t ./layer/python
 	cd layer && zip -r ../memory-layer.zip *
 
 main:
@@ -13,7 +18,13 @@ login:
 test:
 	.venv/bin/pytest ./tests/tests.py
 
-clean:
-	rm -rf memory-man-2.zip
-	rm -rf memory-login.zip
+clean_zip:
+	rm memory-login.zip
+	rm memory-layer.zip
+	cd layer && rm -rf python
+	rm memory-man-2.zip
 
+
+clean_env:
+	rm -rf .venv
+	rm -rf .pytest_cache
