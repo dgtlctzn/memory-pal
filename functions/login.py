@@ -32,12 +32,14 @@ def send_res(status, body):
 
 
 def lambda_handler(event, context):
-    body = json.loads(event.get('body'))
-    user_pass = body.get('hash_pass')
-    user_email = body.get('user_email')
-    user_phone = body.get('user_phone')
-    user_name = body.get('user_name')
     try:
+        body = json.loads(event.get('body'))
+
+        user_pass = body.get('hash_pass')
+        user_email = body.get('user_email')
+        user_phone = body.get('user_phone')
+        user_name = body.get('user_name')
+
         with connect(
             host=host,
             user=user,
@@ -48,7 +50,6 @@ def lambda_handler(event, context):
                 check_user_query = """SELECT email FROM Users WHERE email = "%s" """ % user_email
                 cursor.execute(check_user_query)
                 if len(cursor.fetchall()):
-                    # if result.with_rows:
                     return send_res(409, json.dumps({
                         'success': False,
                         'info': None,
@@ -74,7 +75,7 @@ def lambda_handler(event, context):
                     }
                     cnx.commit()
                     return send_res(201, json.dumps(res_body))
-    except Error as e:
+    except (Error, Exception) as e:
         print(e)
         res_body = {
             'success': False,
@@ -82,13 +83,3 @@ def lambda_handler(event, context):
             'message': 'Internal server error'
         }
         return send_res(500, json.dumps(res_body))
-
-
-if __name__ == '__main__':
-    event = {
-        "user_name": "Joseph Perry",
-        "user_email": "dgtlctzn7@gmail.com",
-        "user_phone": "404-358-3607",
-        "hash_pass": "katsu"
-    }
-    print(lambda_handler(event, ''))
