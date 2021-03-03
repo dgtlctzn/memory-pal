@@ -35,7 +35,7 @@ def lambda_handler(event, context):
     try:
         body = json.loads(event.get('body'))
 
-        user_pass = body.get('hash_pass')
+        user_pass = body.get('user_pass')
         user_email = body.get('user_email')
 
         with connect(

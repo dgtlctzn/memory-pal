@@ -15,6 +15,10 @@ signup:
 	cd functions && zip ../memory-signup.zip signup.py
 	aws lambda update-function-code --function-name MemoryLogin --zip-file fileb://memory-signup.zip
 
+login:
+	cd functions && zip ../memory-login.zip login.py
+	aws lambda update-function-code --function-name MemoryLogUserIn --zip-file fileb://memory-login.zip
+
 test:
 	.venv/bin/pytest ./tests/tests.py
 
