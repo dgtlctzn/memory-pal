@@ -20,7 +20,7 @@ login:
 	aws lambda update-function-code --function-name MemoryLogUserIn --zip-file fileb://memory-login.zip
 
 test:
-	.venv/bin/pytest ./tests/tests.py
+	.venv/bin/pytest tests.py
 
 clean_zip:
 	rm memory-login.zip
