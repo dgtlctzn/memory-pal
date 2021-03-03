@@ -27,7 +27,7 @@ def send_res(status, body):
             'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
             'X-Requested-With': '*',
         },
-        'body': body
+        'body': json.dumps(body)
     }
 
 
@@ -37,8 +37,6 @@ def lambda_handler(event, context):
 
         user_pass = body.get('hash_pass')
         user_email = body.get('user_email')
-        user_phone = body.get('user_phone')
-        user_name = body.get('user_name')
 
         with connect(
             host=host,
@@ -47,34 +45,32 @@ def lambda_handler(event, context):
             database=database
         ) as cnx:
             with cnx.cursor() as cursor:
-                check_user_query = """SELECT email FROM Users WHERE email = "%s" """ % user_email
+                check_user_query = """SELECT name, password, email FROM Users WHERE email = "%s" """ % user_email
                 cursor.execute(check_user_query)
-                if len(cursor.fetchall()):
-                    return send_res(409, json.dumps({
-                        'success': False,
-                        'info': None,
-                        'message': 'User already exists'
-                    }))
-                else:
-                    hash_pass = pbkdf2_sha256.hash(user_pass)
-                    cursor.execute(
-                        """INSERT INTO Users (name, email, password, phone) VALUES (%s, %s, %s, %s);""",
-                        (user_name, user_email, hash_pass, user_phone)
-                    )
-                    user_info = {
-                        'user_name': user_name,
-                        'user_email': user_email,
-                        'hash_pass': hash_pass,
-                        'user_phone': user_phone
-                    }
-                    compact_jws = jwt.encode(user_info, jwt_secret, algorithm='HS256')
-                    res_body = {
-                        'success': True,
-                        'info': compact_jws,
-                        'message': 'New user created'
-                    }
-                    cnx.commit()
-                    return send_res(201, json.dumps(res_body))
+                for result in cursor.fetchall():
+                    name, check_pass, email = result
+                    if pbkdf2_sha256.verify(user_pass, check_pass):
+                        user_info = {
+                            'user_name': name,
+                            'user_email': email
+                        }
+                        compact_jws = jwt.encode(user_info, jwt_secret, algorithm='HS256')
+                        return send_res(200, {
+                            'success': True,
+                            'info': compact_jws,
+                            'message': 'User in database'
+                        })
+                    else:
+                        return send_res(403, {
+                            'success': False,
+                            'info': None,
+                            'message': 'Unauthorized'
+                        })
+                return send_res(404, {
+                    'success': False,
+                    'info': None,
+                    'message': 'No user found'
+                })
     except (Error, Exception) as e:
         print(e)
         res_body = {
@@ -82,4 +78,4 @@ def lambda_handler(event, context):
             'info': None,
             'message': 'Internal server error'
         }
-        return send_res(500, json.dumps(res_body))
+        return send_res(500, res_body)
