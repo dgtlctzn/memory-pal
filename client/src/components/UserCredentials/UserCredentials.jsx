@@ -1,7 +1,20 @@
 import React from "react";
-import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  FormText,
+  FormFeedback,
+} from "reactstrap";
 
-const UserCredentials = ({credentials, handleInputChange, handleSignUp}) => {
+const UserCredentials = ({
+  credentials,
+  handleInputChange,
+  handleSignUp,
+  isInvalid,
+}) => {
   return (
     <Form onSubmit={handleSignUp}>
       <FormGroup>
@@ -12,8 +25,10 @@ const UserCredentials = ({credentials, handleInputChange, handleSignUp}) => {
           value={credentials.email}
           onChange={handleInputChange}
           id="exampleEmail"
-          placeholder="with a placeholder"
+          placeholder="forgetful@what.com"
+          invalid={isInvalid}
         />
+        <FormFeedback>User already exists with that email!</FormFeedback>
       </FormGroup>
       <FormGroup>
         <Label for="examplePassword">Password</Label>
@@ -23,7 +38,7 @@ const UserCredentials = ({credentials, handleInputChange, handleSignUp}) => {
           value={credentials.password}
           onChange={handleInputChange}
           id="examplePassword"
-          placeholder="password placeholder"
+          placeholder="$EcReTPa$$wOrD"
         />
       </FormGroup>
       <Button>Sign Up</Button>
