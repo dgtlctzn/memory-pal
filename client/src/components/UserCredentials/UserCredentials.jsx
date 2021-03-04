@@ -3,7 +3,7 @@ import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
 
 const UserCredentials = ({credentials, handleInputChange, handleSignUp}) => {
   return (
-    <Form>
+    <Form onSubmit={handleSignUp}>
       <FormGroup>
         <Label for="exampleEmail">Email</Label>
         <Input

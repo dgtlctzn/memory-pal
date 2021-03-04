@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 
+import API from "../../util/API.js";
 import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
 
 const SignUp = () => {
@@ -12,10 +12,19 @@ const SignUp = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value });
-    console.log(credentials);
   };
 
-  const handleSignUp = (e) => {};
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+
+    const { email, password } = credentials;
+    try {
+      const { data } = await API.signUpUser(email, password);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div>
