@@ -7,15 +7,18 @@ import UserInfoForm from "../../components/UserInfoForm/UserInfoForm.jsx";
 
 const formQuestions = [
   {
-    type: "name",
+    desc: "name",
+    type: "text",
     text: "What should we call you by?",
   },
   {
-    type: "phone",
+    desc: "phone",
+    type: "number",
     text: "What phone number would you like your reminder texts to be sent to?",
   },
   {
-    type: "birthday",
+    desc: "birthday",
+    type: "date",
     text:
       "What's your birthday? We'd like to wish you a happy birthday when it rolls around!",
   },
@@ -73,6 +76,7 @@ const UserInfo = () => {
         return index === page ? (
           <UserInfoForm
             key={index + 1}
+            desc={item.desc}
             type={item.type}
             text={item.text}
             userInfo={userInfo}

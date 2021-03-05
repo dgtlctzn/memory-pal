@@ -11,6 +11,7 @@ import {
 
 const UserInfoForm = ({
   type,
+  desc,
   text,
   userInfo,
   handleInputChange,
@@ -20,11 +21,11 @@ const UserInfoForm = ({
     <Form onSubmit={handleNext}>
       <FormGroup>
         <FormText color="muted">{text}</FormText>
-        <Label for="exampleEmail">{type}</Label>
+        <Label for="exampleEmail">{desc}</Label>
         <Input
-          type="text"
-          name={type}
-          value={userInfo[type]}
+          type={type}
+          name={desc}
+          value={userInfo[desc]}
           onChange={handleInputChange}
           //   id="exampleEmail"
           //   placeholder="forgetful@what.com"
