@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import API from "../../util/API.js";
+import AuthContext from "../../util/AuthContext.js";
 import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
 
 const SignUp = () => {
   const history = useHistory();
+  const {jwt, setJwt} = AuthContext();
 
   const [credentials, setCredentials] = useState({
     email: "",
@@ -28,6 +30,7 @@ const SignUp = () => {
       if (!data.success) {
         setIsInvalid(true);
       } else {
+        setJwt(data.info);
         history.push("/info");
       }
     } catch (err) {
