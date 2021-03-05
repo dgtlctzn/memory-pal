@@ -12,7 +12,7 @@ import {
   FormGroup,
   FormText,
   Label,
-  Col,
+  //   Col,
   Input,
 } from "reactstrap";
 
@@ -26,6 +26,20 @@ const formOptions = [
   { text: "What is the name of the event?", label: "Date of Event" },
 ];
 
+const radioForm = [
+  { val: 30, label: "One Month" },
+  { val: 21, label: "Three Weeks" },
+  { val: 14, label: "Two Weeks" },
+  { val: 7, label: "One Week" },
+  { val: 6, label: "Six Days" },
+  { val: 5, label: "Five Days" },
+  { val: 4, label: "Four Days" },
+  { val: 3, label: "Three Days" },
+  { val: 2, label: "Two Days" },
+  { val: 1, label: "One Day" },
+  { val: 0, label: "Day Of" },
+];
+
 const AddEvent = ({
   handleToggle,
   modal,
@@ -33,6 +47,9 @@ const AddEvent = ({
   setDate,
   date,
   event,
+  page,
+  handleNextPage,
+  handleAddReminder,
 }) => {
   return (
     <div>
@@ -40,40 +57,71 @@ const AddEvent = ({
       <Modal isOpen={modal} toggle={handleToggle}>
         <ModalHeader toggle={handleToggle}>Add a Reminder Event</ModalHeader>
         <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label for="exampleSelect">Type of Event</Label>
-              <Input
-                type="select"
-                name="select"
-                id="exampleSelect"
-                onChange={handleSelectEvent}
-              >
-                <option value={4}>Select</option>
-                <option value={0}>Birthday</option>
-                <option value={1}>Holiday</option>
-                <option value={2}>Cancel Subscription</option>
-                <option value={3}>Other</option>
-              </Input>
-            </FormGroup>
-            {event < 4 ? (
-              <div>
+          {page < 1 ? (
+            <div>
+              {" "}
+              <Form>
                 <FormGroup>
-                  <FormText>{formOptions[event].text}</FormText>
-                  <Input type="text" name="email" id="exampleEmail" />
+                  <Label for="exampleSelect">Type of Event</Label>
+                  <Input
+                    type="select"
+                    name="select"
+                    id="exampleSelect"
+                    onChange={handleSelectEvent}
+                  >
+                    <option value={4}>Select</option>
+                    <option value={0}>Birthday</option>
+                    <option value={1}>Holiday</option>
+                    <option value={2}>Cancel Subscription</option>
+                    <option value={3}>Other</option>
+                  </Input>
                 </FormGroup>
-                <Label for="exampleSelect">{formOptions[event].label}</Label>
-              </div>
-            ) : (
-              ""
-            )}
-          </Form>
-          <Calendar onChange={setDate} value={date} />
+                {event < 4 ? (
+                  <div>
+                    <FormGroup>
+                      <FormText>{formOptions[event].text}</FormText>
+                      <Input type="text" name="email" id="exampleEmail" />
+                    </FormGroup>
+                    <Label for="exampleSelect">
+                      {formOptions[event].label}
+                    </Label>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </Form>
+                <Calendar onChange={setDate} value={date} />
+   
+            </div>
+          ) : (
+            <Form>
+              <Label for="exampleSelect">Time Before Event</Label>
+              {radioForm.map((item, index) => (
+                <FormGroup key={index + 1} check>
+                  <Input
+                    id="InputType-checkbox"
+                    value={item.val}
+                    onChange={handleAddReminder}
+                    type="checkbox"
+                  />
+                  <Label for="InputType-checkbox" check>
+                    {item.label}
+                  </Label>
+                </FormGroup>
+              ))}
+            </Form>
+          )}
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleToggle}>
-            Do Something
-          </Button>{" "}
+          {page < 1 ? (
+            <Button color="primary" onClick={handleNextPage}>
+              Next
+            </Button>
+          ) : (
+            <Button color="primary" onClick={handleToggle}>
+              Add Event
+            </Button>
+          )}
           <Button color="secondary" onClick={handleToggle}>
             Cancel
           </Button>
@@ -90,6 +138,9 @@ AddEvent.propTypes = {
   modal: PropTypes.bool,
   date: PropTypes.instanceOf(Date),
   event: PropTypes.any,
+  page: PropTypes.number,
+  handleNextPage: PropTypes.func,
+  handleAddReminder: PropTypes.func,
 };
 
 export default AddEvent;
