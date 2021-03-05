@@ -7,7 +7,7 @@ import UserCredentials from "../../components/UserCredentials/UserCredentials.js
 
 const SignUp = () => {
   const history = useHistory();
-  const {jwt, setJwt} = useContext(AuthContext);
+  const { setJwt } = useContext(AuthContext);
 
   const [credentials, setCredentials] = useState({
     email: "",

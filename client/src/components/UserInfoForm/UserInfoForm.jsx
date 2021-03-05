@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
   Button,
   Form,
@@ -6,7 +7,7 @@ import {
   Label,
   Input,
   FormText,
-  FormFeedback,
+  // FormFeedback,
 } from "reactstrap";
 
 const UserInfoForm = ({
@@ -34,6 +35,16 @@ const UserInfoForm = ({
       <Button>Next</Button>
     </Form>
   );
+};
+
+
+UserInfoForm.propTypes = {
+  type: PropTypes.string,
+  desc: PropTypes.string,
+  text: PropTypes.string,
+  userInfo: PropTypes.string,
+  handleInputChange: PropTypes.func,
+  handleNext: PropTypes.func
 };
 
 export default UserInfoForm;

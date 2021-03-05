@@ -7,7 +7,7 @@ import {
   Nav,
   //   NavLink,
   NavItem,
-  NavbarText,
+  // NavbarText,
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
 

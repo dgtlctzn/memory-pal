@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React from "react";
 import {
   Button,
@@ -5,7 +6,7 @@ import {
   FormGroup,
   Label,
   Input,
-  FormText,
+  // FormText,
   FormFeedback,
 } from "reactstrap";
 
@@ -44,6 +45,13 @@ const UserCredentials = ({
       <Button>Sign Up</Button>
     </Form>
   );
+};
+
+UserCredentials.propTypes = {
+  credentials: PropTypes.object,
+  handleInputChange: PropTypes.func,
+  handleSignUp: PropTypes.func,
+  isInvalid: PropTypes.bool
 };
 
 export default UserCredentials;
