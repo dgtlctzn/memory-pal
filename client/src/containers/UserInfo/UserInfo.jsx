@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
+import phoneFormat from "../../util/phoneFormat.js";
 import UserInfoForm from "../../components/UserInfoForm/UserInfoForm.jsx";
 
 const formQuestions = [
@@ -13,7 +14,7 @@ const formQuestions = [
   },
   {
     desc: "phone",
-    type: "number",
+    type: "text",
     text: "What phone number would you like your reminder texts to be sent to?",
   },
   {
@@ -38,7 +39,11 @@ const UserInfo = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserInfo({ ...userInfo, [name]: value });
+    if (name === "phone") {
+      setUserInfo({ ...userInfo, [name]: phoneFormat(value, userInfo.phone) });
+    } else {
+      setUserInfo({ ...userInfo, [name]: value });
+    }
   };
 
   const handleNext = async (e) => {
