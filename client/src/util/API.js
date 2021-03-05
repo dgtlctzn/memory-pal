@@ -11,6 +11,18 @@ const API = {
                 user_pass
             }
         });
+    },
+    addUserInfo: function(user_jwt, user_name, user_phone, user_birthday) {
+        return axios({
+            method: "PUT",
+            url: this.url + "/addinfo",
+            data: {
+                user_jwt,
+                user_name,
+                user_phone,
+                user_birthday
+            }
+        });
     }
 };
 

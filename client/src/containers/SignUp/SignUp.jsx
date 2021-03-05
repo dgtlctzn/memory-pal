@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 
 import API from "../../util/API.js";
-import AuthContext from "../../util/AuthContext.js";
+import AuthContext from "../../Context/AuthContext.js";
 import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
 
 const SignUp = () => {
   const history = useHistory();
-  const {jwt, setJwt} = AuthContext();
+  const {jwt, setJwt} = useContext(AuthContext);
 
   const [credentials, setCredentials] = useState({
     email: "",
