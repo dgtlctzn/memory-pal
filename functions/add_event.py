@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime, timedelta
 
 import jwt
 from dotenv import load_dotenv
@@ -39,6 +40,8 @@ def lambda_handler(event, context):
         day_type = body.get('day_type')
         day_name = body.get('day_name')
         year = body.get('year')
+        day_map = body.get('day_map')
+        date = datetime.today()
 
         user_email = jwt.decode(user_jwt, jwt_secret, algorithms="HS256")['user_email']
 
@@ -52,11 +55,25 @@ def lambda_handler(event, context):
                 day_info = (day_type, day_name, user_message, user_email, year)
                 add_day_query = """
                 INSERT INTO Days (type, name, message, user_id, year)
-                VALUES ( "%s", "%s", "%s", (SELECT id FROM Users WHERE email = "%s"), %d )
+                VALUES ( "%s", "%s", "%s", (SELECT id FROM Users WHERE email = "%s"), "%s" )
                 """ % day_info
                 cursor.execute(add_day_query)
                 day_id = cursor.lastrowid
+
+                event_entries = []
+                for day in day_map:
+                    event_entries.append((
+                        str(date - timedelta(days=day)),
+                        day,
+                        day_id
+                    ))
+                add_events_query = """
+                INSERT INTO Events (date, days_till, days_id)
+                VALUES ( %s, %s, %s)
+                """
+                cursor.executemany(add_events_query, event_entries)
                 cnx.commit()
+
                 return send_res(200, {
                     'success': True,
                     'info': day_id,
@@ -77,10 +94,11 @@ if __name__ == '__main__':
         'body': json.dumps({
             'user_jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX25hbWUiOiJKb2pvIFBvcHBhIiwidXNlcl9lbWFpbCI6In'
                         'BvcHBhN0BnbWFpbC5jb20ifQ.0lkerS75VlrU4meloaqJpT5odkY_2VcwqmHo5fpqtuw',
-            'user_message': 'Need to make a joke',
+            'user_message': 'Need to buy presents',
             'day_type': 'Holiday',
             'year': 0,
-            'day_name': 'April Fools'
+            'day_name': 'Christmas',
+            'day_map': [0, 6, 21]
         })
     }
     print(lambda_handler(body, None))
