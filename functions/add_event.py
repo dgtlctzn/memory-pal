@@ -59,22 +59,13 @@ def lambda_handler(event, context):
                 for row in res_one:
                     user_id = row[0]
                 day_info = (day_type, day_name, user_message, user_id, year)
-                print(day_info)
                 add_day_query = """
                 INSERT INTO Days
                 (type, name, message, user_id, year)
                 VALUES ( "%s", "%s", "%s", %d, %d )
                 """ % day_info
                 cursor.execute(add_day_query)
-                select_day_query = """
-                SELECT id FROM Days
-                WHERE type = "%s" AND name = "%s" AND message = "%s" AND user_id = %d AND year = %d
-                """ % day_info
-                cursor.execute(select_day_query)
-                res_two = cursor.fetchall()
-                day_id = None
-                for row in res_two:
-                    day_id = row[0]
+                day_id = cursor.lastrowid
                 cnx.commit()
                 return send_res(200, {
                     'success': True,
@@ -98,8 +89,8 @@ if __name__ == '__main__':
                         'BvcHBhN0BnbWFpbC5jb20ifQ.0lkerS75VlrU4meloaqJpT5odkY_2VcwqmHo5fpqtuw',
             'user_message': 'Need to order present',
             'day_type': 'Holiday',
-            'year': 1989,
-            'day_name': 'Christmas'
+            'year': 0,
+            'day_name': 'Fathers Day'
         })
     }
     print(lambda_handler(body, None))
