@@ -49,20 +49,10 @@ def lambda_handler(event, context):
             database=database
         ) as cnx:
             with cnx.cursor() as cursor:
-                select_user_query = """
-                SELECT id FROM Users
-                WHERE email = "%s"
-                """ % user_email
-                cursor.execute(select_user_query)
-                res_one = cursor.fetchall()
-                user_id = None
-                for row in res_one:
-                    user_id = row[0]
-                day_info = (day_type, day_name, user_message, user_id, year)
+                day_info = (day_type, day_name, user_message, user_email, year)
                 add_day_query = """
-                INSERT INTO Days
-                (type, name, message, user_id, year)
-                VALUES ( "%s", "%s", "%s", %d, %d )
+                INSERT INTO Days (type, name, message, user_id, year)
+                VALUES ( "%s", "%s", "%s", (SELECT id FROM Users WHERE email = "%s"), %d )
                 """ % day_info
                 cursor.execute(add_day_query)
                 day_id = cursor.lastrowid
@@ -87,10 +77,10 @@ if __name__ == '__main__':
         'body': json.dumps({
             'user_jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX25hbWUiOiJKb2pvIFBvcHBhIiwidXNlcl9lbWFpbCI6In'
                         'BvcHBhN0BnbWFpbC5jb20ifQ.0lkerS75VlrU4meloaqJpT5odkY_2VcwqmHo5fpqtuw',
-            'user_message': 'Need to order present',
+            'user_message': 'Need to make a joke',
             'day_type': 'Holiday',
             'year': 0,
-            'day_name': 'Fathers Day'
+            'day_name': 'April Fools'
         })
     }
     print(lambda_handler(body, None))
