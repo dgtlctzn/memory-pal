@@ -12,4 +12,8 @@ def parents_day(my_month, first, last):
 def days_diff(first, second):
     """returns negative number if second event comes before first"""
     new_date = dt.date(year=first.year, month=second.month, day=second.day)
-    return (new_date - first).days
+    return new_date - first
+
+
+# if date of this parents day - date.today() == days_till in db // send text
+print(days_diff(dt.date.today(), dt.date(year=2021, month=3, day=9)))
