@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 // import { Button } from "reactstrap";
 
 import AddEvent from "../../components/AddEvent/AddEvent.jsx";
+import API from "../../util/API.js";
+import AuthContext from "../../Context/AuthContext.js";
 
 const Home = () => {
+  const { jwt } = useContext(AuthContext);
+
   const [modal, setModal] = useState(false);
-  const [event, setEvent] = useState(4);
+  const [event, setEvent] = useState("Select");
   const [date, setDate] = useState(new Date());
   const [page, setPage] = useState(0);
   const [reminders, setReminders] = useState([]);
+  const [name, setName] = useState("");
 
   const handleToggle = () => {
     setModal(!modal);
@@ -21,8 +26,19 @@ const Home = () => {
     setEvent(e.target.value);
   };
 
-  const handleNextPage = () => {
-    setPage(page + 1);
+  const handleNextPage = async () => {
+    const newPage = page + 1;
+    if (newPage === 2) {
+      try {
+        const {data} = await API.addEvent(jwt, "", event, name, reminders, date, 0);
+        console.log(data);
+        handleToggle();
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      setPage(newPage);
+    }
   };
 
   const handleAddReminder = (e) => {
@@ -33,6 +49,10 @@ const Home = () => {
       const newReminders = reminders;
       setReminders([...newReminders.filter((item) => item !== daysBefore)]);
     }
+  };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
   };
 
   return (
@@ -48,6 +68,8 @@ const Home = () => {
         page={page}
         handleNextPage={handleNextPage}
         handleAddReminder={handleAddReminder}
+        handleNameChange={handleNameChange}
+        name={name}
       />
     </div>
   );

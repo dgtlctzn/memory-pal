@@ -41,7 +41,7 @@ def lambda_handler(event, context):
         day_name = body.get('day_name')
         year = body.get('year')
         day_map = body.get('day_map')
-        date = datetime.today()
+        date = body.get('date')
 
         user_email = jwt.decode(user_jwt, jwt_secret, algorithms="HS256")['user_email']
 

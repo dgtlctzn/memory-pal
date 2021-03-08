@@ -23,6 +23,10 @@ add_info:
 	cd functions && zip ../memory-add-info.zip add_info.py
 	aws lambda update-function-code --function-name MemoryUpdateUser --zip-file fileb://memory-add-info.zip
 
+add_event:
+	cd functions && zip ../memory-add-event.zip add_event.py
+	aws lambda update-function-code --function-name MemoryAddEvent --zip-file fileb://memory-add-event.zip
+
 test:
 	.venv/bin/pytest tests.py
 

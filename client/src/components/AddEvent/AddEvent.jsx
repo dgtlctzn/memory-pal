@@ -16,15 +16,15 @@ import {
   Input,
 } from "reactstrap";
 
-const formOptions = [
-  { text: "What is their name?", label: "Birth Date" },
-  { text: "Which holiday is it?", label: "Date of Holiday" },
-  {
+const formOptions = {
+  Birthday: { text: "What is their name?", label: "Birth Date" },
+  Holiday: { text: "Which holiday is it?", label: "Date of Holiday" },
+  "Cancel Subscription": {
     text: "What service would you like to cancel?",
     label: "Date to Cancel By",
   },
-  { text: "What is the name of the event?", label: "Date of Event" },
-];
+  Other: { text: "What is the name of the event?", label: "Date of Event" },
+};
 
 const radioForm = [
   { val: 30, label: "One Month" },
@@ -50,6 +50,8 @@ const AddEvent = ({
   page,
   handleNextPage,
   handleAddReminder,
+  handleNameChange,
+  name,
 }) => {
   return (
     <div>
@@ -69,18 +71,26 @@ const AddEvent = ({
                     id="exampleSelect"
                     onChange={handleSelectEvent}
                   >
-                    <option value={4}>Select</option>
-                    <option value={0}>Birthday</option>
-                    <option value={1}>Holiday</option>
-                    <option value={2}>Cancel Subscription</option>
-                    <option value={3}>Other</option>
+                    <option value="Select">Select</option>
+                    <option value="Birthday">Birthday</option>
+                    <option value="Holiday">Holiday</option>
+                    <option value="Cancel Subscription">
+                      Cancel Subscription
+                    </option>
+                    <option value="Other">Other</option>
                   </Input>
                 </FormGroup>
-                {event < 4 ? (
+                {event !== "Select" ? (
                   <div>
                     <FormGroup>
                       <FormText>{formOptions[event].text}</FormText>
-                      <Input type="text" name="email" id="exampleEmail" />
+                      <Input
+                        type="text"
+                        name="email"
+                        onChange={handleNameChange}
+                        value={name}
+                        id="exampleEmail"
+                      />
                     </FormGroup>
                     <Label for="exampleSelect">
                       {formOptions[event].label}
@@ -90,8 +100,7 @@ const AddEvent = ({
                   ""
                 )}
               </Form>
-                <Calendar onChange={setDate} value={date} />
-   
+              <Calendar onChange={setDate} value={date} />
             </div>
           ) : (
             <Form>
@@ -118,7 +127,7 @@ const AddEvent = ({
               Next
             </Button>
           ) : (
-            <Button color="primary" onClick={handleToggle}>
+            <Button color="primary" onClick={handleNextPage}>
               Add Event
             </Button>
           )}
@@ -141,6 +150,8 @@ AddEvent.propTypes = {
   page: PropTypes.number,
   handleNextPage: PropTypes.func,
   handleAddReminder: PropTypes.func,
+  handleNameChange: PropTypes.func,
+  name: PropTypes.string,
 };
 
 export default AddEvent;
