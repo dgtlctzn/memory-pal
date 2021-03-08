@@ -13,8 +13,9 @@ user = os.getenv('MYSQL_USER')
 password = os.getenv('MYSQL_PASS')
 database = 'memory_db'
 
-twilioSID = os.getenv('TWILIO_SID')
-twilioAuth = os.getenv('TWILIO_AUTH')
+twilio_SID = os.getenv('TWILIO_SID')
+twilio_auth = os.getenv('TWILIO_AUTH')
+twilio_number = os.getenv('TWILIO_NUMBER')
 
 
 def parents_day(my_month, first, last):
@@ -27,9 +28,9 @@ def parents_day(my_month, first, last):
 
 class SendText:
 
-    def __init__(self):
-        self.__client = Client(twilioSID, twilioAuth)
-        self.__phone_number = '+12565154057'
+    def __init__(self, number, sid, auth):
+        self.__client = Client(sid, auth)
+        self.__phone_number = number
 
     def text(self, phone, message):
         self.__client.messages.create(
@@ -136,7 +137,7 @@ def lambda_handler(event, context):
                 """ % parents_days
                 cursor.execute(text_events_query)
 
-                st = SendText()
+                st = SendText(twilio_number, twilio_SID, twilio_auth)
                 for result in cursor.fetchall():
                     phone, name, event_type, days_till, birth_date, message = result
                     st.text_by_type(event_type, name, days_till, phone, message, curr_year - birth_date.year)
