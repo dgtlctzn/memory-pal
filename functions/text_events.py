@@ -29,11 +29,12 @@ class SendText:
 
     def __init__(self):
         self.__client = Client(twilioSID, twilioAuth)
+        self.__phone_number = '+12565154057'
 
     def text(self, phone, message):
         self.__client.messages.create(
             to=phone,
-            from_='+12565154057',
+            from_=self.__phone_number,
             body=message
         )
 
