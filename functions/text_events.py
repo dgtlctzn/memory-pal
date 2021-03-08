@@ -38,16 +38,31 @@ class SendText:
             body=message
         )
 
-    def text_by_type(self, event_type, name, days_till, phone, message):
+    @staticmethod
+    def number_str(number):
+        digit_2 = number % 10
+        if digit_2 == 3:
+            num_str = 'rd'
+        elif digit_2 == 2:
+            num_str = 'nd'
+        elif digit_2 == 1:
+            num_str = 'st'
+        else:
+            num_str = 'th'
+        return str(number) + num_str
+
+    def text_by_type(self, event_type, name, days_till, phone, message, age):
+
         if event_type == 'Birthday':
             if days_till:
                 text_message = f'''
                 {days_till} more days till it\'s {name}'s birthday!
+                They will be {age} years old.
                 {message}
                 '''
                 self.text(phone, text_message)
             else:
-                text_message = f'It\'s {name}\'s birthday today!'
+                text_message = f'It\'s {name}\'s {self.number_str(age)} birthday today!'
                 self.text(phone, text_message)
         elif event_type == 'Holiday':
             if days_till:
@@ -123,8 +138,8 @@ def lambda_handler(event, context):
 
                 st = SendText()
                 for result in cursor.fetchall():
-                    phone, name, event_type, days_till, _, message = result
-                    st.text_by_type(event_type, name, days_till, phone, message)
+                    phone, name, event_type, days_till, birth_date, message = result
+                    st.text_by_type(event_type, name, days_till, phone, message, curr_year - birth_date.year)
 
     except (Error, Exception) as e:
         print(e)
