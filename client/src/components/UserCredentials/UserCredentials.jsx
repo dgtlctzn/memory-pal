@@ -13,11 +13,11 @@ import {
 const UserCredentials = ({
   credentials,
   handleInputChange,
-  handleSignUp,
+  handleUserCredentials,
   isInvalid,
 }) => {
   return (
-    <Form onSubmit={handleSignUp}>
+    <Form onSubmit={handleUserCredentials}>
       <FormGroup>
         <Label for="exampleEmail">Email</Label>
         <Input
@@ -42,7 +42,7 @@ const UserCredentials = ({
           placeholder="$EcReTPa$$wOrD"
         />
       </FormGroup>
-      <Button>Sign Up</Button>
+      <Button>Submit</Button>
     </Form>
   );
 };
@@ -50,7 +50,7 @@ const UserCredentials = ({
 UserCredentials.propTypes = {
   credentials: PropTypes.object,
   handleInputChange: PropTypes.func,
-  handleSignUp: PropTypes.func,
+  handleUserCredentials: PropTypes.func,
   isInvalid: PropTypes.bool
 };
 

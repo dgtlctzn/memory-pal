@@ -1,11 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 
-import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
 import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
+import API from "../../util/API.js";
 
-const SignUp = () => {
+const Login = () => {
   const history = useHistory();
   const { setJwt } = useContext(AuthContext);
 
@@ -23,15 +23,14 @@ const SignUp = () => {
   const handleUserCredentials = async (e) => {
     e.preventDefault();
 
-    const { email, password } = credentials;
     try {
-      const { data } = await API.signUpUser(email, password);
-      console.log(data);
+      const { email, password } = credentials;
+      const { data } = await API.loginUser(email, password);
       if (!data.success) {
         setIsInvalid(true);
       } else {
         setJwt(data.info);
-        history.push("/info");
+        history.push("/home");
       }
     } catch (err) {
       console.log(err);
@@ -41,16 +40,16 @@ const SignUp = () => {
 
   return (
     <div>
-      <h1>Sign up</h1>
+      <h1>Log In</h1>
       <UserCredentials
         credentials={credentials}
         handleInputChange={handleInputChange}
         handleUserCredentials={handleUserCredentials}
         isInvalid={isInvalid}
       />
-      <Link to="/login">Already have an account? Log In</Link>
+      <Link to="/">Don&apos;t have an account? Sign up!</Link>
     </div>
   );
 };
 
-export default SignUp;
+export default Login;

@@ -12,6 +12,16 @@ const API = {
       },
     });
   },
+  loginUser: function(user_email, user_pass) {
+    return axios({
+      method: "POST",
+      url: this.url + "/login",
+      data: {
+        user_email,
+        user_pass,
+      },
+    });
+  },
   addUserInfo: function (user_jwt, user_name, user_phone, user_birthday) {
     return axios({
       method: "PUT",
