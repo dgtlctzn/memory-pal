@@ -18,7 +18,11 @@ const Home = () => {
   const [page, setPage] = useState(0);
   const [reminders, setReminders] = useState([]);
 
-  useEffect(async () => {
+  useEffect(() => {
+    getTableInfo();
+  }, []);
+
+  const getTableInfo = async() => {
     try {
       const { data } = await API.getEvents(jwt);
       console.log(data);
@@ -26,7 +30,7 @@ const Home = () => {
     } catch (err) {
       console.log(err);
     }
-  }, []);
+  };
 
   const handleToggle = () => {
     setModal(!modal);
@@ -54,6 +58,7 @@ const Home = () => {
         );
         console.log(data);
         handleToggle();
+        getTableInfo();
       } catch (err) {
         console.log(err);
       }

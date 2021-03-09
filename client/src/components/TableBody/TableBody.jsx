@@ -6,7 +6,7 @@ import TableRow from "../TableRow/TableRow.jsx";
 
 const TableBody = ({ name, dateItems, type }) => {
   return (
-    <Table hover>
+    <Table hover dark>
       <thead>
         <tr>
           <th>#</th>
