@@ -4,11 +4,13 @@ import React, { useState, useContext, useEffect } from "react";
 import AddEvent from "../../components/AddEvent/AddEvent.jsx";
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
+import TableBody from "../../components/TableBody/TableBody.jsx";
 
 const Home = () => {
   const { jwt } = useContext(AuthContext);
 
   const [date, setDate] = useState(new Date());
+  const [dateItems, setDateItems] = useState([]);
   const [event, setEvent] = useState("Select");
   const [modal, setModal] = useState(false);
   const [name, setName] = useState("");
@@ -19,6 +21,7 @@ const Home = () => {
     try {
       const { data } = await API.getEvents(jwt);
       console.log(data);
+      setDateItems(data.info);
     } catch (err) {
       console.log(err);
     }
@@ -88,6 +91,10 @@ const Home = () => {
         handleNameChange={handleNameChange}
         name={name}
       />
+      <h2>Birthdays</h2>
+      <TableBody name="Name" type="Birthday" dateItems={dateItems}/>
+      <h2>Cancel Subscriptions</h2>
+      <TableBody name="Service" type="Cancel Subscription" dateItems={dateItems}/>
     </div>
   );
 };
