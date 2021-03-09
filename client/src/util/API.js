@@ -57,6 +57,15 @@ const API = {
       },
     });
   },
+  getEvents: function(jwt) {
+    return axios({
+      method: "GET",
+      url: this.url + "/addevent",
+      headers: {
+        Authorization: jwt
+      }
+    });
+  }
 };
 
 export default API;

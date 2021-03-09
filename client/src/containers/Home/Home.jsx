@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 // import { Button } from "reactstrap";
 
 import AddEvent from "../../components/AddEvent/AddEvent.jsx";
@@ -15,6 +15,15 @@ const Home = () => {
   const [page, setPage] = useState(0);
   const [reminders, setReminders] = useState([]);
 
+  useEffect(async () => {
+    try {
+      const { data } = await API.getEvents(jwt);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   const handleToggle = () => {
     setModal(!modal);
     setTimeout(() => {
@@ -30,7 +39,15 @@ const Home = () => {
     const newPage = page + 1;
     if (newPage === 2) {
       try {
-        const {data} = await API.addEvent(jwt, "", event, name, reminders, date.toISOString(), 0);
+        const { data } = await API.addEvent(
+          jwt,
+          "",
+          event,
+          name,
+          reminders,
+          date.toISOString(),
+          0
+        );
         console.log(data);
         handleToggle();
       } catch (err) {
