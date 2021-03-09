@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { Container, Row, Col } from "reactstrap";
 // import { Button } from "reactstrap";
 
 import AddEvent from "../../components/AddEvent/AddEvent.jsx";
@@ -76,26 +77,48 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <h1>This is the home page</h1>
-      <AddEvent
-        handleToggle={handleToggle}
-        modal={modal}
-        handleSelectEvent={handleSelectEvent}
-        setDate={setDate}
-        date={date}
-        event={event}
-        page={page}
-        handleNextPage={handleNextPage}
-        handleAddReminder={handleAddReminder}
-        handleNameChange={handleNameChange}
-        name={name}
-      />
-      <h2>Birthdays</h2>
-      <TableBody name="Name" type="Birthday" dateItems={dateItems}/>
-      <h2>Cancel Subscriptions</h2>
-      <TableBody name="Service" type="Cancel Subscription" dateItems={dateItems}/>
-    </div>
+    <Container>
+      <Row>
+        <h1>This is the home page</h1>
+        <AddEvent
+          handleToggle={handleToggle}
+          modal={modal}
+          handleSelectEvent={handleSelectEvent}
+          setDate={setDate}
+          date={date}
+          event={event}
+          page={page}
+          handleNextPage={handleNextPage}
+          handleAddReminder={handleAddReminder}
+          handleNameChange={handleNameChange}
+          name={name}
+        />
+      </Row>
+      <Row>
+        <Col xs="12" md="6">
+          <h2>Birthdays</h2>
+          <TableBody name="Name" type="Birthday" dateItems={dateItems} />
+        </Col>
+        <Col xs="12" md="6">
+          <h2>Holidays</h2>
+          <TableBody name="Name" type="Holiday" dateItems={dateItems} />
+        </Col>
+      </Row>
+      <Row>
+        <Col xs="12" md="6">
+          <h2>Other</h2>
+          <TableBody name="Name" type="Other" dateItems={dateItems} />
+        </Col>
+        <Col xs="12" md="6">
+          <h2>Cancel Subscriptions</h2>
+          <TableBody
+            name="Service"
+            type="Cancel Subscription"
+            dateItems={dateItems}
+          />
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
