@@ -8,12 +8,12 @@ import AuthContext from "../../Context/AuthContext.js";
 const Home = () => {
   const { jwt } = useContext(AuthContext);
 
-  const [modal, setModal] = useState(false);
-  const [event, setEvent] = useState("Select");
   const [date, setDate] = useState(new Date());
+  const [event, setEvent] = useState("Select");
+  const [modal, setModal] = useState(false);
+  const [name, setName] = useState("");
   const [page, setPage] = useState(0);
   const [reminders, setReminders] = useState([]);
-  const [name, setName] = useState("");
 
   const handleToggle = () => {
     setModal(!modal);
@@ -30,7 +30,7 @@ const Home = () => {
     const newPage = page + 1;
     if (newPage === 2) {
       try {
-        const {data} = await API.addEvent(jwt, "", event, name, reminders, date, 0);
+        const {data} = await API.addEvent(jwt, "", event, name, reminders, date.toISOString(), 0);
         console.log(data);
         handleToggle();
       } catch (err) {

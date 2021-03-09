@@ -42,7 +42,7 @@ UserInfoForm.propTypes = {
   type: PropTypes.string,
   desc: PropTypes.string,
   text: PropTypes.string,
-  userInfo: PropTypes.string,
+  userInfo: PropTypes.object,
   handleInputChange: PropTypes.func,
   handleNext: PropTypes.func
 };

@@ -29,9 +29,9 @@ const API = {
     user_message,
     day_type,
     day_name,
-    year,
     day_map,
-    date
+    date,
+    year
   ) {
     return axios({
       method: "POST",

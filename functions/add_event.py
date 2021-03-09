@@ -41,7 +41,9 @@ def lambda_handler(event, context):
         day_name = body.get('day_name')
         year = body.get('year')
         day_map = body.get('day_map')
-        date = body.get('date')
+        iso_date = body.get('date')
+
+        date = datetime.strptime(iso_date, '%Y-%m-%dT%H:%M:%S.%fZ')
 
         user_email = jwt.decode(user_jwt, jwt_secret, algorithms="HS256")['user_email']
 
@@ -89,16 +91,16 @@ def lambda_handler(event, context):
         return send_res(500, res_body)
 
 
-if __name__ == '__main__':
-    body = {
-        'body': json.dumps({
-            'user_jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX25hbWUiOiJKb2pvIFBvcHBhIiwidXNlcl9lbWFpbCI6In'
-                        'BvcHBhN0BnbWFpbC5jb20ifQ.0lkerS75VlrU4meloaqJpT5odkY_2VcwqmHo5fpqtuw',
-            'user_message': 'Need to buy presents',
-            'day_type': 'Holiday',
-            'year': 0,
-            'day_name': 'Christmas',
-            'day_map': [0, 6, 21]
-        })
-    }
-    print(lambda_handler(body, None))
+# if __name__ == '__main__':
+#     body = {
+#         'body': json.dumps({
+#             'user_jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX25hbWUiOiJKb2pvIFBvcHBhIiwidXNlcl9lbWFpbCI6In'
+#                         'BvcHBhN0BnbWFpbC5jb20ifQ.0lkerS75VlrU4meloaqJpT5odkY_2VcwqmHo5fpqtuw',
+#             'user_message': 'Need to buy presents',
+#             'day_type': 'Holiday',
+#             'year': 0,
+#             'day_name': 'Christmas',
+#             'day_map': [0, 6, 21]
+#         })
+#     }
+#     print(lambda_handler(body, None))
