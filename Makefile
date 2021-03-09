@@ -27,6 +27,10 @@ add_event:
 	cd functions && zip ../memory-add-event.zip add_event.py
 	aws lambda update-function-code --function-name MemoryAddEvent --zip-file fileb://memory-add-event.zip
 
+get_events:
+	cd functions && zip ../memory-get-events.zip get_events.py
+	aws lambda update-function-code --function-name MemoryGetEvents --zip-file fileb://memory-get-events.zip
+
 test:
 	.venv/bin/pytest tests.py
 
