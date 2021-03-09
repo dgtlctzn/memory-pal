@@ -55,9 +55,17 @@ def lambda_handler(event, context):
                 cursor.execute(get_events_query)
                 results = cursor.fetchall()
 
+                format_res = []
+                for result in results:
+                    format_res.append({
+                        'date': result[0],
+                        'type': result[1],
+                        'name': result[2]
+                    })
+
                 return send_res(200, {
                     'success': True,
-                    'info': results,
+                    'info': format_res,
                     'message': f'{len(results)} events found'
                 })
     except (Error, Exception) as e:
