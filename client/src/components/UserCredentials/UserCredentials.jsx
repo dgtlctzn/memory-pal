@@ -10,6 +10,8 @@ import {
   FormFeedback,
 } from "reactstrap";
 
+import "./UserCredentials.css";
+
 const UserCredentials = ({
   credentials,
   handleInputChange,
@@ -20,14 +22,15 @@ const UserCredentials = ({
   return (
     <Form onSubmit={handleUserCredentials}>
       <FormGroup>
-        <Label for="exampleEmail">Email</Label>
+        {/* <Label for="exampleEmail">Email</Label> */}
         <Input
+          className="user-input"
           type="email"
           name="email"
           value={credentials.email}
           onChange={handleInputChange}
           id="exampleEmail"
-          placeholder="forgetful@what.com"
+          placeholder="Email"
           invalid={isInvalid}
         />
         {signUp ? (
@@ -37,14 +40,15 @@ const UserCredentials = ({
         )}
       </FormGroup>
       <FormGroup>
-        <Label for="examplePassword">Password</Label>
+        {/* <Label for="examplePassword">Password</Label> */}
         <Input
+          className="user-input"
           type="password"
           name="password"
           value={credentials.password}
           onChange={handleInputChange}
           id="examplePassword"
-          placeholder="$EcReTPa$$wOrD"
+          placeholder="Password"
           invalid={isInvalid}
         />
       </FormGroup>

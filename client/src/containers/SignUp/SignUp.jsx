@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useHistory, Link } from "react-router-dom";
+import { Row, Col, Container } from "reactstrap";
 
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
@@ -40,17 +41,21 @@ const SignUp = () => {
   };
 
   return (
-    <div>
-      <h1>Sign up</h1>
-      <UserCredentials
-        credentials={credentials}
-        handleInputChange={handleInputChange}
-        handleUserCredentials={handleUserCredentials}
-        isInvalid={isInvalid}
-        signUp={true}
-      />
-      <Link to="/login">Already have an account? Log In</Link>
-    </div>
+    <Container>
+      <Row>
+        <Col xs={{ size: 10, offset: 1 }} lg={{ size: 4, offset: 4 }}>
+          <h1>Sign up</h1>
+          <UserCredentials
+            credentials={credentials}
+            handleInputChange={handleInputChange}
+            handleUserCredentials={handleUserCredentials}
+            isInvalid={isInvalid}
+            signUp={true}
+          />
+          <Link to="/login">Already have an account? Log In</Link>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
+import { Row, Col, Container } from "reactstrap";
 
 import AuthContext from "../../Context/AuthContext.js";
 import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
@@ -39,17 +40,21 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h1>Log In</h1>
-      <UserCredentials
-        credentials={credentials}
-        handleInputChange={handleInputChange}
-        handleUserCredentials={handleUserCredentials}
-        isInvalid={isInvalid}
-        signUp={false}
-      />
-      <Link to="/">Don&apos;t have an account? Sign up!</Link>
-    </div>
+    <Container>
+      <Row>
+        <Col xs={{ size: 10, offset: 1 }} lg={{ size: 4, offset: 4 }}>
+          <h1>Log In</h1>
+          <UserCredentials
+            credentials={credentials}
+            handleInputChange={handleInputChange}
+            handleUserCredentials={handleUserCredentials}
+            isInvalid={isInvalid}
+            signUp={false}
+          />
+          <Link to="/">Don&apos;t have an account? Sign up!</Link>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
