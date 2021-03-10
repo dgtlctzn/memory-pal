@@ -61,12 +61,12 @@ def lambda_handler(event, context):
                             'message': 'User in database'
                         })
                     else:
-                        return send_res(403, {
+                        return send_res(200, {
                             'success': False,
                             'info': None,
                             'message': 'Unauthorized'
                         })
-                return send_res(404, {
+                return send_res(200, {
                     'success': False,
                     'info': None,
                     'message': 'No user found'

@@ -15,6 +15,7 @@ const UserCredentials = ({
   handleInputChange,
   handleUserCredentials,
   isInvalid,
+  signUp
 }) => {
   return (
     <Form onSubmit={handleUserCredentials}>
@@ -29,7 +30,11 @@ const UserCredentials = ({
           placeholder="forgetful@what.com"
           invalid={isInvalid}
         />
-        <FormFeedback>User already exists with that email!</FormFeedback>
+        {signUp ? (
+          <FormFeedback>User already exists with that email!</FormFeedback>
+        ) : (
+          <FormFeedback>Incorrect account info!</FormFeedback>
+        )}
       </FormGroup>
       <FormGroup>
         <Label for="examplePassword">Password</Label>
@@ -40,6 +45,7 @@ const UserCredentials = ({
           onChange={handleInputChange}
           id="examplePassword"
           placeholder="$EcReTPa$$wOrD"
+          invalid={isInvalid}
         />
       </FormGroup>
       <Button>Submit</Button>
@@ -51,7 +57,8 @@ UserCredentials.propTypes = {
   credentials: PropTypes.object,
   handleInputChange: PropTypes.func,
   handleUserCredentials: PropTypes.func,
-  isInvalid: PropTypes.bool
+  isInvalid: PropTypes.bool,
+  signUp: PropTypes.bool
 };
 
 export default UserCredentials;

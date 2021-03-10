@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
 // import { Button } from "reactstrap";
 
+import "./Home.css";
 import AddEvent from "../../components/AddEvent/AddEvent.jsx";
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
@@ -22,7 +23,7 @@ const Home = () => {
     getTableInfo();
   }, []);
 
-  const getTableInfo = async() => {
+  const getTableInfo = async () => {
     try {
       const { data } = await API.getEvents(jwt);
       console.log(data);
@@ -102,25 +103,33 @@ const Home = () => {
       <Row>
         <Col xs="12" md="6">
           <h2>Birthdays</h2>
-          <TableBody name="Name" eventType="Birthday" dateItems={dateItems} />
+          <div className="table-box">
+            <TableBody name="Name" eventType="Birthday" dateItems={dateItems} />
+          </div>
         </Col>
         <Col xs="12" md="6">
           <h2>Holidays</h2>
-          <TableBody name="Name" eventType="Holiday" dateItems={dateItems} />
+          <div className="table-box">
+            <TableBody name="Name" eventType="Holiday" dateItems={dateItems} />
+          </div>
         </Col>
       </Row>
       <Row>
         <Col xs="12" md="6">
           <h2>Other</h2>
-          <TableBody name="Name" eventType="Other" dateItems={dateItems} />
+          <div className="table-box">
+            <TableBody name="Name" eventType="Other" dateItems={dateItems} />
+          </div>
         </Col>
         <Col xs="12" md="6">
           <h2>Cancel Subscriptions</h2>
-          <TableBody
-            name="Service"
-            eventType="Cancel Subscription"
-            dateItems={dateItems}
-          />
+          <div className="table-box">
+            <TableBody
+              name="Service"
+              eventType="Cancel Subscription"
+              dateItems={dateItems}
+            />
+          </div>
         </Col>
       </Row>
     </Container>

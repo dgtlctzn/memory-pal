@@ -28,7 +28,7 @@ const TableBody = ({ name, dateItems, eventType }) => {
   dateItems.sort((a, b) => a.days_away - b.days_away);
 
   return (
-    <Table hover dark>
+    <Table hover >
       <thead>
         <tr>
           <th>Days Away</th>

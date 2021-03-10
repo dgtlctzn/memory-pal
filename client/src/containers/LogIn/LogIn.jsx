@@ -46,6 +46,7 @@ const Login = () => {
         handleInputChange={handleInputChange}
         handleUserCredentials={handleUserCredentials}
         isInvalid={isInvalid}
+        signUp={false}
       />
       <Link to="/">Don&apos;t have an account? Sign up!</Link>
     </div>
