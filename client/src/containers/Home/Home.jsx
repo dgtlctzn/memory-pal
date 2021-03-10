@@ -35,13 +35,29 @@ const Home = () => {
 
   const handleToggle = () => {
     setModal(!modal);
+    setEvent("Select");
     setTimeout(() => {
       setPage(0);
     }, 500);
   };
 
+  const handleSpecials = (event) => {
+    switch(event) {
+      case "Father's Day":
+        setDate(new Date(2021, 5, 20));
+        break;
+      case "Mother's Day":
+        setDate(new Date(2021, 4, 9));
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleSelectEvent = (e) => {
-    setEvent(e.target.value);
+    const selectedDate = e.target.value;
+    handleSpecials(selectedDate);
+    setEvent(selectedDate);
   };
 
   const handleNextPage = async () => {

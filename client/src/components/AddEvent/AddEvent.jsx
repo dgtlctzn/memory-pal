@@ -74,33 +74,50 @@ const AddEvent = ({
                     <option value="Select">Select</option>
                     <option value="Birthday">Birthday</option>
                     <option value="Holiday">Holiday</option>
+                    <option value="Father's Day">Father&apos;s Day</option>
+                    <option value="Mother's Day">Mother&apos;s Day</option>
                     <option value="Cancel Subscription">
                       Cancel Subscription
                     </option>
                     <option value="Other">Other</option>
                   </Input>
                 </FormGroup>
-                {event !== "Select" ? (
+                {event !== "Select" &&
+                event !== "Father's Day" &&
+                event !== "Mother's Day" ? (
                   <div>
-                    <FormGroup>
-                      <FormText>{formOptions[event].text}</FormText>
-                      <Input
-                        type="text"
-                        name="email"
-                        onChange={handleNameChange}
-                        value={name}
-                        id="exampleEmail"
-                      />
-                    </FormGroup>
-                    <Label for="exampleSelect">
-                      {formOptions[event].label}
-                    </Label>
+                    {event !== "Holiday" ? (
+                      <div>
+                        <FormGroup>
+                          <FormText>{formOptions[event].text}</FormText>
+                          <Input
+                            type="text"
+                            name="email"
+                            onChange={handleNameChange}
+                            value={name}
+                            id="exampleEmail"
+                          />
+                        </FormGroup>
+                        <Label for="exampleSelect">
+                          {formOptions[event].label}
+                        </Label>
+                        <Calendar onChange={setDate} value={date} />
+                      </div>
+                    ) : (
+                      <FormGroup>
+                        <FormText>{formOptions[event].text}</FormText>
+                        <Input type="select" name="select" id="exampleSelect">
+                          <option>Christmas</option>
+                          <option>Hanukkah</option>
+                          <option>Rosh Hashanah</option>
+                        </Input>
+                      </FormGroup>
+                    )}
                   </div>
                 ) : (
                   ""
                 )}
               </Form>
-              <Calendar onChange={setDate} value={date} />
             </div>
           ) : (
             <Form>
@@ -123,9 +140,15 @@ const AddEvent = ({
         </ModalBody>
         <ModalFooter>
           {page < 1 ? (
-            <Button color="primary" onClick={handleNextPage}>
-              Next
-            </Button>
+            <div>
+              {event !== "Select" ? (
+                <Button color="primary" onClick={handleNextPage}>
+                  Next
+                </Button>
+              ) : (
+                <Button disabled>Next</Button>
+              )}
+            </div>
           ) : (
             <Button color="primary" onClick={handleNextPage}>
               Add Event
