@@ -13,32 +13,6 @@ const formatDate = (momentDate, type) => {
   }
 };
 
-const relativeDate = (currentDate, event, type) => {
-  let curr;
-  if (type === "Birthday" || type === "Holiday") {
-    const year = currentDate.year();
-    const month = event.month();
-    const day = event.date();
-
-    const thisYearsEvent = moment().year(year).month(month).date(day);
-    const nextYearsEvent = moment()
-      .year(year + 1)
-      .month(month)
-      .date(day);
-    const cb = thisYearsEvent.diff(currentDate, "days");
-    const nb = nextYearsEvent.diff(currentDate, "days");
-
-    curr = cb < nb ? cb : nb;
-    const next = cb < nb ? nb : cb;
-    if (curr < 0) {
-      return next;
-    }
-  } else {
-    curr = event.diff(currentDate, "days");
-  }
-  return curr;
-};
-
 const daysToString = (daysAway) => {
   if (!daysAway) {
     return "today!";
@@ -50,22 +24,8 @@ const daysToString = (daysAway) => {
 };
 
 const TableBody = ({ name, dateItems, eventType }) => {
-  const now = moment();
 
-  const newDateItems = dateItems.map((item) => {
-    const momentDate = moment(item.date);
-    const { type, name } = item;
-    const daysAway = relativeDate(now, momentDate, type);
-    const formDate = formatDate(momentDate, type);
-    return {
-      daysAway,
-      formDate,
-      type,
-      name
-    };
-  });
-
-  newDateItems.sort((a, b) => a.daysAway - b.daysAway);
+  dateItems.sort((a, b) => a.days_away - b.days_away);
 
   return (
     <Table hover dark>
@@ -77,14 +37,15 @@ const TableBody = ({ name, dateItems, eventType }) => {
         </tr>
       </thead>
       <tbody>
-        {newDateItems.map(({ daysAway, formDate, type, name }, index) => {
+        {dateItems.map(({ days_away, date, type, name }, index) => {
           if (type === eventType) {
+            const momentDate = moment(date);
             return (
               <TableRow
                 key={`${index + 1}`}
-                date={formDate}
+                date={formatDate(momentDate, type)}
                 name={name}
-                daysAway={daysToString(daysAway)}
+                daysAway={daysToString(days_away)}
               />
             );
           }

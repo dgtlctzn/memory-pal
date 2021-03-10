@@ -33,11 +33,11 @@ def send_res(status, body):
 
 def relative_date(current_dt, event_dt, e_type):
     if e_type == 'Birthday' or e_type == 'Holiday':
-        this_year_event = event_dt.replace(year=current_dt.year)
-        next_year_event = event_dt.replace(year=current_dt.year + 1)
+        this_year_event = datetime(year=current_dt.year, month=event_dt.month, day=event_dt.day)
+        next_year_event = datetime(year=current_dt.year + 1, month=event_dt.month, day=event_dt.day)
 
-        curr_delta = (this_year_event - current_dt).days
-        next_delta = (next_year_event - current_dt).days
+        curr_delta = (current_dt - this_year_event).days * -1
+        next_delta = (current_dt - next_year_event).days * -1
 
         days_away = curr_delta if curr_delta < next_delta else next_delta
         if days_away < 0:
@@ -45,7 +45,7 @@ def relative_date(current_dt, event_dt, e_type):
         else:
             return days_away
     else:
-        return (event_dt - current_dt).days
+        return (current_dt - event_dt).days * -1
 
 
 def lambda_handler(event, context):
@@ -53,8 +53,9 @@ def lambda_handler(event, context):
         headers = event.get('headers')
         user_jwt = headers.get('Authorization')
         user_email = jwt.decode(user_jwt, jwt_secret, algorithms="HS256")['user_email']
+        user_timestamp = event['queryStringParameters']['timestamp']
 
-        now = datetime.now()
+        now = datetime.fromtimestamp(int(user_timestamp) / 1000)
 
         with connect(
             host=host,
@@ -98,3 +99,7 @@ def lambda_handler(event, context):
             'message': 'Internal server error'
         }
         return send_res(500, res_body)
+
+
+# if __name__ == '__main__':
+#     print(relative_date(datetime.now(), datetime(year=1989, month=3, day=8), 'Birthday'))
