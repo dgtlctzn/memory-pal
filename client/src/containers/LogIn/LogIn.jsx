@@ -15,6 +15,7 @@ const Login = () => {
     password: "",
   });
   const [isInvalid, setIsInvalid] = useState(false);
+  const [thinking, setThinking] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,8 +25,13 @@ const Login = () => {
   const handleUserCredentials = async (e) => {
     e.preventDefault();
 
+    setThinking(true);
+    const { email, password } = credentials;
     try {
-      const { email, password } = credentials;
+      if (!email || !password) {
+        setIsInvalid(true);
+        return;
+      }
       const { data } = await API.loginUser(email, password);
       if (!data.success) {
         setIsInvalid(true);
@@ -36,6 +42,8 @@ const Login = () => {
     } catch (err) {
       console.log(err);
       alert("Our server might need a reminder too!");
+    } finally {
+      setThinking(false);
     }
   };
 
@@ -50,6 +58,7 @@ const Login = () => {
             handleUserCredentials={handleUserCredentials}
             isInvalid={isInvalid}
             signUp={false}
+            thinking={thinking}
           />
           <Link to="/">Don&apos;t have an account? Sign up!</Link>
         </Col>

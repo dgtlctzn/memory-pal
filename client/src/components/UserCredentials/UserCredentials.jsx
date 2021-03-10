@@ -4,9 +4,10 @@ import {
   Button,
   Form,
   FormGroup,
-  Label,
+  // Label,
   Input,
   // FormText,
+  Spinner,
   FormFeedback,
 } from "reactstrap";
 
@@ -17,7 +18,8 @@ const UserCredentials = ({
   handleInputChange,
   handleUserCredentials,
   isInvalid,
-  signUp
+  signUp,
+  thinking,
 }) => {
   return (
     <Form onSubmit={handleUserCredentials}>
@@ -52,7 +54,14 @@ const UserCredentials = ({
           invalid={isInvalid}
         />
       </FormGroup>
-      <Button>Submit</Button>
+      {thinking ? (
+        <Button color="primary">
+          Submit
+          <Spinner size="sm" color="secondary" />
+        </Button>
+      ) : (
+        <Button color="primary">Submit</Button>
+      )}
     </Form>
   );
 };
@@ -62,7 +71,8 @@ UserCredentials.propTypes = {
   handleInputChange: PropTypes.func,
   handleUserCredentials: PropTypes.func,
   isInvalid: PropTypes.bool,
-  signUp: PropTypes.bool
+  signUp: PropTypes.bool,
+  thinking: PropTypes.bool,
 };
 
 export default UserCredentials;
