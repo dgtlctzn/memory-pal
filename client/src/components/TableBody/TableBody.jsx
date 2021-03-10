@@ -38,6 +38,9 @@ const TableBody = ({ name, dateItems, eventType }) => {
       </thead>
       <tbody>
         {dateItems.map(({ days_away, date, type, name }, index) => {
+          if (type === "Father's Day" || type === "Mother's Day") {
+            type = "Holiday";
+          }
           if (type === eventType) {
             const momentDate = moment(date);
             return (

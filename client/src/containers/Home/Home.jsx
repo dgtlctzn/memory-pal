@@ -45,9 +45,11 @@ const Home = () => {
     switch(event) {
       case "Father's Day":
         setDate(new Date(2021, 5, 20));
+        setName("Father's Day");
         break;
       case "Mother's Day":
         setDate(new Date(2021, 4, 9));
+        setName("Mother's Day");
         break;
       default:
         break;
