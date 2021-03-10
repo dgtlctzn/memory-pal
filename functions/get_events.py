@@ -31,6 +31,10 @@ def send_res(status, body):
     }
 
 
+def relative_date(current, event, type):
+    
+
+
 def lambda_handler(event, context):
     try:
         headers = event.get('headers')

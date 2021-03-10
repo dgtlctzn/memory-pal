@@ -14,60 +14,58 @@ const formatDate = (momentDate, type) => {
 };
 
 const relativeDate = (currentDate, event, type) => {
+  let curr;
   if (type === "Birthday" || type === "Holiday") {
     const year = currentDate.year();
     const month = event.month();
     const day = event.date();
 
     const thisYearsEvent = moment().year(year).month(month).date(day);
-    const nextYearsEvent = moment().year(year + 1).month(month).date(day);
+    const nextYearsEvent = moment()
+      .year(year + 1)
+      .month(month)
+      .date(day);
     const cb = thisYearsEvent.diff(currentDate, "days");
     const nb = nextYearsEvent.diff(currentDate, "days");
 
-    const curr = cb < nb ? cb : nb;
+    curr = cb < nb ? cb : nb;
     const next = cb < nb ? nb : cb;
-    if (!curr) {
-      return "today!";
-    } else if (curr < 0) {
-      return next.toString();
+    if (curr < 0) {
+      return next;
     }
-    return curr.toString();
-    // if (curr > 30) {
-    //   return "> 30";
-    // } else if (curr < 0) {
-    //   if (next > 30) {
-    //     return "> 30";
-    //   } else {
-    //     return next.toString();
-    //   }
-    // } else if (!curr) {
-    //   return "today!";
-    // } else {
-    //   return curr.toString();
-    // }
   } else {
-    const curr = event.diff(currentDate, "days");
-    if (!curr) {
-      return "today!";
-    } else if (curr < 0) {
-      return "past";
-    }
-    return curr.toString();
-    // if (curr > 30) {
-    //   return "> 30";
-    // } else if (!curr) {
-    //   return "today!";
-    // } else if (curr < 0) {
-    //   return "past";
-    // } else {
-    //   return curr.toString();
-    // }
+    curr = event.diff(currentDate, "days");
+  }
+  return curr;
+};
+
+const daysToString = (daysAway) => {
+  if (!daysAway) {
+    return "today!";
+  } else if (daysAway < 0) {
+    return "past";
+  } else {
+    return daysAway.toString();
   }
 };
 
 const TableBody = ({ name, dateItems, eventType }) => {
-
   const now = moment();
+
+  const newDateItems = dateItems.map((item) => {
+    const momentDate = moment(item.date);
+    const { type, name } = item;
+    const daysAway = relativeDate(now, momentDate, type);
+    const formDate = formatDate(momentDate, type);
+    return {
+      daysAway,
+      formDate,
+      type,
+      name
+    };
+  });
+
+  newDateItems.sort((a, b) => a.daysAway - b.daysAway);
 
   return (
     <Table hover dark>
@@ -79,15 +77,14 @@ const TableBody = ({ name, dateItems, eventType }) => {
         </tr>
       </thead>
       <tbody>
-        {dateItems.map(({name, type, date}, index) => {
+        {newDateItems.map(({ daysAway, formDate, type, name }, index) => {
           if (type === eventType) {
-            const formDate = moment(date);
             return (
               <TableRow
                 key={`${index + 1}`}
-                date={formatDate(formDate, type)}
+                date={formDate}
                 name={name}
-                difference={relativeDate(now, formDate, type, name)}
+                daysAway={daysToString(daysAway)}
               />
             );
           }
