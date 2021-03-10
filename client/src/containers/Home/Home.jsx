@@ -102,23 +102,23 @@ const Home = () => {
       <Row>
         <Col xs="12" md="6">
           <h2>Birthdays</h2>
-          <TableBody name="Name" type="Birthday" dateItems={dateItems} />
+          <TableBody name="Name" eventType="Birthday" dateItems={dateItems} />
         </Col>
         <Col xs="12" md="6">
           <h2>Holidays</h2>
-          <TableBody name="Name" type="Holiday" dateItems={dateItems} />
+          <TableBody name="Name" eventType="Holiday" dateItems={dateItems} />
         </Col>
       </Row>
       <Row>
         <Col xs="12" md="6">
           <h2>Other</h2>
-          <TableBody name="Name" type="Other" dateItems={dateItems} />
+          <TableBody name="Name" eventType="Other" dateItems={dateItems} />
         </Col>
         <Col xs="12" md="6">
           <h2>Cancel Subscriptions</h2>
           <TableBody
             name="Service"
-            type="Cancel Subscription"
+            eventType="Cancel Subscription"
             dateItems={dateItems}
           />
         </Col>
