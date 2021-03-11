@@ -149,6 +149,7 @@ const AddEvent = ({
                   value={message}
                 />
               </FormGroup>
+              <FormText className="float-right">{message.length}/300</FormText>
             </Form>
           )}
         </ModalBody>

@@ -107,7 +107,9 @@ const Home = () => {
   };
 
   const handleMessageInput = (e) => {
-    setMessage(e.target.value);
+    if (e.target.value.length <= 300) {
+      setMessage(e.target.value);
+    }
   };
 
   return (
