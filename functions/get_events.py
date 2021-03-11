@@ -48,6 +48,25 @@ def relative_date(current_dt, event_dt, e_type):
         return (current_dt - event_dt).days * -1
 
 
+def parents_day(my_month, first, last):
+    def get_day(my_year):
+        for i in range(first, last):
+            if datetime(year=my_year, month=my_month, day=i).isoweekday() == 7:
+                return datetime(year=my_year, month=my_month, day=i)
+    return get_day
+
+
+def get_next_parents_day(current_dt, e_type):
+    if e_type == 'Father\'s Day':
+        get_fathers_day = parents_day(6, 15, 22)
+        fathers_day = get_fathers_day(current_dt.year)
+        return fathers_day if fathers_day > current_dt else get_fathers_day(current_dt.year + 1)
+    elif e_type == 'Mother\'s Day':
+        get_mothers_day = parents_day(5, 8, 15)
+        mothers_day = get_mothers_day(current_dt.year)
+        return mothers_day if mothers_day > current_dt else get_mothers_day(current_dt.year + 1)
+
+
 def lambda_handler(event, context):
     try:
         headers = event.get('headers')
@@ -78,7 +97,11 @@ def lambda_handler(event, context):
                 format_res = []
                 for result in results:
                     date_str, dt, e_type, name = result
+                    if e_type == 'Father\'s Day' or e_type == 'Mother\'s Day':
+                        dt = get_next_parents_day(now, e_type)
+                        date_str = dt.strftime('%Y-%m-%d %H:%M:%S')
                     days_away = relative_date(now, dt, e_type)
+
                     format_res.append({
                         'date': date_str,
                         'type': e_type,
