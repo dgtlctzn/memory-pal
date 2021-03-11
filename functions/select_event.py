@@ -33,10 +33,9 @@ def send_res(status, body):
 
 def lambda_handler(event, context):
     try:
-        body = json.loads(event.get('body'))
-
-        user_jwt = body.get('user_jwt')
-        row_id = body.get('row_id')
+        headers = event.get('headers')
+        user_jwt = headers.get('Authorization')
+        row_id = event['queryStringParameters']['row_id']
 
         user_email = jwt.decode(user_jwt, jwt_secret, algorithms="HS256")['user_email']
 
@@ -49,7 +48,7 @@ def lambda_handler(event, context):
             with cnx.cursor() as cursor:
                 select_row = (user_email, row_id)
                 select_row_query = """
-                SELECT Events.days_till, Days.type, Days.name, Days.message, CAST(Events.date AS CHAR) FROM Days
+                SELECT Events.days_till, Days.type, Days.name, Days.message, CAST(Days.date AS CHAR) FROM Days
                 INNER JOIN Events
                 ON Days.id = Events.days_id
                 WHERE Days.user_id = (SELECT id FROM Users WHERE email = "%s")

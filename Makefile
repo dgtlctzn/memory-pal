@@ -31,6 +31,10 @@ get_events:
 	cd functions && zip ../memory-get-events.zip get_events.py
 	aws lambda update-function-code --function-name MemoryGetEvents --zip-file fileb://memory-get-events.zip
 
+select_event:
+	cd functions && zip ../memory-select-event.zip select_event.py
+	aws lambda update-function-code --function-name MemorySelectEvent --zip-file fileb://memory-select-event.zip
+
 test:
 	.venv/bin/pytest tests.py
 
