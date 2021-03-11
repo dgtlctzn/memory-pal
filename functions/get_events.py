@@ -72,9 +72,9 @@ def lambda_handler(event, context):
         headers = event.get('headers')
         user_jwt = headers.get('Authorization')
         user_email = jwt.decode(user_jwt, jwt_secret, algorithms="HS256")['user_email']
-        user_timestamp = event['queryStringParameters']['timestamp']
+        user_dt = event['queryStringParameters']['user_dt']
 
-        now = datetime.fromtimestamp(int(user_timestamp) / 1000)
+        now = datetime.strptime(user_dt, '%m/%d/%Y, %I:%M:%S %p')
 
         with connect(
             host=host,

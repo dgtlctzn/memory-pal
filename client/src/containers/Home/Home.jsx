@@ -25,7 +25,8 @@ const Home = () => {
 
   const getTableInfo = async () => {
     try {
-      const { data } = await API.getEvents(jwt);
+      const datetime = new Date().toLocaleString();
+      const { data } = await API.getEvents(jwt, datetime);
       console.log(data);
       setDateItems(data.info);
     } catch (err) {

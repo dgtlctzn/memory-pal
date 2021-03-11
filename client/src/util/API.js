@@ -57,10 +57,10 @@ const API = {
       },
     });
   },
-  getEvents: function(jwt) {
+  getEvents: function(jwt, date) {
     return axios({
       method: "GET",
-      url: `${this.url}/addevent?timestamp=${Date.now()}`,
+      url: `${this.url}/addevent?user_dt=${date}`,
       headers: {
         Authorization: jwt
       }
