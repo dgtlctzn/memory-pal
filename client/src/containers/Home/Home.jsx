@@ -14,6 +14,7 @@ const Home = () => {
   const [date, setDate] = useState(new Date());
   const [dateItems, setDateItems] = useState([]);
   const [event, setEvent] = useState("Select");
+  const [message, setMessage] = useState("");
   const [modal, setModal] = useState(false);
   const [name, setName] = useState("");
   const [page, setPage] = useState(0);
@@ -73,7 +74,7 @@ const Home = () => {
       try {
         const { data } = await API.addEvent(
           jwt,
-          "",
+          message,
           event,
           name,
           reminders,
@@ -105,6 +106,10 @@ const Home = () => {
     setName(e.target.value);
   };
 
+  const handleMessageInput = (e) => {
+    setMessage(e.target.value);
+  };
+
   return (
     <Container>
       <Row>
@@ -121,6 +126,8 @@ const Home = () => {
           handleAddReminder={handleAddReminder}
           handleNameChange={handleNameChange}
           name={name}
+          handleMessageInput={handleMessageInput}
+          message={message}
         />
       </Row>
       <Row>

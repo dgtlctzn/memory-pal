@@ -52,6 +52,8 @@ const AddEvent = ({
   handleAddReminder,
   handleNameChange,
   name,
+  handleMessageInput,
+  message,
 }) => {
   return (
     <div>
@@ -135,6 +137,18 @@ const AddEvent = ({
                   </Label>
                 </FormGroup>
               ))}
+              <FormGroup>
+                <FormText for="exampleText">
+                  Optional text to include in reminder text
+                </FormText>
+                <Input
+                  type="textarea"
+                  name="text"
+                  id="exampleText"
+                  onChange={handleMessageInput}
+                  value={message}
+                />
+              </FormGroup>
             </Form>
           )}
         </ModalBody>
@@ -175,6 +189,8 @@ AddEvent.propTypes = {
   handleAddReminder: PropTypes.func,
   handleNameChange: PropTypes.func,
   name: PropTypes.string,
+  handleMessageInput: PropTypes.func,
+  message: PropTypes.string,
 };
 
 export default AddEvent;
