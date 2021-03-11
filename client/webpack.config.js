@@ -46,12 +46,14 @@ module.exports = {
   },
   devServer: {
     contentBase: "./dist",
-    hot: true
+    hot: true,
+    publicPath: "/",
+    historyApiFallback: true,
   },
   plugins: [
     new HtmlWebPackPlugin({
       template: path.join(__dirname, "public", "index.html"),
-      filename: 'index.html',
+      filename: "index.html",
     }),
   ],
 };
