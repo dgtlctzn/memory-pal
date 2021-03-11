@@ -94,16 +94,16 @@ const Home = () => {
     selectEvent(rowID);
   };
 
-  const selectEvent = async(rowID) => {
-    try{
+  const selectEvent = async (rowID) => {
+    try {
       setModal(true);
-      const {data} = await API.selectEvent(jwt, rowID);
-      const res = data.info;
-      setEvent(res.type);
-      setMessage(res.message);
-      setName(res.name);
-      setDate(new Date(res.date));
-      setReminders(res.days_map);
+      const { data } = await API.selectEvent(jwt, rowID);
+      const { info } = data;
+      setEvent(info.type);
+      setMessage(info.message);
+      setName(info.name);
+      setDate(new Date(info.date));
+      setReminders(info.days_map);
     } catch (err) {
       console.log(err);
     }
