@@ -48,7 +48,7 @@ const Home = () => {
   };
 
   const handleSpecials = (event) => {
-    switch(event) {
+    switch (event) {
       case "Father's Day":
         setDate(new Date(2021, 5, 20));
         setName("Father's Day");
@@ -90,6 +90,10 @@ const Home = () => {
     } else {
       setPage(newPage);
     }
+  };
+
+  const handleEdit = () => {
+    setModal(true);
   };
 
   const handleAddReminder = (e) => {
@@ -136,13 +140,23 @@ const Home = () => {
         <Col xs="12" md="6">
           <h2>Birthdays</h2>
           <div className="table-box">
-            <TableBody name="Name" eventType="Birthday" dateItems={dateItems} />
+            <TableBody
+              name="Name"
+              eventType="Birthday"
+              dateItems={dateItems}
+              handleEdit={handleEdit}
+            />
           </div>
         </Col>
         <Col xs="12" md="6">
           <h2>Holidays</h2>
           <div className="table-box">
-            <TableBody name="Name" eventType="Holiday" dateItems={dateItems} />
+            <TableBody
+              name="Name"
+              eventType="Holiday"
+              dateItems={dateItems}
+              handleEdit={handleEdit}
+            />
           </div>
         </Col>
       </Row>
@@ -150,7 +164,12 @@ const Home = () => {
         <Col xs="12" md="6">
           <h2>Other</h2>
           <div className="table-box">
-            <TableBody name="Name" eventType="Other" dateItems={dateItems} />
+            <TableBody
+              name="Name"
+              eventType="Other"
+              dateItems={dateItems}
+              handleEdit={handleEdit}
+            />
           </div>
         </Col>
         <Col xs="12" md="6">
@@ -160,6 +179,7 @@ const Home = () => {
               name="Service"
               eventType="Cancel Subscription"
               dateItems={dateItems}
+              handleEdit={handleEdit}
             />
           </div>
         </Col>

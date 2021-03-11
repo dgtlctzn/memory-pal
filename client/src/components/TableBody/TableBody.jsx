@@ -23,7 +23,7 @@ const daysToString = (daysAway) => {
   }
 };
 
-const TableBody = ({ name, dateItems, eventType }) => {
+const TableBody = ({ name, dateItems, eventType, handleEdit }) => {
 
   dateItems.sort((a, b) => a.days_away - b.days_away);
 
@@ -49,6 +49,7 @@ const TableBody = ({ name, dateItems, eventType }) => {
                 date={formatDate(momentDate, type)}
                 name={name}
                 daysAway={daysToString(days_away)}
+                handleEdit={handleEdit}
               />
             );
           }
@@ -62,6 +63,7 @@ TableBody.propTypes = {
   name: PropTypes.string,
   dateItems: PropTypes.array,
   eventType: PropTypes.string,
+  handleEdit: PropTypes.func
 };
 
 export default TableBody;
