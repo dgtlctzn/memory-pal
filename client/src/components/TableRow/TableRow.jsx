@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 const TableRow = ({date, name, daysAway}) => {
   return (
     <tr>
-      <th scope="row">{daysAway}</th>
-      <td>{name}</td>
+      <th scope="row">{name}</th>
+      <td>{daysAway}</td>
       <td>{date}</td>
     </tr>
   );

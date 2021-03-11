@@ -23,6 +23,10 @@ const Home = () => {
     getTableInfo();
   }, []);
 
+  useEffect(() => {
+    setName("");
+  }, [event]);
+
   const getTableInfo = async () => {
     try {
       const datetime = new Date().toLocaleString();

@@ -31,9 +31,9 @@ const TableBody = ({ name, dateItems, eventType }) => {
     <Table hover >
       <thead>
         <tr>
-          <th>Days Away</th>
           <th>{name}</th>
-          <th>date</th>
+          <th>Days Away</th>
+          <th>Date</th>
         </tr>
       </thead>
       <tbody>
