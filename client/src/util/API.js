@@ -63,6 +63,15 @@ const API = {
         Authorization: jwt
       }
     });
+  },
+  selectEvent: function(jwt, rowID) {
+    return axios({
+      method: "GET",
+      url: `${this.url}/selectevent?row_id=${rowID}`,
+      headers: {
+        Authorization: jwt
+      }
+    });
   }
 };
 

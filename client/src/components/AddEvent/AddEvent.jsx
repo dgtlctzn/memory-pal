@@ -43,7 +43,7 @@ const radioForm = [
 const AddEvent = ({
   handleToggle,
   modal,
-  handleSelectEvent,
+  handleSetEvent,
   setDate,
   date,
   event,
@@ -54,6 +54,7 @@ const AddEvent = ({
   name,
   handleMessageInput,
   message,
+  reminders
 }) => {
   return (
     <div>
@@ -66,12 +67,13 @@ const AddEvent = ({
               {" "}
               <Form>
                 <FormGroup>
-                  <Label for="exampleSelect">Type of Event</Label>
+                  <Label htmlFor="exampleSelect">Type of Event</Label>
                   <Input
                     type="select"
                     name="select"
                     id="exampleSelect"
-                    onChange={handleSelectEvent}
+                    onChange={handleSetEvent}
+                    value={event}
                   >
                     <option value="Select">Select</option>
                     <option value="Birthday">Birthday</option>
@@ -100,7 +102,7 @@ const AddEvent = ({
                             id="exampleEmail"
                           />
                         </FormGroup>
-                        <Label for="exampleSelect">
+                        <Label htmlFor="exampleSelect">
                           {formOptions[event].label}
                         </Label>
                         <Calendar onChange={setDate} value={date} />
@@ -123,22 +125,32 @@ const AddEvent = ({
             </div>
           ) : (
             <Form>
-              <Label for="exampleSelect">Time Before Event</Label>
+              <Label htmlFor="exampleSelect">Time Before Event</Label>
               {radioForm.map((item, index) => (
                 <FormGroup key={index + 1} check>
-                  <Input
-                    id="InputType-checkbox"
-                    value={item.val}
-                    onChange={handleAddReminder}
-                    type="checkbox"
-                  />
-                  <Label for="InputType-checkbox" check>
+                  {reminders.includes(item.val) ? (
+                    <Input
+                      id="InputType-checkbox"
+                      value={item.val}
+                      onChange={handleAddReminder}
+                      type="checkbox"
+                      checked
+                    />
+                  ) : (
+                    <Input
+                      id="InputType-checkbox"
+                      value={item.val}
+                      onChange={handleAddReminder}
+                      type="checkbox"
+                    />
+                  )}
+                  <Label htmlFor="InputType-checkbox" check>
                     {item.label}
                   </Label>
                 </FormGroup>
               ))}
               <FormGroup>
-                <FormText for="exampleText">
+                <FormText htmlFor="exampleText">
                   Optional text to include in reminder text
                 </FormText>
                 <Input
@@ -149,7 +161,9 @@ const AddEvent = ({
                   value={message}
                 />
               </FormGroup>
-              <FormText className="float-right">{message.length}/300</FormText>
+              <FormText className="float-right">
+                {message ? message.length : 0}/300
+              </FormText>
             </Form>
           )}
         </ModalBody>
@@ -180,7 +194,7 @@ const AddEvent = ({
 
 AddEvent.propTypes = {
   setDate: PropTypes.func,
-  handleSelectEvent: PropTypes.func,
+  handleSetEvent: PropTypes.func,
   handleToggle: PropTypes.func,
   modal: PropTypes.bool,
   date: PropTypes.instanceOf(Date),
@@ -192,6 +206,7 @@ AddEvent.propTypes = {
   name: PropTypes.string,
   handleMessageInput: PropTypes.func,
   message: PropTypes.string,
+  reminders: PropTypes.array
 };
 
 export default AddEvent;

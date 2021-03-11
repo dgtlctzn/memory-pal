@@ -24,10 +24,6 @@ const Home = () => {
     getTableInfo();
   }, []);
 
-  useEffect(() => {
-    setName("");
-  }, [event]);
-
   const getTableInfo = async () => {
     try {
       const datetime = new Date().toLocaleString();
@@ -42,6 +38,7 @@ const Home = () => {
   const handleToggle = () => {
     setModal(!modal);
     setEvent("Select");
+    setName("");
     setReminders([]);
     setTimeout(() => {
       setPage(0);
@@ -63,7 +60,7 @@ const Home = () => {
     }
   };
 
-  const handleSelectEvent = (e) => {
+  const handleSetEvent = (e) => {
     const selectedDate = e.target.value;
     handleSpecials(selectedDate);
     setEvent(selectedDate);
@@ -92,8 +89,24 @@ const Home = () => {
     }
   };
 
-  const handleEdit = () => {
-    setModal(true);
+  const handleSelectEvent = (e) => {
+    const rowID = e.target.parentElement.dataset.id;
+    selectEvent(rowID);
+  };
+
+  const selectEvent = async(rowID) => {
+    try{
+      setModal(true);
+      const {data} = await API.selectEvent(jwt, rowID);
+      const res = data.info;
+      setEvent(res.type);
+      setMessage(res.message);
+      setName(res.name);
+      setDate(new Date(res.date));
+      setReminders(res.days_map);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleAddReminder = (e) => {
@@ -123,7 +136,7 @@ const Home = () => {
         <AddEvent
           handleToggle={handleToggle}
           modal={modal}
-          handleSelectEvent={handleSelectEvent}
+          handleSetEvent={handleSetEvent}
           setDate={setDate}
           date={date}
           event={event}
@@ -134,6 +147,7 @@ const Home = () => {
           name={name}
           handleMessageInput={handleMessageInput}
           message={message}
+          reminders={reminders}
         />
       </Row>
       <Row>
@@ -144,7 +158,7 @@ const Home = () => {
               name="Name"
               eventType="Birthday"
               dateItems={dateItems}
-              handleEdit={handleEdit}
+              handleSelectEvent={handleSelectEvent}
             />
           </div>
         </Col>
@@ -155,7 +169,7 @@ const Home = () => {
               name="Name"
               eventType="Holiday"
               dateItems={dateItems}
-              handleEdit={handleEdit}
+              handleSelectEvent={handleSelectEvent}
             />
           </div>
         </Col>
@@ -168,7 +182,7 @@ const Home = () => {
               name="Name"
               eventType="Other"
               dateItems={dateItems}
-              handleEdit={handleEdit}
+              handleSelectEvent={handleSelectEvent}
             />
           </div>
         </Col>
@@ -179,7 +193,7 @@ const Home = () => {
               name="Service"
               eventType="Cancel Subscription"
               dateItems={dateItems}
-              handleEdit={handleEdit}
+              handleSelectEvent={handleSelectEvent}
             />
           </div>
         </Col>

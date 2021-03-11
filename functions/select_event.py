@@ -69,7 +69,8 @@ def lambda_handler(event, context):
                         'days_map': days_map,
                         'date': date,
                         'type': e_type,
-                        'name': name
+                        'name': name,
+                        'message': message
                     },
                     'message': 'Day found'
                 })
