@@ -40,8 +40,7 @@ const API = {
     day_type,
     day_name,
     day_map,
-    date,
-    year
+    date
   ) {
     return axios({
       method: "POST",
@@ -52,8 +51,7 @@ const API = {
         day_type,
         day_name,
         day_map,
-        date,
-        year
+        date
       },
     });
   },

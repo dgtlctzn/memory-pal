@@ -39,11 +39,10 @@ def lambda_handler(event, context):
         user_message = body.get('user_message')
         day_type = body.get('day_type')
         day_name = body.get('day_name')
-        year = body.get('year')
         day_map = body.get('day_map')
-        iso_date = body.get('date')
+        user_dt = body.get('date')
 
-        date = datetime.strptime(iso_date, '%Y-%m-%dT%H:%M:%S.%fZ')
+        date = datetime.strptime(user_dt, '%m/%d/%Y, %I:%M:%S %p')
 
         user_email = jwt.decode(user_jwt, jwt_secret, algorithms="HS256")['user_email']
 
@@ -54,9 +53,9 @@ def lambda_handler(event, context):
             database=database
         ) as cnx:
             with cnx.cursor() as cursor:
-                day_info = (day_type, day_name, user_message, user_email, year)
+                day_info = (day_type, day_name, user_message, user_email, date)
                 add_day_query = """
-                INSERT INTO Days (type, name, message, user_id, year)
+                INSERT INTO Days (type, name, message, user_id, date)
                 VALUES ( "%s", "%s", "%s", (SELECT id FROM Users WHERE email = "%s"), "%s" )
                 """ % day_info
                 cursor.execute(add_day_query)

@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const TableRow = ({date, name, daysAway, handleEdit}) => {
+const TableRow = ({day_id, date, name, daysAway, handleEdit}) => {
   return (
-    <tr onClick={handleEdit}>
+    <tr onClick={handleEdit} value={day_id}>
       <th scope="row">{name}</th>
       <td>{daysAway}</td>
       <td>{date}</td>
@@ -15,7 +15,8 @@ TableRow.propTypes = {
     date: PropTypes.string,
     name: PropTypes.string,
     daysAway: PropTypes.string,
-    handleEdit: PropTypes.func
+    handleEdit: PropTypes.func,
+    day_id: PropTypes.number
 };
 
 export default TableRow;

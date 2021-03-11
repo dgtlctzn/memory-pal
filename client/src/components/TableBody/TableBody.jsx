@@ -37,7 +37,7 @@ const TableBody = ({ name, dateItems, eventType, handleEdit }) => {
         </tr>
       </thead>
       <tbody>
-        {dateItems.map(({ days_away, date, type, name }, index) => {
+        {dateItems.map(({ day_id, days_away, date, type, name }, index) => {
           if (type === "Father's Day" || type === "Mother's Day") {
             type = "Holiday";
           }
@@ -50,6 +50,7 @@ const TableBody = ({ name, dateItems, eventType, handleEdit }) => {
                 name={name}
                 daysAway={daysToString(days_away)}
                 handleEdit={handleEdit}
+                day_id={day_id}
               />
             );
           }

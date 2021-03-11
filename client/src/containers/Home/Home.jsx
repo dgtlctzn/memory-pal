@@ -42,6 +42,7 @@ const Home = () => {
   const handleToggle = () => {
     setModal(!modal);
     setEvent("Select");
+    setReminders([]);
     setTimeout(() => {
       setPage(0);
     }, 500);
@@ -78,8 +79,7 @@ const Home = () => {
           event,
           name,
           reminders,
-          date.toISOString(),
-          0
+          date.toLocaleString()
         );
         console.log(data);
         handleToggle();

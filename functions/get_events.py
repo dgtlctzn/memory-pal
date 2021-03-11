@@ -84,7 +84,7 @@ def lambda_handler(event, context):
         ) as cnx:
             with cnx.cursor() as cursor:
                 get_events_query = """
-                SELECT CAST(Events.date AS CHAR), Events.date, Days.type, Days.name FROM Events
+                SELECT CAST(Events.date AS CHAR), Events.date, Days.type, Days.name, Days.id FROM Events
                 INNER JOIN Days
                 ON Events.days_id = Days.id
                 WHERE Days.user_id = (SELECT id FROM Users WHERE email = "%s")
@@ -96,7 +96,7 @@ def lambda_handler(event, context):
 
                 format_res = []
                 for result in results:
-                    date_str, dt, e_type, name = result
+                    date_str, dt, e_type, name, day_id = result
                     if e_type == 'Father\'s Day' or e_type == 'Mother\'s Day':
                         dt = get_next_parents_day(now, e_type)
                         date_str = dt.strftime('%Y-%m-%d %H:%M:%S')
@@ -106,7 +106,8 @@ def lambda_handler(event, context):
                         'date': date_str,
                         'type': e_type,
                         'name': name,
-                        'days_away': days_away
+                        'days_away': days_away,
+                        'day_id': day_id
                     })
 
                 return send_res(200, {
