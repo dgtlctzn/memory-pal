@@ -6,6 +6,7 @@ import "./Home.css";
 import AddEvent from "../../components/AddEvent/AddEvent.jsx";
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
+import LoadingTable from "../../components/LoadingTable/LoadingTable.jsx";
 import TableBody from "../../components/TableBody/TableBody.jsx";
 
 const Home = () => {
@@ -21,6 +22,7 @@ const Home = () => {
   const [name, setName] = useState("");
   const [page, setPage] = useState(0);
   const [reminders, setReminders] = useState([]);
+  const [thinking, setThinking] = useState(false);
 
   useEffect(() => {
     getTableInfo();
@@ -28,12 +30,15 @@ const Home = () => {
 
   const getTableInfo = async () => {
     try {
+      setThinking(true);
       const datetime = new Date().toLocaleString();
       const { data } = await API.getEvents(jwt, datetime);
       console.log(data);
       setDateItems(data.info);
     } catch (err) {
       console.log(err);
+    } finally {
+      setThinking(false);
     }
   };
 
@@ -194,23 +199,31 @@ const Home = () => {
         <Col xs="12" md="6">
           <h2>Birthdays</h2>
           <div className="table-box">
-            <TableBody
-              name="Name"
-              eventType="Birthday"
-              dateItems={dateItems}
-              handleSelectEvent={handleSelectEvent}
-            />
+            {thinking ? (
+              <LoadingTable name="Name" />
+            ) : (
+              <TableBody
+                name="Name"
+                eventType="Birthday"
+                dateItems={dateItems}
+                handleSelectEvent={handleSelectEvent}
+              />
+            )}
           </div>
         </Col>
         <Col xs="12" md="6">
           <h2>Holidays</h2>
           <div className="table-box">
-            <TableBody
-              name="Name"
-              eventType="Holiday"
-              dateItems={dateItems}
-              handleSelectEvent={handleSelectEvent}
-            />
+            {thinking ? (
+              <LoadingTable name="Name" />
+            ) : (
+              <TableBody
+                name="Name"
+                eventType="Holiday"
+                dateItems={dateItems}
+                handleSelectEvent={handleSelectEvent}
+              />
+            )}
           </div>
         </Col>
       </Row>
@@ -218,23 +231,31 @@ const Home = () => {
         <Col xs="12" md="6">
           <h2>Other</h2>
           <div className="table-box">
-            <TableBody
-              name="Name"
-              eventType="Other"
-              dateItems={dateItems}
-              handleSelectEvent={handleSelectEvent}
-            />
+            {thinking ? (
+              <LoadingTable name="Name" />
+            ) : (
+              <TableBody
+                name="Name"
+                eventType="Other"
+                dateItems={dateItems}
+                handleSelectEvent={handleSelectEvent}
+              />
+            )}
           </div>
         </Col>
         <Col xs="12" md="6">
           <h2>Cancel Subscriptions</h2>
           <div className="table-box">
-            <TableBody
-              name="Service"
-              eventType="Cancel Subscription"
-              dateItems={dateItems}
-              handleSelectEvent={handleSelectEvent}
-            />
+            {thinking ? (
+              <LoadingTable name="Service" />
+            ) : (
+              <TableBody
+                name="Service"
+                eventType="Cancel Subscription"
+                dateItems={dateItems}
+                handleSelectEvent={handleSelectEvent}
+              />
+            )}
           </div>
         </Col>
       </Row>

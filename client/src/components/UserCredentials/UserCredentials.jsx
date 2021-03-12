@@ -57,7 +57,7 @@ const UserCredentials = ({
       {thinking ? (
         <Button color="primary">
           Submit
-          <Spinner size="sm" color="secondary" />
+          <Spinner size="sm" color="light" />
         </Button>
       ) : (
         <Button color="primary">Submit</Button>

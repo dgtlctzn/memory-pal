@@ -2,7 +2,6 @@ build:
 	virtualenv --python=python3.8 .venv
 
 layer:
-	pip freeze > requirements.txt
 	cd layer && mkdir python
 	pip install -r requirements.txt -t ./layer/python
 	cd layer && zip -r ../memory-layer.zip *
@@ -38,6 +37,10 @@ select_event:
 delete_event:
 	cd functions && zip ../memory-delete-event.zip delete_event.py
 	aws lambda update-function-code --function-name MemoryDeleteEvent --zip-file fileb://memory-delete-event.zip
+
+text_events:
+	cd functions && zip ../memory-text-events.zip text_events.py
+	aws lambda update-function-code --function-name MemoryTextEvents --zip-file fileb://memory-text-events.zip
 
 test:
 	.venv/bin/pytest tests.py

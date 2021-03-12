@@ -23,12 +23,16 @@ const daysToString = (daysAway) => {
   }
 };
 
-const TableBody = ({ name, dateItems, eventType, handleSelectEvent }) => {
-
+const TableBody = ({
+  name,
+  dateItems,
+  eventType,
+  handleSelectEvent,
+}) => {
   dateItems.sort((a, b) => a.days_away - b.days_away);
 
   return (
-    <Table hover >
+    <Table hover>
       <thead>
         <tr>
           <th>{name}</th>
@@ -65,7 +69,7 @@ TableBody.propTypes = {
   dateItems: PropTypes.array,
   eventType: PropTypes.string,
   handleEdit: PropTypes.func,
-  handleSelectEvent: PropTypes.func
+  handleSelectEvent: PropTypes.func,
 };
 
 export default TableBody;
