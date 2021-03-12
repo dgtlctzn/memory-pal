@@ -55,14 +55,19 @@ const AddEvent = ({
   handleMessageInput,
   message,
   reminders,
-  edit, 
-  handleEdit
+  edit,
+  handleEdit,
+  handleDelete,
 }) => {
   return (
     <div>
       <Button onClick={handleToggle}>Add Event</Button>
       <Modal isOpen={modal} toggle={handleToggle}>
-        <ModalHeader toggle={handleToggle}>Add a Reminder Event</ModalHeader>
+        {edit ? (
+          <ModalHeader toggle={handleToggle}>Edit Reminder Event</ModalHeader>
+        ) : (
+          <ModalHeader toggle={handleToggle}>Add a Reminder Event</ModalHeader>
+        )}
         <ModalBody>
           {page < 1 ? (
             <div>
@@ -170,6 +175,13 @@ const AddEvent = ({
           )}
         </ModalBody>
         <ModalFooter>
+          {edit ? (
+            <Button color="danger" onClick={handleDelete}>
+              Remove
+            </Button>
+          ) : (
+            ""
+          )}
           {page < 1 ? (
             <div>
               {event !== "Select" ? (
@@ -184,7 +196,7 @@ const AddEvent = ({
             <div>
               {edit ? (
                 <Button color="primary" onClick={handleEdit}>
-                  Edit Event
+                  Save
                 </Button>
               ) : (
                 <Button color="primary" onClick={handleNextPage}>
@@ -218,7 +230,8 @@ AddEvent.propTypes = {
   message: PropTypes.string,
   reminders: PropTypes.array,
   edit: PropTypes.bool,
-  handleEdit: PropTypes.func
+  handleEdit: PropTypes.func,
+  handleDelete: PropTypes.func,
 };
 
 export default AddEvent;

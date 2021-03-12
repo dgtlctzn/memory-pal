@@ -95,6 +95,10 @@ const Home = () => {
 
   };
 
+  const handleDelete = () => {
+
+  };
+
   const handleSelectEvent = (e) => {
     const rowID = e.target.parentElement.dataset.id;
     selectEvent(rowID);
@@ -157,6 +161,7 @@ const Home = () => {
           reminders={reminders}
           edit={edit}
           handleEdit={handleEdit}
+          handleDelete={handleDelete}
         />
       </Row>
       <Row>
