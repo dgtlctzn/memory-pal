@@ -15,6 +15,7 @@ const Home = () => {
   const [dateItems, setDateItems] = useState([]);
   const [edit, setEdit] = useState(false);
   const [event, setEvent] = useState("Select");
+  const [eventID, setEventID] = useState(0);
   const [message, setMessage] = useState("");
   const [modal, setModal] = useState(false);
   const [name, setName] = useState("");
@@ -38,6 +39,7 @@ const Home = () => {
 
   const handleToggle = () => {
     setEdit(false);
+    setEventID(0);
     setModal(!modal);
     setEvent("Select");
     setName("");
@@ -95,12 +97,20 @@ const Home = () => {
 
   };
 
-  const handleDelete = () => {
-
+  const handleDelete = async(e) => {
+    e.preventDefault();
+    try{
+      await API.deleteEvent(jwt, eventID);
+      getTableInfo();
+      handleToggle();
+    } catch(err) {
+      console.log(err);
+    }
   };
 
   const handleSelectEvent = (e) => {
     const rowID = e.target.parentElement.dataset.id;
+    setEventID(rowID);
     selectEvent(rowID);
   };
 

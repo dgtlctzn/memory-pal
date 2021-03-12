@@ -35,6 +35,10 @@ select_event:
 	cd functions && zip ../memory-select-event.zip select_event.py
 	aws lambda update-function-code --function-name MemorySelectEvent --zip-file fileb://memory-select-event.zip
 
+delete_event:
+	cd functions && zip ../memory-delete-event.zip delete_event.py
+	aws lambda update-function-code --function-name MemoryDeleteEvent --zip-file fileb://memory-delete-event.zip
+
 test:
 	.venv/bin/pytest tests.py
 

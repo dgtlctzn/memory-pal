@@ -72,6 +72,15 @@ const API = {
         Authorization: jwt
       }
     });
+  },
+  deleteEvent: function(jwt, rowID) {
+    return axios({
+      method: "DELETE",
+      url: `${this.url}/selectevent?row_id=${rowID}`,
+      headers: {
+        Authorization: jwt
+      }
+    });
   }
 };
 
