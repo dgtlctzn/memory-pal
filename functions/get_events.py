@@ -84,12 +84,9 @@ def lambda_handler(event, context):
         ) as cnx:
             with cnx.cursor() as cursor:
                 get_events_query = """
-                SELECT CAST(Days.date AS CHAR), Days.date, Days.type, Days.name, Days.id FROM Events
-                INNER JOIN Days
-                ON Events.days_id = Days.id
-                WHERE Days.user_id = (SELECT id FROM Users WHERE email = "%s")
-                GROUP BY Days.id
-                ORDER BY Events.date ASC;
+                SELECT CAST(date AS CHAR), date, type, name, id FROM Days
+                WHERE user_id = (SELECT id FROM Users WHERE email = "%s")
+                ORDER BY date ASC
                 """ % user_email
                 cursor.execute(get_events_query)
                 results = cursor.fetchall()
