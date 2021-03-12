@@ -93,17 +93,33 @@ const Home = () => {
     }
   };
 
-  const handleEdit = () => {
-
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    try {
+      await API.deleteEvent(jwt, eventID);
+      const { data } = await API.addEvent(
+        jwt,
+        message,
+        event,
+        name,
+        reminders,
+        date.toLocaleString()
+      );
+      console.log(data);
+      handleToggle();
+      getTableInfo();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const handleDelete = async(e) => {
+  const handleDelete = async (e) => {
     e.preventDefault();
-    try{
+    try {
       await API.deleteEvent(jwt, eventID);
       getTableInfo();
       handleToggle();
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   };
