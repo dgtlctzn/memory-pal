@@ -54,7 +54,9 @@ const AddEvent = ({
   name,
   handleMessageInput,
   message,
-  reminders
+  reminders,
+  edit, 
+  handleEdit
 }) => {
   return (
     <div>
@@ -179,9 +181,17 @@ const AddEvent = ({
               )}
             </div>
           ) : (
-            <Button color="primary" onClick={handleNextPage}>
-              Add Event
-            </Button>
+            <div>
+              {edit ? (
+                <Button color="primary" onClick={handleEdit}>
+                  Edit Event
+                </Button>
+              ) : (
+                <Button color="primary" onClick={handleNextPage}>
+                  Add Event
+                </Button>
+              )}
+            </div>
           )}
           <Button color="secondary" onClick={handleToggle}>
             Cancel
@@ -206,7 +216,9 @@ AddEvent.propTypes = {
   name: PropTypes.string,
   handleMessageInput: PropTypes.func,
   message: PropTypes.string,
-  reminders: PropTypes.array
+  reminders: PropTypes.array,
+  edit: PropTypes.bool,
+  handleEdit: PropTypes.func
 };
 
 export default AddEvent;

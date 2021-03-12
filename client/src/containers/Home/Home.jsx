@@ -13,6 +13,7 @@ const Home = () => {
 
   const [date, setDate] = useState(new Date());
   const [dateItems, setDateItems] = useState([]);
+  const [edit, setEdit] = useState(false);
   const [event, setEvent] = useState("Select");
   const [message, setMessage] = useState("");
   const [modal, setModal] = useState(false);
@@ -36,6 +37,7 @@ const Home = () => {
   };
 
   const handleToggle = () => {
+    setEdit(false);
     setModal(!modal);
     setEvent("Select");
     setName("");
@@ -89,6 +91,10 @@ const Home = () => {
     }
   };
 
+  const handleEdit = () => {
+
+  };
+
   const handleSelectEvent = (e) => {
     const rowID = e.target.parentElement.dataset.id;
     selectEvent(rowID);
@@ -97,6 +103,7 @@ const Home = () => {
   const selectEvent = async (rowID) => {
     try {
       setModal(true);
+      setEdit(true);
       const { data } = await API.selectEvent(jwt, rowID);
       const { info } = data;
       setEvent(info.type);
@@ -148,6 +155,8 @@ const Home = () => {
           handleMessageInput={handleMessageInput}
           message={message}
           reminders={reminders}
+          edit={edit}
+          handleEdit={handleEdit}
         />
       </Row>
       <Row>
