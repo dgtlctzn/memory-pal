@@ -32,7 +32,7 @@ const UserInfoForm = ({
           //   placeholder="forgetful@what.com"
         />
       </FormGroup>
-      <Button>Next</Button>
+      {userInfo[desc] ? (<Button>Next</Button>) : (<Button disabled>Next</Button>)}
     </Form>
   );
 };

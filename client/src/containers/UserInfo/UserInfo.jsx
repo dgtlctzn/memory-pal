@@ -1,16 +1,16 @@
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
+import { Row, Col, Container } from "reactstrap";
 
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
-import phoneFormat from "../../util/phoneFormat.js";
 import UserInfoForm from "../../components/UserInfoForm/UserInfoForm.jsx";
 
 const formQuestions = [
   {
     desc: "name",
     type: "text",
-    text: "What should we call you by?",
+    text: "What name do you go by?",
   },
   {
     desc: "phone",
@@ -40,7 +40,11 @@ const UserInfo = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "phone") {
-      setUserInfo({ ...userInfo, [name]: phoneFormat(value, userInfo.phone) });
+      const ascii = value.length ? value.charCodeAt(value.length - 1) : "";
+      if (ascii !== "" && (ascii < 48 || ascii > 57 || value.length === 15)) {
+        return;
+      }
+      setUserInfo({ ...userInfo, [name]: value });
     } else {
       setUserInfo({ ...userInfo, [name]: value });
     }
@@ -76,23 +80,27 @@ const UserInfo = () => {
   };
 
   return (
-    <div>
-      {formQuestions.map((item, index) => {
-        return index === page ? (
-          <UserInfoForm
-            key={index + 1}
-            desc={item.desc}
-            type={item.type}
-            text={item.text}
-            userInfo={userInfo}
-            handleNext={handleNext}
-            handleInputChange={handleInputChange}
-          />
-        ) : (
-          ""
-        );
-      })}
-    </div>
+    <Container>
+      <Row>
+        <Col xs={{ size: 10, offset: 1 }} lg={{ size: 4, offset: 4 }}>
+          {formQuestions.map((item, index) => {
+            return index === page ? (
+              <UserInfoForm
+                key={index + 1}
+                desc={item.desc}
+                type={item.type}
+                text={item.text}
+                userInfo={userInfo}
+                handleNext={handleNext}
+                handleInputChange={handleInputChange}
+              />
+            ) : (
+              ""
+            );
+          })}
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
