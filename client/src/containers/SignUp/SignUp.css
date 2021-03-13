@@ -1,0 +1,27 @@
+body {
+    background-color: lightblue;
+    font-family: 'Questrial', sans-serif;}
+
+#phone-img {
+  height: auto;
+  width: 100%;
+}
+
+#sign-up-box {
+    background-color: rgb(230, 230, 230);
+}
+
+#sign-up-form {
+    margin-top: 140px;
+}
+
+#title-header {
+    margin: 20px;
+    font-size: 80px;
+    color: rgb(58, 58, 58);
+}
+
+#title-text {
+    font-size: 30px;
+    color: rgb(58, 58, 58);
+}
