@@ -32,7 +32,7 @@ const TableBody = ({
   dateItems.sort((a, b) => a.days_away - b.days_away);
 
   return (
-    <Table dark hover>
+    <Table hover>
       <thead>
         <tr>
           <th>{name}</th>

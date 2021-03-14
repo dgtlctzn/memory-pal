@@ -21,15 +21,15 @@ const UserInfoForm = ({
   return (
     <Form onSubmit={handleNext}>
       <FormGroup>
-        <FormText color="muted">{text}</FormText>
-        <Label for="exampleEmail">{desc}</Label>
+        {/* <FormText color="muted">{text}</FormText> */}
+        <Label for="exampleEmail">{text}</Label>
         <Input
           type={type}
           name={desc}
           value={userInfo[desc]}
           onChange={handleInputChange}
           //   id="exampleEmail"
-          //   placeholder="forgetful@what.com"
+          placeholder={desc}
         />
       </FormGroup>
       {userInfo[desc] ? (<Button>Next</Button>) : (<Button disabled>Next</Button>)}

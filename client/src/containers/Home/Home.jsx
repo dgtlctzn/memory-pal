@@ -173,8 +173,7 @@ const Home = () => {
 
   return (
     <Container>
-      <Row>
-        <h1>This is the home page</h1>
+      <Row className="type-col">
         <AddEvent
           handleToggle={handleToggle}
           modal={modal}
@@ -197,65 +196,73 @@ const Home = () => {
       </Row>
       <Row>
         <Col xs="12" md="6">
-          <h2>Birthdays</h2>
-          <div className="table-box">
-            {thinking ? (
-              <LoadingTable name="Name" />
-            ) : (
-              <TableBody
-                name="Name"
-                eventType="Birthday"
-                dateItems={dateItems}
-                handleSelectEvent={handleSelectEvent}
-              />
-            )}
+          <div className="type-col">
+            <h2>&#127874; Birthdays</h2>
+            <div className="table-box">
+              {thinking ? (
+                <LoadingTable name="Name" />
+              ) : (
+                <TableBody
+                  name="Name"
+                  eventType="Birthday"
+                  dateItems={dateItems}
+                  handleSelectEvent={handleSelectEvent}
+                />
+              )}
+            </div>
           </div>
         </Col>
         <Col xs="12" md="6">
-          <h2>Holidays</h2>
-          <div className="table-box">
-            {thinking ? (
-              <LoadingTable name="Name" />
-            ) : (
-              <TableBody
-                name="Name"
-                eventType="Holiday"
-                dateItems={dateItems}
-                handleSelectEvent={handleSelectEvent}
-              />
-            )}
+          <div className="type-col">
+            <h2>&#127881; Holidays</h2>
+            <div className="table-box">
+              {thinking ? (
+                <LoadingTable name="Name" />
+              ) : (
+                <TableBody
+                  name="Name"
+                  eventType="Holiday"
+                  dateItems={dateItems}
+                  handleSelectEvent={handleSelectEvent}
+                />
+              )}
+            </div>
           </div>
         </Col>
       </Row>
       <Row>
         <Col xs="12" md="6">
-          <h2>Other</h2>
-          <div className="table-box">
-            {thinking ? (
-              <LoadingTable name="Name" />
-            ) : (
-              <TableBody
-                name="Name"
-                eventType="Other"
-                dateItems={dateItems}
-                handleSelectEvent={handleSelectEvent}
-              />
-            )}
+          <div className="type-col">
+            <h2>&#128198; Other</h2>
+            <div className="table-box">
+              {thinking ? (
+                <LoadingTable name="Name" />
+              ) : (
+                <TableBody
+                  name="Name"
+                  eventType="Other"
+                  dateItems={dateItems}
+                  handleSelectEvent={handleSelectEvent}
+                />
+              )}
+            </div>
           </div>
         </Col>
         <Col xs="12" md="6">
-          <h2>Cancel Subscriptions</h2>
-          <div className="table-box">
-            {thinking ? (
-              <LoadingTable name="Service" />
-            ) : (
-              <TableBody
-                name="Service"
-                eventType="Cancel Subscription"
-                dateItems={dateItems}
-                handleSelectEvent={handleSelectEvent}
-              />
-            )}
+          <div className="type-col">
+            <h2>&#10071; Cancel Subscriptions</h2>
+            <div className="table-box">
+              {thinking ? (
+                <LoadingTable name="Service" />
+              ) : (
+                <TableBody
+                  name="Service"
+                  eventType="Cancel Subscription"
+                  dateItems={dateItems}
+                  handleSelectEvent={handleSelectEvent}
+                />
+              )}
+            </div>
           </div>
         </Col>
       </Row>

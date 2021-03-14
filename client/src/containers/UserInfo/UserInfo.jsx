@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
 
+import "./UserInfo.css";
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
 import UserInfoForm from "../../components/UserInfoForm/UserInfoForm.jsx";
@@ -82,7 +83,7 @@ const UserInfo = () => {
   return (
     <Container>
       <Row>
-        <Col xs={{ size: 10, offset: 1 }} lg={{ size: 4, offset: 4 }}>
+        <Col className="user-info-form" xs={{ size: 10, offset: 1 }} lg={{ size: 4, offset: 4 }}>
           {formQuestions.map((item, index) => {
             return index === page ? (
               <UserInfoForm

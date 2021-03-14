@@ -61,7 +61,7 @@ const AddEvent = ({
 }) => {
   return (
     <div>
-      <Button onClick={handleToggle}>Add Event</Button>
+      <Button className="text-center" onClick={handleToggle}>Add Reminder Event</Button>
       <Modal isOpen={modal} toggle={handleToggle}>
         {edit ? (
           <ModalHeader toggle={handleToggle}>Edit Reminder Event</ModalHeader>
