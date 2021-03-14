@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
 
+import "./Login.css";
 import AuthContext from "../../Context/AuthContext.js";
 import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
 import API from "../../util/API.js";
@@ -50,8 +51,14 @@ const Login = () => {
   return (
     <Container>
       <Row>
-        <Col xs={{ size: 10, offset: 1 }} lg={{ size: 4, offset: 4 }}>
-          <h1>Log In</h1>
+        <Col xs={{ size: 12}} lg={{ size: 12}}>
+          <h1 id="login-header" className="text-center">Memory Pal</h1>
+          <p id="login-text" className="text-center">Add events, set reminders, get text updates</p>
+        </Col>
+      </Row>
+      <Row>
+        <Col id="login-box" xs={{ size: 10, offset: 1 }} lg={{ size: 4, offset: 4 }}>
+          <h1 className="directions">Log In</h1>
           <UserCredentials
             credentials={credentials}
             handleInputChange={handleInputChange}
