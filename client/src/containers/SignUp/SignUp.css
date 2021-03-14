@@ -1,5 +1,5 @@
 body {
-    background-color: lightblue;
+    background-color: rgb(209, 233, 241);
     font-family: 'Questrial', sans-serif;}
 
 #phone-img {
@@ -24,4 +24,12 @@ body {
 #title-text {
     font-size: 30px;
     color: rgb(58, 58, 58);
+}
+
+#left-col {
+    padding: 0px;
+}
+
+.directions {
+    font-size: 25px;
 }

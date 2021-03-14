@@ -52,7 +52,7 @@ const SignUp = () => {
 
   return (
     <Row>
-      <Col lg={{ size: 6 }}>
+      <Col id="left-col" lg={{ size: 6 }}>
         <h1 id="title-header" className="text-center">
           Memory Pal
         </h1>
