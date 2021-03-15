@@ -5,6 +5,7 @@ import { Row, Col, Container } from "reactstrap";
 import "./UserInfo.css";
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
+import ThinkingContext from "../../Context/ThinkingContext.js";
 import UserInfoForm from "../../components/UserInfoForm/UserInfoForm.jsx";
 
 const formQuestions = [
@@ -29,6 +30,7 @@ const formQuestions = [
 const UserInfo = () => {
   const history = useHistory();
   const { jwt } = useContext(AuthContext);
+  const { setThinking } = useContext(ThinkingContext);
 
   const [page, setPage] = useState(0);
 
@@ -55,24 +57,29 @@ const UserInfo = () => {
     e.preventDefault();
 
     try {
-      const { name, phone, birthday } = userInfo;
-      switch (page) {
-        case 0:
-          await API.addUserInfo(jwt, name, null, null);
-          break;
-        case 1:
-          await API.addUserInfo(jwt, null, phone, null);
-          break;
-        case 2:
-          await API.addUserInfo(jwt, null, null, birthday);
-          break;
-        default:
-          throw new Error("invalid page");
-      }
+      // setThinking(true);
+      // const { name, phone, birthday } = userInfo;
+      // switch (page) {
+      //   case 0:
+      //     await API.addUserInfo(jwt, name, null, null);
+      //     break;
+      //   case 1:
+      //     await API.addUserInfo(jwt, null, phone, null);
+      //     break;
+      //   case 2:
+      //     await API.addUserInfo(jwt, null, null, birthday);
+      //     break;
+      //   default:
+      //     setThinking(false);
+      // }
       const next = page + 1;
       if (next < 3) {
         setPage(next);
       } else {
+        setThinking(true);
+        const { name, phone, birthday } = userInfo;
+        await API.addUserInfo(jwt, name, phone, birthday);
+        setThinking(false);
         history.push("/home");
       }
     } catch (err) {

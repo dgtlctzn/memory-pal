@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -6,9 +6,12 @@ import {
   FormGroup,
   Label,
   Input,
+  Spinner,
   // FormText,
   // FormFeedback,
 } from "reactstrap";
+
+import ThinkingContext from "../../Context/ThinkingContext.js";
 
 const UserInfoForm = ({
   type,
@@ -18,6 +21,8 @@ const UserInfoForm = ({
   handleInputChange,
   handleNext,
 }) => {
+  const { thinking } = useContext(ThinkingContext);
+
   return (
     <Form onSubmit={handleNext}>
       <FormGroup>
@@ -32,11 +37,23 @@ const UserInfoForm = ({
           placeholder={desc}
         />
       </FormGroup>
-      {userInfo[desc] ? (<Button>Next</Button>) : (<Button disabled>Next</Button>)}
+      {userInfo[desc] ? (
+        <div>
+          {thinking ? (
+            <Button>
+              Next
+              <Spinner size="sm" color="light" />
+            </Button>
+          ) : (
+            <Button>Next</Button>
+          )}
+        </div>
+      ) : (
+        <Button disabled>Next</Button>
+      )}
     </Form>
   );
 };
-
 
 UserInfoForm.propTypes = {
   type: PropTypes.string,
@@ -44,7 +61,8 @@ UserInfoForm.propTypes = {
   text: PropTypes.string,
   userInfo: PropTypes.object,
   handleInputChange: PropTypes.func,
-  handleNext: PropTypes.func
+  handleNext: PropTypes.func,
+  thinking: PropTypes.bool,
 };
 
 export default UserInfoForm;

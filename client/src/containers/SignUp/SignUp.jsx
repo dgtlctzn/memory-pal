@@ -5,19 +5,21 @@ import { Row, Col } from "reactstrap";
 import "./SignUp.css";
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
-import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
 import phoneIMG from "../../images/text-phone.png";
+import ThinkingContext from "../../Context/ThinkingContext.js";
+import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
 
 const SignUp = () => {
   const history = useHistory();
   const { setJwt } = useContext(AuthContext);
+  const { thinking, setThinking } = useContext(ThinkingContext);
 
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
   const [isInvalid, setIsInvalid] = useState(false);
-  const [thinking, setThinking] = useState(false);
+  // const [thinking, setThinking] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
