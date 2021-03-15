@@ -35,11 +35,11 @@ const Home = () => {
       setThinking({...thinking, table: true});
       const datetime = new Date().toLocaleString();
       const { data } = await API.getEvents(jwt, datetime);
+      setThinking({...thinking, table: false});
       console.log(data);
       setDateItems(data.info);
     } catch (err) {
       console.log(err);
-    } finally {
       setThinking({...thinking, table: false});
     }
   };
@@ -127,6 +127,7 @@ const Home = () => {
       handleToggle();
       getTableInfo();
     } catch (err) {
+      setThinking({...thinking, edit: false});
       console.log(err);
     }
   };
@@ -136,10 +137,11 @@ const Home = () => {
     try {
       setThinking({...thinking, delete: true});
       await API.deleteEvent(jwt, eventID);
-      setThinking({...thinking, delete: true});
+      setThinking({...thinking, delete: false});
       getTableInfo();
       handleToggle();
     } catch (err) {
+      setThinking({...thinking, delete: false});
       console.log(err);
     }
   };
@@ -158,6 +160,7 @@ const Home = () => {
       const { info } = data;
       setEvent(info.type);
       setMessage(info.message);
+      setRecurring(info.recurring);
       setName(info.name);
       setDate(new Date(info.date.replace(/\s+/g, "T")));
       setReminders(info.days_map);

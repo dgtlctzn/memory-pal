@@ -48,7 +48,7 @@ def lambda_handler(event, context):
             with cnx.cursor() as cursor:
                 select_row = (user_email, row_id)
                 select_row_query = """
-                SELECT Events.days_till, Days.type, Days.name, Days.message, CAST(Days.date AS CHAR) FROM Days
+                SELECT Events.days_till, Days.type, Days.name, Days.message, CAST(Days.date AS CHAR), Days.recurring FROM Days
                 INNER JOIN Events
                 ON Days.id = Events.days_id
                 WHERE Days.user_id = (SELECT id FROM Users WHERE email = "%s")
@@ -57,7 +57,7 @@ def lambda_handler(event, context):
                 cursor.execute(select_row_query)
 
                 result = cursor.fetchall()
-                _, e_type, name, message, date = result[0]
+                _, e_type, name, message, date, recurring = result[0]
 
                 days_map = []
                 for row in result:
@@ -70,7 +70,8 @@ def lambda_handler(event, context):
                         'date': date,
                         'type': e_type,
                         'name': name,
-                        'message': message
+                        'message': message,
+                        'recurring': recurring
                     },
                     'message': 'Day found'
                 })
