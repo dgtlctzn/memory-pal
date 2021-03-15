@@ -93,7 +93,16 @@ class SendText:
                 '''
                 self.text(phone, text_message)
         else:
-            self.text(phone, message)
+            if days_till:
+                text_message = f'''
+                {days_till} days till your {name}. {message}
+                '''
+                self.text(phone, text_message)
+            else:
+                text_message = f'''
+                Today is your {name}!
+                '''
+                self.text(phone, text_message)
 
 
 def lambda_handler(event, context):
