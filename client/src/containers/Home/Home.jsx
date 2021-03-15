@@ -144,7 +144,7 @@ const Home = () => {
       setEvent(info.type);
       setMessage(info.message);
       setName(info.name);
-      setDate(new Date(info.date));
+      setDate(new Date(info.date.replace(/\s+/g, "T")));
       setReminders(info.days_map);
     } catch (err) {
       console.log(err);
