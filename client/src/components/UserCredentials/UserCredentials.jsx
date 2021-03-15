@@ -56,7 +56,7 @@ const UserCredentials = ({
           invalid={isInvalid}
         />
       </FormGroup>
-      {thinking ? (
+      {thinking.credentials ? (
         <Button color="primary">
           Submit
           <Spinner size="sm" color="light" />

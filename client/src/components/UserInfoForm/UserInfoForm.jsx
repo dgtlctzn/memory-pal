@@ -41,7 +41,7 @@ const UserInfoForm = ({
       </FormGroup>
       {userInfo[desc] ? (
         <div>
-          {thinking ? (
+          {thinking.info ? (
             <Button>
               Next
               <Spinner size="sm" color="light" />

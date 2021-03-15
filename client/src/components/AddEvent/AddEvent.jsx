@@ -1,7 +1,7 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useContext } from "react";
 import {
   Button,
   Modal,
@@ -12,9 +12,12 @@ import {
   FormGroup,
   FormText,
   Label,
+  Spinner,
   //   Col,
   Input,
 } from "reactstrap";
+
+import ThinkingContext from "../../Context/ThinkingContext";
 
 const formOptions = {
   Birthday: { text: "What is their name?", label: "Birth Date" },
@@ -59,9 +62,13 @@ const AddEvent = ({
   handleEdit,
   handleDelete,
 }) => {
+  const { thinking } = useContext(ThinkingContext);
+
   return (
     <div>
-      <Button className="text-center" onClick={handleToggle}>Add Reminder Event</Button>
+      <Button className="text-center" onClick={handleToggle}>
+        Add Reminder Event
+      </Button>
       <Modal isOpen={modal} toggle={handleToggle}>
         {edit ? (
           <ModalHeader toggle={handleToggle}>Edit Reminder Event</ModalHeader>
@@ -176,9 +183,17 @@ const AddEvent = ({
         </ModalBody>
         <ModalFooter>
           {edit ? (
-            <Button color="danger" onClick={handleDelete}>
-              Remove
-            </Button>
+            <div>
+              {thinking.delete ? (
+                <Button color="danger" onClick={handleDelete}>
+                  Remove <Spinner size="sm" color="light" />
+                </Button>
+              ) : (
+                <Button color="danger" onClick={handleDelete}>
+                  Remove
+                </Button>
+              )}
+            </div>
           ) : (
             ""
           )}
@@ -195,13 +210,29 @@ const AddEvent = ({
           ) : (
             <div>
               {edit ? (
-                <Button color="primary" onClick={handleEdit}>
-                  Save
-                </Button>
+                <div>
+                  {thinking.edit ? (
+                    <Button color="primary" onClick={handleEdit}>
+                      Save <Spinner size="sm" color="light" />
+                    </Button>
+                  ) : (
+                    <Button color="primary" onClick={handleEdit}>
+                      Save
+                    </Button>
+                  )}
+                </div>
               ) : (
-                <Button color="primary" onClick={handleNextPage}>
-                  Add Event
-                </Button>
+                <div>
+                  {thinking.add ? (
+                    <Button color="primary" onClick={handleNextPage}>
+                      Add Event <Spinner size="sm" color="light" />
+                    </Button>
+                  ) : (
+                    <Button color="primary" onClick={handleNextPage}>
+                      Add Event
+                    </Button>
+                  )}
+                </div>
               )}
             </div>
           )}

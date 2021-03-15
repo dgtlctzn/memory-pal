@@ -8,9 +8,11 @@ import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
 import LoadingTable from "../../components/LoadingTable/LoadingTable.jsx";
 import TableBody from "../../components/TableBody/TableBody.jsx";
+import ThinkingContext from "../../Context/ThinkingContext";
 
 const Home = () => {
   const { jwt } = useContext(AuthContext);
+  const { thinking, setThinking } = useContext(ThinkingContext);
 
   const [date, setDate] = useState(new Date());
   const [dateItems, setDateItems] = useState([]);
@@ -22,7 +24,6 @@ const Home = () => {
   const [name, setName] = useState("");
   const [page, setPage] = useState(0);
   const [reminders, setReminders] = useState([]);
-  const [thinking, setThinking] = useState(false);
 
   useEffect(() => {
     getTableInfo();
@@ -30,7 +31,7 @@ const Home = () => {
 
   const getTableInfo = async () => {
     try {
-      setThinking(true);
+      setThinking({...thinking, table: true});
       const datetime = new Date().toLocaleString();
       const { data } = await API.getEvents(jwt, datetime);
       console.log(data);
@@ -38,7 +39,7 @@ const Home = () => {
     } catch (err) {
       console.log(err);
     } finally {
-      setThinking(false);
+      setThinking({...thinking, table: false});
     }
   };
 
@@ -79,6 +80,7 @@ const Home = () => {
     const newPage = page + 1;
     if (newPage === 2) {
       try {
+        setThinking({...thinking, add: true});
         const { data } = await API.addEvent(
           jwt,
           message,
@@ -88,6 +90,7 @@ const Home = () => {
           date.toLocaleString()
         );
         console.log(data);
+        setThinking({...thinking, add: true});
         handleToggle();
         getTableInfo();
       } catch (err) {
@@ -101,6 +104,7 @@ const Home = () => {
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
+      setThinking({...thinking, edit: true});
       await API.deleteEvent(jwt, eventID);
       const { data } = await API.addEvent(
         jwt,
@@ -111,6 +115,7 @@ const Home = () => {
         date.toLocaleString()
       );
       console.log(data);
+      setThinking({...thinking, edit: false});
       handleToggle();
       getTableInfo();
     } catch (err) {
@@ -121,7 +126,9 @@ const Home = () => {
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
+      setThinking({...thinking, delete: true});
       await API.deleteEvent(jwt, eventID);
+      setThinking({...thinking, delete: true});
       getTableInfo();
       handleToggle();
     } catch (err) {
@@ -199,7 +206,7 @@ const Home = () => {
           <div className="type-col">
             <h2>&#127874; Birthdays</h2>
             <div className="table-box">
-              {thinking ? (
+              {thinking.table ? (
                 <LoadingTable name="Name" />
               ) : (
                 <TableBody
@@ -216,7 +223,7 @@ const Home = () => {
           <div className="type-col">
             <h2>&#127881; Holidays</h2>
             <div className="table-box">
-              {thinking ? (
+              {thinking.table ? (
                 <LoadingTable name="Name" />
               ) : (
                 <TableBody
@@ -235,7 +242,7 @@ const Home = () => {
           <div className="type-col">
             <h2>&#128198; Other</h2>
             <div className="table-box">
-              {thinking ? (
+              {thinking.table ? (
                 <LoadingTable name="Name" />
               ) : (
                 <TableBody
@@ -252,7 +259,7 @@ const Home = () => {
           <div className="type-col">
             <h2>&#10071; Cancel Subscriptions</h2>
             <div className="table-box">
-              {thinking ? (
+              {thinking.table ? (
                 <LoadingTable name="Service" />
               ) : (
                 <TableBody

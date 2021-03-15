@@ -12,14 +12,13 @@ import UserCredentials from "../../components/UserCredentials/UserCredentials.js
 const SignUp = () => {
   const history = useHistory();
   const { setJwt } = useContext(AuthContext);
-  const { setThinking } = useContext(ThinkingContext);
+  const { thinking, setThinking } = useContext(ThinkingContext);
 
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
   const [isInvalid, setIsInvalid] = useState(false);
-  // const [thinking, setThinking] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -35,8 +34,9 @@ const SignUp = () => {
         setIsInvalid(true);
         return;
       }
-      setThinking(true);
+      setThinking({...thinking, credentials: true});
       const { data } = await API.signUpUser(email, password);
+      setThinking({...thinking, credentials: false});
       if (!data.success) {
         setIsInvalid(true);
       } else {
@@ -46,8 +46,6 @@ const SignUp = () => {
     } catch (err) {
       console.log(err);
       alert("Our server might need a reminder too!");
-    } finally {
-      setThinking(false);
     }
   };
 

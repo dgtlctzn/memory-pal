@@ -11,7 +11,7 @@ import ThinkingContext from "../../Context/ThinkingContext";
 const Login = () => {
   const history = useHistory();
   const { setJwt } = useContext(AuthContext);
-  const { setThinking } = useContext(ThinkingContext);
+  const { thinking, setThinking } = useContext(ThinkingContext);
 
   const [credentials, setCredentials] = useState({
     email: "",
@@ -27,14 +27,15 @@ const Login = () => {
   const handleUserCredentials = async (e) => {
     e.preventDefault();
 
-    setThinking(true);
     const { email, password } = credentials;
     try {
       if (!email || !password) {
         setIsInvalid(true);
         return;
       }
+      setThinking({...thinking, credentials: true});
       const { data } = await API.loginUser(email, password);
+      setThinking({...thinking, credentials: false});
       if (!data.success) {
         setIsInvalid(true);
       } else {
@@ -44,8 +45,6 @@ const Login = () => {
     } catch (err) {
       console.log(err);
       alert("Our server might need a reminder too!");
-    } finally {
-      setThinking(false);
     }
   };
 

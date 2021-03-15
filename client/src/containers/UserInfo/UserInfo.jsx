@@ -30,7 +30,7 @@ const formQuestions = [
 const UserInfo = () => {
   const history = useHistory();
   const { jwt } = useContext(AuthContext);
-  const { setThinking } = useContext(ThinkingContext);
+  const { thinking, setThinking } = useContext(ThinkingContext);
 
   const [isInvalid, setIsInvalid] = useState(false);
   const [page, setPage] = useState(0);
@@ -61,16 +61,15 @@ const UserInfo = () => {
       if (next < 3) {
         setPage(next);
       } else {
-        setThinking(true);
+        setThinking({...thinking, info: true});
         const { name, phone, birthday } = userInfo;
         const { data } = await API.addUserInfo(jwt, name, phone, birthday);
         console.log(data);
+        setThinking({...thinking, info: false});
         if (!data.success) {
-          setThinking(false);
           setIsInvalid(true);
           setPage(2);
         } else {
-          setThinking(false);
           history.push("/home");
         }
       }

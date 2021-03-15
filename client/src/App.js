@@ -11,7 +11,14 @@ import UserInfo from "./containers/UserInfo/UserInfo.jsx";
 
 const App = () => {
   const [jwt, setJwt] = useState("");
-  const [thinking, setThinking] = useState(false);
+  const [thinking, setThinking] = useState({
+    add: false,
+    edit: false,
+    delete: false,
+    table: false,
+    credentials: false,
+    info: false,
+  });
 
   return (
     <Router>
