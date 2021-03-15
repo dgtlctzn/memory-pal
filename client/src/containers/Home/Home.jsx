@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
+import moment from "moment";
 // import { Button } from "reactstrap";
 
 import "./Home.css";
@@ -158,11 +159,12 @@ const Home = () => {
       setEdit(true);
       const { data } = await API.selectEvent(jwt, rowID);
       const { info } = data;
+      const currDate = moment(info.date);
+      setDate(new Date(currDate.year(), currDate.month(), currDate.date()));
       setEvent(info.type);
       setMessage(info.message);
       setRecurring(info.recurring);
       setName(info.name);
-      setDate(new Date(info.date.replace(/\s+/g, "T")));
       setReminders(info.days_map);
     } catch (err) {
       console.log(err);

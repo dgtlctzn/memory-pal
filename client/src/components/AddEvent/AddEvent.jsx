@@ -119,26 +119,32 @@ const AddEvent = ({
                     {event === "Other" ? (
                       <div>
                         {recurring ? (
-                          <FormGroup check>
-                            <Label check>
-                              <Input
-                                checked
-                                type="checkbox"
-                                onChange={handleRecurringCheck}
-                              />{" "}
-                              Is this a recurring event?
-                            </Label>
-                          </FormGroup>
+                          <div>
+                            <FormGroup check>
+                              <Label check>
+                                <Input
+                                  checked
+                                  type="checkbox"
+                                  onChange={handleRecurringCheck}
+                                />{" "}
+                                Is this a recurring event?
+                              </Label>
+                            </FormGroup>
+                            <br />
+                          </div>
                         ) : (
-                          <FormGroup check>
-                            <Label check>
-                              <Input
-                                type="checkbox"
-                                onChange={handleRecurringCheck}
-                              />{" "}
-                              Is this a recurring event?
-                            </Label>
-                          </FormGroup>
+                          <div>
+                            <FormGroup check>
+                              <Label check>
+                                <Input
+                                  type="checkbox"
+                                  onChange={handleRecurringCheck}
+                                />{" "}
+                                Is this a recurring event?
+                              </Label>
+                            </FormGroup>
+                            <br />
+                          </div>
                         )}
                       </div>
                     ) : (
@@ -203,7 +209,7 @@ const AddEvent = ({
             <div>
               {thinking.delete ? (
                 <Button color="danger" onClick={handleDelete}>
-                  Remove <Spinner size="sm" color="light" />
+                  Remove <Spinner className="spinner" size="sm" color="light" />
                 </Button>
               ) : (
                 <Button color="danger" onClick={handleDelete}>
@@ -230,7 +236,7 @@ const AddEvent = ({
                 <div>
                   {thinking.edit ? (
                     <Button color="primary" onClick={handleEdit}>
-                      Save <Spinner size="sm" color="light" />
+                      Save <Spinner className="spinner" size="sm" color="light" />
                     </Button>
                   ) : (
                     <Button color="primary" onClick={handleEdit}>
@@ -242,7 +248,7 @@ const AddEvent = ({
                 <div>
                   {thinking.add ? (
                     <Button color="primary" onClick={handleNextPage}>
-                      Add Event <Spinner size="sm" color="light" />
+                      Add Event <Spinner className="spinner" size="sm" color="light" />
                     </Button>
                   ) : (
                     <Button color="primary" onClick={handleNextPage}>
@@ -281,7 +287,7 @@ AddEvent.propTypes = {
   handleEdit: PropTypes.func,
   handleDelete: PropTypes.func,
   handleRecurringCheck: PropTypes.func,
-  recurring: PropTypes.bool,
+  recurring: PropTypes.number,
 };
 
 export default AddEvent;
