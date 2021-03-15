@@ -23,6 +23,7 @@ const Home = () => {
   const [modal, setModal] = useState(false);
   const [name, setName] = useState("");
   const [page, setPage] = useState(0);
+  const [recurring, setRecurring] = useState(false);
   const [reminders, setReminders] = useState([]);
 
   useEffect(() => {
@@ -50,6 +51,7 @@ const Home = () => {
     setEvent("Select");
     setName("");
     setReminders([]);
+    setRecurring(false);
     setTimeout(() => {
       setPage(0);
     }, 500);
@@ -65,9 +67,11 @@ const Home = () => {
         setDate(new Date(2021, 4, 9));
         setName("Mother's Day");
         break;
-      default:
+      case "Holiday":
         setDate(new Date(2021, 1, 14));
         setName("Valentine's Day");
+        break;
+      default:
         break;
     }
   };
@@ -89,7 +93,8 @@ const Home = () => {
           event,
           name,
           reminders,
-          date.toLocaleString()
+          date.toLocaleString(),
+          recurring
         );
         console.log(data);
         setThinking({...thinking, add: true});
@@ -114,7 +119,8 @@ const Home = () => {
         event,
         name,
         reminders,
-        date.toLocaleString()
+        date.toLocaleString(),
+        recurring
       );
       console.log(data);
       setThinking({...thinking, edit: false});
@@ -180,6 +186,10 @@ const Home = () => {
     }
   };
 
+  const handleRecurringCheck = () => {
+    setRecurring(!recurring);
+  }
+
   return (
     <Container>
       <Row className="type-col">
@@ -201,6 +211,8 @@ const Home = () => {
           edit={edit}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
+          handleRecurringCheck={handleRecurringCheck}
+          recurring={recurring}
         />
       </Row>
       <Row>

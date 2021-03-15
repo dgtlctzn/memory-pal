@@ -41,6 +41,7 @@ def lambda_handler(event, context):
         day_name = body.get('day_name')
         day_map = body.get('day_map')
         user_dt = body.get('date')
+        recurring = body.get('recurring')
 
         date = datetime.strptime(user_dt, '%m/%d/%Y, %I:%M:%S %p')
 
@@ -53,10 +54,10 @@ def lambda_handler(event, context):
             database=database
         ) as cnx:
             with cnx.cursor() as cursor:
-                day_info = (day_type, day_name, user_message, user_email, date)
+                day_info = (day_type, day_name, user_message, user_email, date, recurring)
                 add_day_query = """
-                INSERT INTO Days (type, name, message, user_id, date)
-                VALUES ( "%s", "%s", "%s", (SELECT id FROM Users WHERE email = "%s"), "%s" )
+                INSERT INTO Days (type, name, message, user_id, date, recurring)
+                VALUES ( "%s", "%s", "%s", (SELECT id FROM Users WHERE email = "%s"), "%s", %s )
                 """ % day_info
                 cursor.execute(add_day_query)
                 day_id = cursor.lastrowid

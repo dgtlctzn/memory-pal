@@ -21,7 +21,6 @@ import ThinkingContext from "../../Context/ThinkingContext";
 
 const formOptions = {
   Birthday: { text: "What is their name?", label: "Birth Date" },
-  // Holiday: { text: "Which holiday is it?", label: "Date of Holiday" },
   "Cancel Subscription": {
     text: "What service would you like to cancel?",
     label: "Date to Cancel By",
@@ -61,6 +60,8 @@ const AddEvent = ({
   edit,
   handleEdit,
   handleDelete,
+  handleRecurringCheck,
+  recurring,
 }) => {
   const { thinking } = useContext(ThinkingContext);
 
@@ -93,9 +94,7 @@ const AddEvent = ({
                     <option value="Birthday">Birthday</option>
                     <option value="Father's Day">Father&apos;s Day</option>
                     <option value="Mother's Day">Mother&apos;s Day</option>
-                    <option value="Holiday">
-                      Valentine&apos;s Day
-                    </option>
+                    <option value="Holiday">Valentine&apos;s Day</option>
                     <option value="Cancel Subscription">
                       Cancel Subscription
                     </option>
@@ -104,10 +103,8 @@ const AddEvent = ({
                 </FormGroup>
                 {event !== "Select" &&
                 event !== "Father's Day" &&
-                event !== "Mother's Day" && 
+                event !== "Mother's Day" &&
                 event !== "Holiday" ? (
-                  // <div>
-                  //   {event !== "Holiday" ? (
                   <div>
                     <FormGroup>
                       <FormText>{formOptions[event].text}</FormText>
@@ -119,22 +116,40 @@ const AddEvent = ({
                         id="exampleEmail"
                       />
                     </FormGroup>
+                    {event === "Other" ? (
+                      <div>
+                        {recurring ? (
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                checked
+                                type="checkbox"
+                                onChange={handleRecurringCheck}
+                              />{" "}
+                              Is this a recurring event?
+                            </Label>
+                          </FormGroup>
+                        ) : (
+                          <FormGroup check>
+                            <Label check>
+                              <Input
+                                type="checkbox"
+                                onChange={handleRecurringCheck}
+                              />{" "}
+                              Is this a recurring event?
+                            </Label>
+                          </FormGroup>
+                        )}
+                      </div>
+                    ) : (
+                      ""
+                    )}
                     <Label htmlFor="exampleSelect">
                       {formOptions[event].label}
                     </Label>
                     <Calendar onChange={setDate} value={date} />
                   </div>
                 ) : (
-                  //   ) : (
-                  //     <FormGroup>
-                  //       <FormText>{formOptions[event].text}</FormText>
-                  //       <Input type="select" name="select" id="exampleSelect">
-                  //         <option>Christmas</option>
-                  //         <option>Valentine&apos;s Day</option>
-                  //       </Input>
-                  //     </FormGroup>
-                  //   )}
-                  // </div>
                   ""
                 )}
               </Form>
@@ -265,6 +280,8 @@ AddEvent.propTypes = {
   edit: PropTypes.bool,
   handleEdit: PropTypes.func,
   handleDelete: PropTypes.func,
+  handleRecurringCheck: PropTypes.func,
+  recurring: PropTypes.bool,
 };
 
 export default AddEvent;

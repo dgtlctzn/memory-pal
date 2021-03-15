@@ -120,9 +120,9 @@ def lambda_handler(event, context):
                 ON Days.user_id = Users.id
                 INNER JOIN Events
                 ON Events.days_id = Days.id
-                WHERE ((Days.type = "Birthday" OR Days.type = "Holiday")
+                WHERE ((Days.type = "Birthday" OR Days.type = "Holiday" OR (Days.type = "Other" AND Days.recurring = TRUE))
                 AND DAY(Events.date) = DAY(CURDATE()) AND MONTH(Events.date) = MONTH(CURDATE()))
-                OR (Days.type = "Cancel Subscription"
+                OR ((Days.type = "Cancel Subscription" OR (Days.type = "Other" AND Days.recurring = FALSE))
                 AND DATE(Events.date) = CURDATE())
                 OR (Days.type = "Father's Day"
                 AND DATE_ADD( %s, INTERVAL -Events.days_till DAY) = CURDATE())
