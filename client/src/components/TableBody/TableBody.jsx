@@ -5,30 +5,31 @@ import moment from "moment";
 
 import TableRow from "../TableRow/TableRow.jsx";
 
-const formatDate = (momentDate, type) => {
+const formatDate = (momentDate, type, recurring) => {
   if (type === "Holiday") {
     return momentDate.format("MMMM Do");
+  } else if (type === "Other") {
+    if (recurring) {
+      return momentDate.format("MMMM Do");
+    } else {
+      return momentDate.format("MMMM Do YYYY");
+    }
   } else {
     return momentDate.format("MMMM Do YYYY");
   }
 };
 
-const daysToString = (daysAway) => {
+const daysToString = (daysAway, recurring) => {
   if (!daysAway) {
     return "today!";
-  } else if (daysAway < 0) {
+  } else if (daysAway < 0 && !recurring) {
     return "past";
   } else {
     return daysAway.toString();
   }
 };
 
-const TableBody = ({
-  name,
-  dateItems,
-  eventType,
-  handleSelectEvent,
-}) => {
+const TableBody = ({ name, dateItems, eventType, handleSelectEvent }) => {
   dateItems.sort((a, b) => a.days_away - b.days_away);
 
   return (
@@ -41,7 +42,7 @@ const TableBody = ({
         </tr>
       </thead>
       <tbody>
-        {dateItems.map(({ day_id, days_away, date, type, name }, index) => {
+        {dateItems.map(({ day_id, days_away, date, type, name, recurring }, index) => {
           if (type === "Father's Day" || type === "Mother's Day") {
             type = "Holiday";
           }
@@ -50,9 +51,9 @@ const TableBody = ({
             return (
               <TableRow
                 key={`${index + 1}`}
-                date={formatDate(momentDate, type)}
+                date={formatDate(momentDate, type, recurring)}
                 name={name}
-                daysAway={daysToString(days_away)}
+                daysAway={daysToString(days_away, recurring)}
                 handleSelectEvent={handleSelectEvent}
                 day_id={day_id}
               />

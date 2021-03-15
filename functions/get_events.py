@@ -31,8 +31,8 @@ def send_res(status, body):
     }
 
 
-def relative_date(current_dt, event_dt, e_type):
-    if e_type == 'Birthday' or e_type == 'Holiday':
+def relative_date(current_dt, event_dt, e_type, recurring):
+    if e_type == 'Birthday' or e_type == 'Holiday' or (e_type == 'Other' and recurring):
         this_year_event = datetime(year=current_dt.year, month=event_dt.month, day=event_dt.day)
         next_year_event = datetime(year=current_dt.year + 1, month=event_dt.month, day=event_dt.day)
 
@@ -84,7 +84,7 @@ def lambda_handler(event, context):
         ) as cnx:
             with cnx.cursor() as cursor:
                 get_events_query = """
-                SELECT CAST(date AS CHAR), date, type, name, id FROM Days
+                SELECT CAST(date AS CHAR), date, type, name, id, recurring FROM Days
                 WHERE user_id = (SELECT id FROM Users WHERE email = "%s")
                 ORDER BY date ASC
                 """ % user_email
@@ -93,18 +93,19 @@ def lambda_handler(event, context):
 
                 format_res = []
                 for result in results:
-                    date_str, dt, e_type, name, day_id = result
+                    date_str, dt, e_type, name, day_id, recurring = result
                     if e_type == 'Father\'s Day' or e_type == 'Mother\'s Day':
                         dt = get_next_parents_day(now, e_type)
                         date_str = dt.strftime('%Y-%m-%d %H:%M:%S')
-                    days_away = relative_date(now, dt, e_type)
+                    days_away = relative_date(now, dt, e_type, recurring)
 
                     format_res.append({
                         'date': date_str,
                         'type': e_type,
                         'name': name,
                         'days_away': days_away,
-                        'day_id': day_id
+                        'day_id': day_id,
+                        'recurring': recurring
                     })
 
                 return send_res(200, {
