@@ -86,7 +86,7 @@ def lambda_handler(event, context):
                 return send_res(200, {
                     'success': True,
                     'info': None,
-                    'message': f'User\'s {update[0]} updated'
+                    'message': f'User updated'
                 })
     except TwilioException as te:
         print(te)

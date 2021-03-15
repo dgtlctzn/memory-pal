@@ -8,7 +8,7 @@ import {
   Input,
   Spinner,
   // FormText,
-  // FormFeedback,
+  FormFeedback,
 } from "reactstrap";
 
 import ThinkingContext from "../../Context/ThinkingContext.js";
@@ -20,7 +20,7 @@ const UserInfoForm = ({
   userInfo,
   handleInputChange,
   handleNext,
-  isInvalid
+  isInvalid,
 }) => {
   const { thinking } = useContext(ThinkingContext);
 
@@ -38,6 +38,11 @@ const UserInfoForm = ({
           placeholder={desc}
           invalid={isInvalid}
         />
+        {isInvalid ? (
+          <FormFeedback>Please enter a valid phone number!</FormFeedback>
+        ) : (
+          ""
+        )}
       </FormGroup>
       {userInfo[desc] ? (
         <div>
@@ -64,7 +69,7 @@ UserInfoForm.propTypes = {
   userInfo: PropTypes.object,
   handleInputChange: PropTypes.func,
   handleNext: PropTypes.func,
-  isInvalid: PropTypes.bool
+  isInvalid: PropTypes.bool,
 };
 
 export default UserInfoForm;
