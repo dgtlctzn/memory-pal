@@ -66,6 +66,8 @@ const Home = () => {
         setName("Mother's Day");
         break;
       default:
+        setDate(new Date(2021, 1, 14));
+        setName("Valentine's Day");
         break;
     }
   };

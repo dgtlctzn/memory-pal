@@ -21,7 +21,7 @@ import ThinkingContext from "../../Context/ThinkingContext";
 
 const formOptions = {
   Birthday: { text: "What is their name?", label: "Birth Date" },
-  Holiday: { text: "Which holiday is it?", label: "Date of Holiday" },
+  // Holiday: { text: "Which holiday is it?", label: "Date of Holiday" },
   "Cancel Subscription": {
     text: "What service would you like to cancel?",
     label: "Date to Cancel By",
@@ -91,9 +91,11 @@ const AddEvent = ({
                   >
                     <option value="Select">Select</option>
                     <option value="Birthday">Birthday</option>
-                    <option value="Holiday">Holiday</option>
                     <option value="Father's Day">Father&apos;s Day</option>
                     <option value="Mother's Day">Mother&apos;s Day</option>
+                    <option value="Holiday">
+                      Valentine&apos;s Day
+                    </option>
                     <option value="Cancel Subscription">
                       Cancel Subscription
                     </option>
@@ -102,37 +104,37 @@ const AddEvent = ({
                 </FormGroup>
                 {event !== "Select" &&
                 event !== "Father's Day" &&
-                event !== "Mother's Day" ? (
+                event !== "Mother's Day" && 
+                event !== "Holiday" ? (
+                  // <div>
+                  //   {event !== "Holiday" ? (
                   <div>
-                    {event !== "Holiday" ? (
-                      <div>
-                        <FormGroup>
-                          <FormText>{formOptions[event].text}</FormText>
-                          <Input
-                            type="text"
-                            name="email"
-                            onChange={handleNameChange}
-                            value={name}
-                            id="exampleEmail"
-                          />
-                        </FormGroup>
-                        <Label htmlFor="exampleSelect">
-                          {formOptions[event].label}
-                        </Label>
-                        <Calendar onChange={setDate} value={date} />
-                      </div>
-                    ) : (
-                      <FormGroup>
-                        <FormText>{formOptions[event].text}</FormText>
-                        <Input type="select" name="select" id="exampleSelect">
-                          <option>Christmas</option>
-                          <option>Hanukkah</option>
-                          <option>Rosh Hashanah</option>
-                        </Input>
-                      </FormGroup>
-                    )}
+                    <FormGroup>
+                      <FormText>{formOptions[event].text}</FormText>
+                      <Input
+                        type="text"
+                        name="email"
+                        onChange={handleNameChange}
+                        value={name}
+                        id="exampleEmail"
+                      />
+                    </FormGroup>
+                    <Label htmlFor="exampleSelect">
+                      {formOptions[event].label}
+                    </Label>
+                    <Calendar onChange={setDate} value={date} />
                   </div>
                 ) : (
+                  //   ) : (
+                  //     <FormGroup>
+                  //       <FormText>{formOptions[event].text}</FormText>
+                  //       <Input type="select" name="select" id="exampleSelect">
+                  //         <option>Christmas</option>
+                  //         <option>Valentine&apos;s Day</option>
+                  //       </Input>
+                  //     </FormGroup>
+                  //   )}
+                  // </div>
                   ""
                 )}
               </Form>
