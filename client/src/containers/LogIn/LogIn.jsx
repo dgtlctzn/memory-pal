@@ -74,6 +74,7 @@ const Login = () => {
             isInvalid={isInvalid}
             signUp={false}
           />
+          <hr/>
           <Link to="/">Don&apos;t have an account? Sign up!</Link>
         </Col>
       </Row>

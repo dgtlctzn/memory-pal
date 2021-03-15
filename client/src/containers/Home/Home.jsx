@@ -191,7 +191,7 @@ const Home = () => {
 
   const handleRecurringCheck = () => {
     setRecurring(!recurring);
-  }
+  };
 
   return (
     <Container>
