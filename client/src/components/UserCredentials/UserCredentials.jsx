@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useContext } from "react";
 import {
   Button,
   Form,
@@ -12,6 +12,7 @@ import {
 } from "reactstrap";
 
 import "./UserCredentials.css";
+import ThinkingContext from "../../Context/ThinkingContext";
 
 const UserCredentials = ({
   credentials,
@@ -19,8 +20,9 @@ const UserCredentials = ({
   handleUserCredentials,
   isInvalid,
   signUp,
-  thinking,
 }) => {
+  const { thinking } = useContext(ThinkingContext);
+
   return (
     <Form onSubmit={handleUserCredentials}>
       <FormGroup>

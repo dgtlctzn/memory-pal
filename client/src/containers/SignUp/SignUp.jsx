@@ -12,7 +12,7 @@ import UserCredentials from "../../components/UserCredentials/UserCredentials.js
 const SignUp = () => {
   const history = useHistory();
   const { setJwt } = useContext(AuthContext);
-  const { thinking, setThinking } = useContext(ThinkingContext);
+  const { setThinking } = useContext(ThinkingContext);
 
   const [credentials, setCredentials] = useState({
     email: "",
@@ -29,15 +29,14 @@ const SignUp = () => {
   const handleUserCredentials = async (e) => {
     e.preventDefault();
 
-    setThinking(true);
     const { email, password } = credentials;
     try {
       if (!email || !password) {
         setIsInvalid(true);
         return;
       }
+      setThinking(true);
       const { data } = await API.signUpUser(email, password);
-      console.log(data);
       if (!data.success) {
         setIsInvalid(true);
       } else {
@@ -77,7 +76,7 @@ const SignUp = () => {
               handleUserCredentials={handleUserCredentials}
               isInvalid={isInvalid}
               signUp={true}
-              thinking={thinking}
+              // thinking={thinking}
             />
             <Link to="/login">Already have an account? Log In</Link>
           </Col>

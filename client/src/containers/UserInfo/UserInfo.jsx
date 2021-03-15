@@ -15,15 +15,15 @@ const formQuestions = [
     text: "What name do you go by?",
   },
   {
-    desc: "phone",
-    type: "text",
-    text: "What phone number would you like your reminder texts to be sent to?",
-  },
-  {
     desc: "birthday",
     type: "date",
     text:
       "What's your birthday? We'd like to wish you a happy birthday when it rolls around!",
+  },
+  {
+    desc: "phone",
+    type: "text",
+    text: "What phone number would you like your reminder texts to be sent to?",
   },
 ];
 
@@ -32,8 +32,8 @@ const UserInfo = () => {
   const { jwt } = useContext(AuthContext);
   const { setThinking } = useContext(ThinkingContext);
 
+  const [isInvalid, setIsInvalid] = useState(false);
   const [page, setPage] = useState(0);
-
   const [userInfo, setUserInfo] = useState({
     name: "",
     phone: "",
@@ -57,30 +57,22 @@ const UserInfo = () => {
     e.preventDefault();
 
     try {
-      // setThinking(true);
-      // const { name, phone, birthday } = userInfo;
-      // switch (page) {
-      //   case 0:
-      //     await API.addUserInfo(jwt, name, null, null);
-      //     break;
-      //   case 1:
-      //     await API.addUserInfo(jwt, null, phone, null);
-      //     break;
-      //   case 2:
-      //     await API.addUserInfo(jwt, null, null, birthday);
-      //     break;
-      //   default:
-      //     setThinking(false);
-      // }
       const next = page + 1;
       if (next < 3) {
         setPage(next);
       } else {
         setThinking(true);
         const { name, phone, birthday } = userInfo;
-        await API.addUserInfo(jwt, name, phone, birthday);
-        setThinking(false);
-        history.push("/home");
+        const { data } = await API.addUserInfo(jwt, name, phone, birthday);
+        console.log(data);
+        if (!data.success) {
+          setThinking(false);
+          setIsInvalid(true);
+          setPage(2);
+        } else {
+          setThinking(false);
+          history.push("/home");
+        }
       }
     } catch (err) {
       console.log(err);
@@ -90,7 +82,11 @@ const UserInfo = () => {
   return (
     <Container>
       <Row>
-        <Col className="user-info-form" xs={{ size: 10, offset: 1 }} lg={{ size: 4, offset: 4 }}>
+        <Col
+          className="user-info-form"
+          xs={{ size: 10, offset: 1 }}
+          lg={{ size: 4, offset: 4 }}
+        >
           {formQuestions.map((item, index) => {
             return index === page ? (
               <UserInfoForm
@@ -101,6 +97,7 @@ const UserInfo = () => {
                 userInfo={userInfo}
                 handleNext={handleNext}
                 handleInputChange={handleInputChange}
+                isInvalid={isInvalid}
               />
             ) : (
               ""

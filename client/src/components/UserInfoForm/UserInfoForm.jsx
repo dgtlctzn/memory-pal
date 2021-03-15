@@ -20,6 +20,7 @@ const UserInfoForm = ({
   userInfo,
   handleInputChange,
   handleNext,
+  isInvalid
 }) => {
   const { thinking } = useContext(ThinkingContext);
 
@@ -35,6 +36,7 @@ const UserInfoForm = ({
           onChange={handleInputChange}
           //   id="exampleEmail"
           placeholder={desc}
+          invalid={isInvalid}
         />
       </FormGroup>
       {userInfo[desc] ? (
@@ -62,7 +64,7 @@ UserInfoForm.propTypes = {
   userInfo: PropTypes.object,
   handleInputChange: PropTypes.func,
   handleNext: PropTypes.func,
-  thinking: PropTypes.bool,
+  isInvalid: PropTypes.bool
 };
 
 export default UserInfoForm;
