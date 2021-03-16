@@ -16,7 +16,7 @@ database = 'memory_db'
 jwt_secret = os.getenv('JWT_SECRET')
 
 
-def send_res(status, body):
+def send_res(status, body, jwt=None):
     return {
         'statusCode': status,
         'headers': {
@@ -26,6 +26,7 @@ def send_res(status, body):
             'Access-Control-Allow-Credentials': True,
             'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
             'X-Requested-With': '*',
+            'Set-Cookie': 'c1=' + jwt if jwt else None
         },
         'body': json.dumps(body)
     }
@@ -84,7 +85,7 @@ def lambda_handler(event, context):
             user_phone=user_phone
         )
         if not result:
-            return send_res(409, {
+            return send_res(200, {
                 'success': False,
                 'info': None,
                 'message': 'User already exists'
@@ -99,7 +100,7 @@ def lambda_handler(event, context):
                 'success': True,
                 'info': compact_jws,
                 'message': 'New user created'
-            })
+            }, compact_jws)
 
     except (Error, Exception) as e:
         print(e)

@@ -2,8 +2,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import reactDOM from "react-dom";
 import React from "react";
 import App from "./App";
+import { CookiesProvider } from "react-cookie";
 
 reactDOM.render(
-    <App/>,
-    document.getElementById("root")
+  <CookiesProvider>
+    <App />
+  </CookiesProvider>,
+  document.getElementById("root")
 );

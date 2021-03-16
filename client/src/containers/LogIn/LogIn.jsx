@@ -3,15 +3,17 @@ import { useHistory, Link } from "react-router-dom";
 import { Row, Col, Container } from "reactstrap";
 
 import "./Login.css";
-import AuthContext from "../../Context/AuthContext.js";
-import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
 import API from "../../util/API.js";
+import AuthContext from "../../Context/AuthContext.js";
+import CookieContext from "../../Context/CookieContext";
 import ThinkingContext from "../../Context/ThinkingContext";
+import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
 
 const Login = () => {
   const history = useHistory();
   const { setJwt } = useContext(AuthContext);
   const { thinking, setThinking } = useContext(ThinkingContext);
+  const {setCookie} = useContext(CookieContext);
 
   const [credentials, setCredentials] = useState({
     email: "",
@@ -40,10 +42,12 @@ const Login = () => {
         setIsInvalid(true);
       } else {
         setJwt(data.info);
+        setCookie("c1", data.info, { path: "/" });
         history.push("/home");
       }
     } catch (err) {
       console.log(err);
+      setThinking({...thinking, credentials: false});
       alert("Our server might need a reminder too!");
     }
   };

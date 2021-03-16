@@ -1,0 +1,6 @@
+{
+    "permissions": [
+        "*://7c6hku694c.execute-api.us-east-1.amazonaws.com/post/*",
+        "webRequest"
+      ]
+}

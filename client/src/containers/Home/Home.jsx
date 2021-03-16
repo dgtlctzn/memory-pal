@@ -7,6 +7,7 @@ import "./Home.css";
 import AddEvent from "../../components/AddEvent/AddEvent.jsx";
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
+import CookieContext from "../../Context/CookieContext.js";
 import LoadingTable from "../../components/LoadingTable/LoadingTable.jsx";
 import TableBody from "../../components/TableBody/TableBody.jsx";
 import ThinkingContext from "../../Context/ThinkingContext";
@@ -14,6 +15,7 @@ import ThinkingContext from "../../Context/ThinkingContext";
 const Home = () => {
   const { jwt } = useContext(AuthContext);
   const { thinking, setThinking } = useContext(ThinkingContext);
+  const {cookie} = useContext(CookieContext);
 
   const [date, setDate] = useState(new Date());
   const [dateItems, setDateItems] = useState([]);
@@ -35,7 +37,7 @@ const Home = () => {
     try {
       setThinking({...thinking, table: true});
       const datetime = new Date().toLocaleString();
-      const { data } = await API.getEvents(jwt, datetime);
+      const { data } = await API.getEvents(cookie.c1, datetime);
       setThinking({...thinking, table: false});
       console.log(data);
       setDateItems(data.info);
