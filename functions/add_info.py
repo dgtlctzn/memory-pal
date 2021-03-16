@@ -79,7 +79,7 @@ def lambda_handler(event, context):
                 cnx.commit()
 
                 message = 'Hi this is Memory Pal! You are now signed up for text reminders. If you would like to ' \
-                          'add reminders or change your settings visit https://pensive-galileo-79bd0c.netlify.app'
+                          'add reminders or change your settings visit https://memorypal.netlify.app/'
                 st = SendText(twilio_number, twilio_SID, twilio_auth)
                 st.text(user_phone, message)
 
