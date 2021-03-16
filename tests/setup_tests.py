@@ -1,7 +1,7 @@
 import os
 
 from dotenv import load_dotenv
-from mysql.connector import connect, Error
+from mysql.connector import connect
 
 load_dotenv()
 

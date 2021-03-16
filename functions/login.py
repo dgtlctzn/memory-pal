@@ -31,18 +31,20 @@ def send_res(status, body):
     }
 
 
-def lambda_handler(event, context):
-    try:
-        body = json.loads(event.get('body'))
+class SqlConnect:
 
-        user_pass = body.get('user_pass')
-        user_email = body.get('user_email')
+    def __init__(self, host, user, password, database):
+        self.host = host
+        self.user = user
+        self.password = password
+        self.database = database
 
+    def login(self, user_email, user_pass):
         with connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
+            host=self.host,
+            user=self.user,
+            password=self.password,
+            database=self.database
         ) as cnx:
             with cnx.cursor() as cursor:
                 check_user_query = """SELECT name, password, email FROM Users WHERE email = "%s" """ % user_email
@@ -54,23 +56,35 @@ def lambda_handler(event, context):
                             'user_name': name,
                             'user_email': email
                         }
-                        compact_jws = jwt.encode(user_info, jwt_secret, algorithm='HS256')
-                        return send_res(200, {
-                            'success': True,
-                            'info': compact_jws,
-                            'message': 'User in database'
-                        })
+                        return user_info
                     else:
-                        return send_res(200, {
-                            'success': False,
-                            'info': None,
-                            'message': 'Unauthorized'
-                        })
-                return send_res(200, {
-                    'success': False,
-                    'info': None,
-                    'message': 'No user found'
-                })
+                        return None
+                return None
+
+
+def lambda_handler(event, context):
+    try:
+        body = json.loads(event.get('body'))
+
+        user_pass = body.get('user_pass')
+        user_email = body.get('user_email')
+
+        sql = SqlConnect(host, user, password, database)
+        user_info = sql.login(user_email, user_pass)
+
+        if user_info:
+            compact_jws = jwt.encode(user_info, jwt_secret, algorithm='HS256')
+            return send_res(200, {
+                'success': True,
+                'info': compact_jws,
+                'message': 'User in database'
+            })
+        else:
+            return send_res(200, {
+                'success': False,
+                'info': None,
+                'message': 'No user found'
+            })
     except (Error, Exception) as e:
         print(e)
         res_body = {

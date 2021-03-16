@@ -1,35 +1,24 @@
 import json
+import os
 
-from ..functions import login
+from ..functions.login import SqlConnect
 
+database = 'memory_db'
+local_host = 'localhost'
+local_user = 'root'
+local_password = os.getenv('LOCAL_PASS')
 
-def test_res_when_wrong_login_password():
-    event = {
-        'body': json.dumps({
-            'user_pass': 'wrong password',
-            'user_email': 'dgtlctzn7@gmail.com'
-        })
-    }
-    res = login.lambda_handler(event, None)
-    assert res['statusCode'] == 200 and not json.loads(res['body'])['success']
+sql = SqlConnect(local_host, local_user, local_password, database)
 
 
-def test_res_when_login_no_user():
-    event = {
-        'body': json.dumps({
-            'user_pass': 'password',
-            'user_email': 'donotexist@gmail.com'
-        })
-    }
-    res = login.lambda_handler(event, None)
-    assert res['statusCode'] == 200 and not json.loads(res['body'])['success']
+def test_none_when_wrong_login_password():
+    assert not sql.login('test@user.com', 'wrong password')
 
 
-def test_200_if_login_user_info_valid():
-    event = {
-        'body': json.dumps({
-            'user_pass': 'katsu',
-            'user_email': 'dgtlctzn7@gmail.com'
-        })
-    }
-    assert login.lambda_handler(event, None)['statusCode'] == 200
+def test_none_when_login_no_user():
+    assert not sql.login('notexists@user.com', 'password')
+
+
+def test_dict_if_login_user_info_valid():
+    res = sql.login('test@user.com', 'katsu')
+    assert type(res) == dict and res.get('user_email') and res.get('user_name')

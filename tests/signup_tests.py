@@ -1,15 +1,14 @@
 import json
+import os
 
-from ..functions import signup
+from ..functions.signup import SqlConnect
+
+database = 'memory_db'
+local_host = 'localhost'
+local_user = 'root'
+local_password = os.getenv('LOCAL_PASS')
 
 
-def test_res_if_signup_user_exists():
-    event = {
-        'body': json.dumps({
-            'user_pass': 'katsu',
-            'user_email': 'dgtlctzn7@gmail.com'
-        })
-    }
-    res = signup.lambda_handler(event, None)
-    assert res['statusCode'] == 200 and not json.loads(res['body'])['success']
-
+def test_false_if_signup_user_exists():
+    sql = SqlConnect(local_host, local_user, local_password, database)
+    assert not sql.signup('test@user.com', 'Test User', user_pass='katsu', user_phone=4043583607)
