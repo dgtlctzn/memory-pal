@@ -11,10 +11,12 @@ main:
 	aws lambda update-function-code --function-name MemoryMan --zip-file fileb://memory-man-2.zip
 
 signup:
+	.venv/bin/pytest ./tests/setup_tests.py ./tests/signup_tests.py
 	cd functions && zip ../memory-signup.zip signup.py
 	aws lambda update-function-code --function-name MemoryLogin --zip-file fileb://memory-signup.zip
 
 login:
+	.venv/bin/pytest ./tests/setup_tests.py ./tests/login_tests.py
 	cd functions && zip ../memory-login.zip login.py
 	aws lambda update-function-code --function-name MemoryLogUserIn --zip-file fileb://memory-login.zip
 
@@ -39,6 +41,7 @@ delete_event:
 	aws lambda update-function-code --function-name MemoryDeleteEvent --zip-file fileb://memory-delete-event.zip
 
 text_events:
+	.venv/bin/pytest ./tests/setup_tests.py ./tests/event_text_tests.py
 	cd functions && zip ../memory-text-events.zip text_events.py
 	aws lambda update-function-code --function-name MemoryTextEvents --zip-file fileb://memory-text-events.zip
 
