@@ -5,12 +5,14 @@ import { Row, Col } from "reactstrap";
 import "./SignUp.css";
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
+import CookieContext from "../../Context/CookieContext";
 import phoneIMG from "../../images/text-phone.png";
 import ThinkingContext from "../../Context/ThinkingContext.js";
 import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
 
 const SignUp = () => {
   const history = useHistory();
+  const { setCookie } = useContext(CookieContext);
   const { setJwt } = useContext(AuthContext);
   const { thinking, setThinking } = useContext(ThinkingContext);
 
@@ -34,13 +36,14 @@ const SignUp = () => {
         setIsInvalid(true);
         return;
       }
-      setThinking({...thinking, credentials: true});
+      setThinking({ ...thinking, credentials: true });
       const { data } = await API.signUpUser(email, password);
-      setThinking({...thinking, credentials: false});
+      setThinking({ ...thinking, credentials: false });
       if (!data.success) {
         setIsInvalid(true);
       } else {
         setJwt(data.info);
+        setCookie("c1", data.info, { path: "/" });
         history.push("/info");
       }
     } catch (err) {
@@ -76,7 +79,7 @@ const SignUp = () => {
               signUp={true}
               // thinking={thinking}
             />
-            <hr/>
+            <hr />
             <Link to="/login">Already have an account? Log In</Link>
           </Col>
         </Row>

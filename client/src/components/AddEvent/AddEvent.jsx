@@ -287,7 +287,7 @@ AddEvent.propTypes = {
   handleEdit: PropTypes.func,
   handleDelete: PropTypes.func,
   handleRecurringCheck: PropTypes.func,
-  recurring: PropTypes.number,
+  recurring: PropTypes.any,
 };
 
 export default AddEvent;
