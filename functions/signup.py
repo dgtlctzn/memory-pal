@@ -31,6 +31,42 @@ def send_res(status, body):
     }
 
 
+class SqlConnect:
+
+    def __init__(self, host, user, password, database):
+        self.host = host
+        self.user = user
+        self.password = password
+        self.database = database
+
+    def signup(
+            self,
+            user_email=None,
+            user_name=None,
+            user_pass=None,
+            user_phone=None
+    ):
+        with connect(
+            host=self.host,
+            user=self.user,
+            password=self.password,
+            database=self.database
+        ) as cnx:
+            with cnx.cursor() as cursor:
+                check_user_query = """SELECT email FROM Users WHERE email = "%s" """ % user_email
+                cursor.execute(check_user_query)
+                if len(cursor.fetchall()):
+                    return False
+                else:
+                    hash_pass = pbkdf2_sha256.hash(user_pass)
+                    cursor.execute(
+                        """INSERT INTO Users (name, email, password, phone) VALUES (%s, %s, %s, %s);""",
+                        (user_name, user_email, hash_pass, user_phone)
+                    )
+                    cnx.commit()
+                    return True
+
+
 def lambda_handler(event, context):
     try:
         body = json.loads(event.get('body'))
@@ -40,39 +76,31 @@ def lambda_handler(event, context):
         user_phone = body.get('user_phone')
         user_name = body.get('user_name')
 
-        with connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
-        ) as cnx:
-            with cnx.cursor() as cursor:
-                check_user_query = """SELECT email FROM Users WHERE email = "%s" """ % user_email
-                cursor.execute(check_user_query)
-                if len(cursor.fetchall()):
-                    return send_res(409, {
-                        'success': False,
-                        'info': None,
-                        'message': 'User already exists'
-                    })
-                else:
-                    hash_pass = pbkdf2_sha256.hash(user_pass)
-                    cursor.execute(
-                        """INSERT INTO Users (name, email, password, phone) VALUES (%s, %s, %s, %s);""",
-                        (user_name, user_email, hash_pass, user_phone)
-                    )
-                    user_info = {
-                        'user_name': user_name,
-                        'user_email': user_email,
-                    }
-                    compact_jws = jwt.encode(user_info, jwt_secret, algorithm='HS256')
-                    res_body = {
-                        'success': True,
-                        'info': compact_jws,
-                        'message': 'New user created'
-                    }
-                    cnx.commit()
-                    return send_res(201, res_body)
+        sql = SqlConnect(host, user, password, database)
+        result = sql.signup(
+            user_email=user_email,
+            user_name=user_name,
+            user_pass=user_pass,
+            user_phone=user_phone
+        )
+        if not result:
+            return send_res(409, {
+                'success': False,
+                'info': None,
+                'message': 'User already exists'
+            })
+        else:
+            user_info = {
+                'user_name': user_name,
+                'user_email': user_email,
+            }
+            compact_jws = jwt.encode(user_info, jwt_secret, algorithm='HS256')
+            return send_res(201, {
+                'success': True,
+                'info': compact_jws,
+                'message': 'New user created'
+            })
+
     except (Error, Exception) as e:
         print(e)
         res_body = {

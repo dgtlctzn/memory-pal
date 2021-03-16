@@ -31,27 +31,29 @@ def send_res(status, body):
     }
 
 
-def lambda_handler(event, context):
-    try:
-        body = json.loads(event.get('body'))
+class SqlConnect:
 
-        user_jwt = body.get('user_jwt')
-        user_message = body.get('user_message')
-        day_type = body.get('day_type')
-        day_name = body.get('day_name')
-        day_map = body.get('day_map')
-        user_dt = body.get('date')
-        recurring = body.get('recurring')
+    def __init__(self, host, user, password, database):
+        self.host = host
+        self.user = user
+        self.password = password
+        self.database = database
 
-        date = datetime.strptime(user_dt, '%m/%d/%Y, %I:%M:%S %p')
-
-        user_email = jwt.decode(user_jwt, jwt_secret, algorithms="HS256")['user_email']
-
+    def add_event(
+            self,
+            day_type=None,
+            day_name=None,
+            day_map=None,
+            user_message=None,
+            user_email=None,
+            date=None,
+            recurring=None
+    ):
         with connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
+            host=self.host,
+            user=self.user,
+            password=self.password,
+            database=self.database
         ) as cnx:
             with cnx.cursor() as cursor:
                 day_info = (day_type, day_name, user_message, user_email, date, recurring)
@@ -75,12 +77,41 @@ def lambda_handler(event, context):
                 """
                 cursor.executemany(add_events_query, event_entries)
                 cnx.commit()
+                return day_id
 
-                return send_res(200, {
-                    'success': True,
-                    'info': day_id,
-                    'message': 'Day added'
-                })
+
+def lambda_handler(event, context):
+    try:
+        body = json.loads(event.get('body'))
+
+        user_jwt = body.get('user_jwt')
+        user_message = body.get('user_message')
+        day_type = body.get('day_type')
+        day_name = body.get('day_name')
+        day_map = body.get('day_map')
+        user_dt = body.get('date')
+        recurring = body.get('recurring')
+
+        date = datetime.strptime(user_dt, '%m/%d/%Y, %I:%M:%S %p')
+
+        user_email = jwt.decode(user_jwt, jwt_secret, algorithms="HS256")['user_email']
+
+        sql = SqlConnect(host, user, password, database)
+        day_id = sql.add_event(
+            day_type=day_type,
+            day_name=day_name,
+            day_map=day_map,
+            user_message=user_message,
+            user_email=user_email,
+            date=date,
+            recurring=recurring
+        )
+
+        return send_res(200, {
+            'success': True,
+            'info': day_id,
+            'message': 'Day added'
+        })
     except (Error, Exception) as e:
         print(e)
         res_body = {
@@ -89,18 +120,3 @@ def lambda_handler(event, context):
             'message': 'Internal server error'
         }
         return send_res(500, res_body)
-
-
-# if __name__ == '__main__':
-#     body = {
-#         'body': json.dumps({
-#             'user_jwt': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX25hbWUiOiJKb2pvIFBvcHBhIiwidXNlcl9lbWFpbCI6In
-#             BvcHBhN0BnbWFpbC5jb20ifQ.0lkerS75VlrU4meloaqJpT5odkY_2VcwqmHo5fpqtuw',
-#             'user_message': 'Need to buy presents',
-#             'day_type': 'Holiday',
-#             'year': 0,
-#             'day_name': 'Christmas',
-#             'day_map': [0, 6, 21]
-#         })
-#     }
-#     print(lambda_handler(body, None))

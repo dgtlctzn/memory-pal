@@ -105,34 +105,41 @@ class SendText:
                 self.text(phone, text_message)
 
 
-def get_sql_events(today, fathers_day, mothers_day):
-    with connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
-    ) as cnx:
-        with cnx.cursor() as cursor:
-            now = today.strftime('%Y-%m-%d')
-            parents_days = (today.day, today.month, now, fathers_day, now, mothers_day, now)
-            text_events_query = """
-            SELECT Users.phone, Days.name, Days.type, Events.days_till, Events.date, Days.message
-            FROM Users
-            INNER JOIN Days
-            ON Days.user_id = Users.id
-            INNER JOIN Events
-            ON Events.days_id = Days.id
-            WHERE ((Days.type = "Birthday" OR Days.type = "Holiday" OR (Days.type = "Other" AND Days.recurring = TRUE))
-            AND DAY(Events.date) = "%s" AND MONTH(Events.date) = "%s" )
-            OR ((Days.type = "Cancel Subscription" OR (Days.type = "Other" AND Days.recurring = FALSE))
-            AND DATE(Events.date) = %s )
-            OR (Days.type = "Father's Day"
-            AND DATE_ADD( "%s", INTERVAL -Events.days_till DAY) =  "%s" )
-            OR (Days.type = "Mother's Day"
-            AND DATE_ADD( "%s", INTERVAL -Events.days_till DAY) =  "%s" );
-            """ % parents_days
-            cursor.execute(text_events_query)
-            return cursor.fetchall()
+class SqlConnect:
+
+    def __init__(self, host, user, password, database):
+        self.host = host
+        self.user = user
+        self.password = password
+        self.database = database
+
+    def get_events(self, today, fathers_day, mothers_day):
+        with connect(
+                host=self.host,
+                user=self.user,
+                password=self.password,
+                database=self.database
+        ) as cnx:
+            with cnx.cursor() as cursor:
+                now = today.strftime('%Y-%m-%d')
+                text_events_query = f"""
+                SELECT Users.phone, Days.name, Days.type, Events.days_till, Events.date, Days.message
+                FROM Users
+                INNER JOIN Days
+                ON Days.user_id = Users.id
+                INNER JOIN Events
+                ON Events.days_id = Days.id
+                WHERE ((Days.type = "Birthday" OR Days.type = "Holiday" OR (Days.type = "Other" AND Days.recurring = TRUE))
+                AND DAY(Events.date) = "{today.day}" AND MONTH(Events.date) = "{today.month}" )
+                OR ((Days.type = "Cancel Subscription" OR (Days.type = "Other" AND Days.recurring = FALSE))
+                AND DATE(Events.date) = "{now}" )
+                OR (Days.type = "Father's Day"
+                AND DATE_ADD( "{fathers_day}", INTERVAL -Events.days_till DAY) =  "{now}" )
+                OR (Days.type = "Mother's Day"
+                AND DATE_ADD( "{mothers_day}", INTERVAL -Events.days_till DAY) =  "{now}" );
+                """
+                cursor.execute(text_events_query)
+                return cursor.fetchall()
 
 
 def lambda_handler(event, context):
@@ -145,7 +152,8 @@ def lambda_handler(event, context):
         fathers_day = get_fathers_day(curr_year)
         mothers_day = get_mothers_day(curr_year)
 
-        results = get_sql_events(now, fathers_day, mothers_day)
+        sql = SqlConnect(host, user, password, database)
+        results = sql.get_events(now, fathers_day, mothers_day)
 
         st = SendText(twilio_number, twilio_SID, twilio_auth)
         for result in results:

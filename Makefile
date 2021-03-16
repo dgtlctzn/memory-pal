@@ -43,7 +43,7 @@ text_events:
 	aws lambda update-function-code --function-name MemoryTextEvents --zip-file fileb://memory-text-events.zip
 
 test:
-	.venv/bin/pytest tests.py
+	.venv/bin/pytest ./tests/*tests.py
 
 clean_zip:
 	rm memory-login.zip
