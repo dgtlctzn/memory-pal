@@ -18,6 +18,8 @@ import {
 import { NavLink } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 
+import "./NavBarAuth.css";
+
 const NavBarAuth = ({ handleLogOut }) => {
   const history = useHistory();
 
@@ -35,7 +37,7 @@ const NavBarAuth = ({ handleLogOut }) => {
       <NavbarToggler onClick={toggle} />
       <Collapse isOpen={isOpen} navbar>
         <Nav className="me-auto" navbar>
-          <NavbarText>
+          <NavbarText className="nav-bar">
             <NavLink to="/home">Home</NavLink>
           </NavbarText>
           {/* <NavItem>
@@ -44,10 +46,10 @@ const NavBarAuth = ({ handleLogOut }) => {
               </NavLink>
             </NavItem> */}
           <UncontrolledDropdown nav inNavbar>
-            <DropdownToggle nav caret>
+            <DropdownToggle className="nav-bar" nav caret>
               Account
             </DropdownToggle>
-            <DropdownMenu right>
+            <DropdownMenu className="nav-bar" right>
               <DropdownItem onClick={handleSettings}>Settings</DropdownItem>
               <DropdownItem divider />
               <DropdownItem onClick={handleLogOut}>Log out</DropdownItem>

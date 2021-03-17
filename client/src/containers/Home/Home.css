@@ -10,8 +10,12 @@
 }
 
 .type-col {
-    background-color: rgb(230, 230, 230);
+    background-color: rgb(241, 241, 241);
     margin: 10px;
     padding: 20px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.calendar-info {
+    padding: 5px;
 }

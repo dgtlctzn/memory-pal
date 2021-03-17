@@ -27,10 +27,11 @@ const App = () => {
     info: false,
     account: false
   });
+  const [username, setUsername] = useState("");
 
   return (
     <Router>
-      <AuthContext.Provider value={{ jwt, setJwt }}>
+      <AuthContext.Provider value={{ jwt, setJwt, username, setUsername }}>
         <ThinkingContext.Provider value={{ thinking, setThinking }}>
           <CookieContext.Provider value={{ cookie, setCookie, removeCookie }}>
             <Switch>

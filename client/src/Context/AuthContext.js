@@ -2,7 +2,9 @@ import {createContext} from "react";
 
 const AuthContext = createContext({
     jwt: "",
-    setJwt: () => {}
+    username: "",
+    setJwt: () => {},
+    setUsername: () => {}
 });
 
 export default AuthContext;

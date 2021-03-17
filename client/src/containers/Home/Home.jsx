@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
 import moment from "moment";
-// import { Button } from "reactstrap";
 
 import "./Home.css";
 import AddEvent from "../../components/AddEvent/AddEvent.jsx";
@@ -14,7 +13,7 @@ import TableBody from "../../components/TableBody/TableBody.jsx";
 import ThinkingContext from "../../Context/ThinkingContext";
 
 const Home = () => {
-  const { jwt, setJwt } = useContext(AuthContext);
+  const { jwt, setJwt, username } = useContext(AuthContext);
   const { thinking, setThinking } = useContext(ThinkingContext);
   const { cookie, removeCookie } = useContext(CookieContext);
 
@@ -205,30 +204,46 @@ const Home = () => {
 
   return (
     <div>
-      <NavBarAuth handleLogOut={handleLogOut}/>
+      <NavBarAuth handleLogOut={handleLogOut} />
       <Container>
         <Row className="type-col">
-          <AddEvent
-            handleToggle={handleToggle}
-            modal={modal}
-            handleSetEvent={handleSetEvent}
-            setDate={setDate}
-            date={date}
-            event={event}
-            page={page}
-            handleNextPage={handleNextPage}
-            handleAddReminder={handleAddReminder}
-            handleNameChange={handleNameChange}
-            name={name}
-            handleMessageInput={handleMessageInput}
-            message={message}
-            reminders={reminders}
-            edit={edit}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-            handleRecurringCheck={handleRecurringCheck}
-            recurring={recurring}
-          />
+          <Col xs="12" md="4">
+            <AddEvent
+              handleToggle={handleToggle}
+              modal={modal}
+              handleSetEvent={handleSetEvent}
+              setDate={setDate}
+              date={date}
+              event={event}
+              page={page}
+              handleNextPage={handleNextPage}
+              handleAddReminder={handleAddReminder}
+              handleNameChange={handleNameChange}
+              name={name}
+              handleMessageInput={handleMessageInput}
+              message={message}
+              reminders={reminders}
+              edit={edit}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+              handleRecurringCheck={handleRecurringCheck}
+              recurring={recurring}
+            />
+          </Col>
+          <Col xs="12" md="4">
+            <h5 className="calendar-info text-left">
+              {moment().format("dddd, MMMM Do YYYY")}
+            </h5>
+          </Col>
+          <Col xs="12" md="4">
+            {username ? (
+              <h5 className="calendar-info">
+                {username}&apos;s Reminder Calendar
+              </h5>
+            ) : (
+              ""
+            )}
+          </Col>
         </Row>
         <Row>
           <Col xs="12" md="6">

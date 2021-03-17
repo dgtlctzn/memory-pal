@@ -77,7 +77,10 @@ def lambda_handler(event, context):
             compact_jws = jwt.encode(user_info, jwt_secret, algorithm='HS256')
             return send_res(200, {
                 'success': True,
-                'info': compact_jws,
+                'info': {
+                    'jwt': compact_jws,
+                    'user_name': user_info.get('user_name')
+                },
                 'message': 'User in database'
             }, compact_jws)
         else:
