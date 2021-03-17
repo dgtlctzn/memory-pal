@@ -6,14 +6,15 @@ import "./Login.css";
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
 import CookieContext from "../../Context/CookieContext";
-import ThinkingContext from "../../Context/ThinkingContext";
+import NavBar from "../../components/NavBar/NavBar.jsx";
+import ThinkingContext from "../../Context/ThinkingContext.js";
 import UserCredentials from "../../components/UserCredentials/UserCredentials.jsx";
 
 const Login = () => {
   const history = useHistory();
   const { setJwt } = useContext(AuthContext);
   const { thinking, setThinking } = useContext(ThinkingContext);
-  const {setCookie} = useContext(CookieContext);
+  const { setCookie } = useContext(CookieContext);
 
   const [credentials, setCredentials] = useState({
     email: "",
@@ -35,9 +36,9 @@ const Login = () => {
         setIsInvalid(true);
         return;
       }
-      setThinking({...thinking, credentials: true});
+      setThinking({ ...thinking, credentials: true });
       const { data } = await API.loginUser(email, password);
-      setThinking({...thinking, credentials: false});
+      setThinking({ ...thinking, credentials: false });
       if (!data.success) {
         setIsInvalid(true);
       } else {
@@ -47,42 +48,45 @@ const Login = () => {
       }
     } catch (err) {
       console.log(err);
-      setThinking({...thinking, credentials: false});
+      setThinking({ ...thinking, credentials: false });
       alert("Our server might need a reminder too!");
     }
   };
 
   return (
-    <Container>
-      <Row>
-        <Col xs={{ size: 12 }} lg={{ size: 12 }}>
-          <h1 id="login-header" className="text-center">
-            Memory Pal
-          </h1>
-          <p id="login-text" className="text-center">
-            Add events, set reminders, get text updates
-          </p>
-        </Col>
-      </Row>
-      <Row>
-        <Col
-          id="login-box"
-          xs={{ size: 10, offset: 1 }}
-          lg={{ size: 4, offset: 4 }}
-        >
-          <h1 className="directions">Log In</h1>
-          <UserCredentials
-            credentials={credentials}
-            handleInputChange={handleInputChange}
-            handleUserCredentials={handleUserCredentials}
-            isInvalid={isInvalid}
-            signUp={false}
-          />
-          <hr/>
-          <Link to="/">Don&apos;t have an account? Sign up!</Link>
-        </Col>
-      </Row>
-    </Container>
+    <div>
+      <NavBar />
+      <Container>
+        <Row>
+          <Col xs={{ size: 12 }} lg={{ size: 12 }}>
+            <h1 id="login-header" className="text-center">
+              Memory Pal
+            </h1>
+            <p id="login-text" className="text-center">
+              Add events, set reminders, get text updates
+            </p>
+          </Col>
+        </Row>
+        <Row>
+          <Col
+            id="login-box"
+            xs={{ size: 10, offset: 1 }}
+            lg={{ size: 4, offset: 4 }}
+          >
+            <h1 className="directions">Log In</h1>
+            <UserCredentials
+              credentials={credentials}
+              handleInputChange={handleInputChange}
+              handleUserCredentials={handleUserCredentials}
+              isInvalid={isInvalid}
+              signUp={false}
+            />
+            <hr />
+            <Link to="/">Don&apos;t have an account? Sign up!</Link>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 

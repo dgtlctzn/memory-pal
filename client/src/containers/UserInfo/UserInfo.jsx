@@ -5,6 +5,7 @@ import { Row, Col, Container } from "reactstrap";
 import "./UserInfo.css";
 import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
+import NavBar from "../../components/NavBar/NavBar.jsx";
 import ThinkingContext from "../../Context/ThinkingContext.js";
 import UserInfoForm from "../../components/UserInfoForm/UserInfoForm.jsx";
 
@@ -61,11 +62,11 @@ const UserInfo = () => {
       if (next < 3) {
         setPage(next);
       } else {
-        setThinking({...thinking, info: true});
+        setThinking({ ...thinking, info: true });
         const { name, phone, birthday } = userInfo;
         const { data } = await API.addUserInfo(jwt, name, phone, birthday);
         console.log(data);
-        setThinking({...thinking, info: false});
+        setThinking({ ...thinking, info: false });
         if (!data.success) {
           setIsInvalid(true);
           setPage(2);
@@ -79,32 +80,35 @@ const UserInfo = () => {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col
-          className="user-info-form"
-          xs={{ size: 10, offset: 1 }}
-          lg={{ size: 4, offset: 4 }}
-        >
-          {formQuestions.map((item, index) => {
-            return index === page ? (
-              <UserInfoForm
-                key={index + 1}
-                desc={item.desc}
-                type={item.type}
-                text={item.text}
-                userInfo={userInfo}
-                handleNext={handleNext}
-                handleInputChange={handleInputChange}
-                isInvalid={isInvalid}
-              />
-            ) : (
-              ""
-            );
-          })}
-        </Col>
-      </Row>
-    </Container>
+    <div>
+      <NavBar />
+      <Container>
+        <Row>
+          <Col
+            className="user-info-form"
+            xs={{ size: 10, offset: 1 }}
+            lg={{ size: 4, offset: 4 }}
+          >
+            {formQuestions.map((item, index) => {
+              return index === page ? (
+                <UserInfoForm
+                  key={index + 1}
+                  desc={item.desc}
+                  type={item.type}
+                  text={item.text}
+                  userInfo={userInfo}
+                  handleNext={handleNext}
+                  handleInputChange={handleInputChange}
+                  isInvalid={isInvalid}
+                />
+              ) : (
+                ""
+              );
+            })}
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 

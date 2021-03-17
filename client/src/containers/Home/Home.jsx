@@ -9,13 +9,14 @@ import API from "../../util/API.js";
 import AuthContext from "../../Context/AuthContext.js";
 import CookieContext from "../../Context/CookieContext.js";
 import LoadingTable from "../../components/LoadingTable/LoadingTable.jsx";
+import NavBarAuth from "../../components/NavBarAuth/NavBarAuth.jsx";
 import TableBody from "../../components/TableBody/TableBody.jsx";
 import ThinkingContext from "../../Context/ThinkingContext";
 
 const Home = () => {
-  const { jwt } = useContext(AuthContext);
+  const { jwt, setJwt } = useContext(AuthContext);
   const { thinking, setThinking } = useContext(ThinkingContext);
-  const {cookie} = useContext(CookieContext);
+  const { cookie, removeCookie } = useContext(CookieContext);
 
   const [date, setDate] = useState(new Date());
   const [dateItems, setDateItems] = useState([]);
@@ -35,15 +36,15 @@ const Home = () => {
 
   const getTableInfo = async () => {
     try {
-      setThinking({...thinking, table: true});
+      setThinking({ ...thinking, table: true });
       const datetime = new Date().toLocaleString();
       const { data } = await API.getEvents(cookie.c1, datetime);
-      setThinking({...thinking, table: false});
+      setThinking({ ...thinking, table: false });
       console.log(data);
       setDateItems(data.info);
     } catch (err) {
       console.log(err);
-      setThinking({...thinking, table: false});
+      setThinking({ ...thinking, table: false });
     }
   };
 
@@ -89,7 +90,7 @@ const Home = () => {
     const newPage = page + 1;
     if (newPage === 2) {
       try {
-        setThinking({...thinking, add: true});
+        setThinking({ ...thinking, add: true });
         const { data } = await API.addEvent(
           jwt,
           message,
@@ -100,7 +101,7 @@ const Home = () => {
           recurring
         );
         console.log(data);
-        setThinking({...thinking, add: true});
+        setThinking({ ...thinking, add: true });
         handleToggle();
         getTableInfo();
       } catch (err) {
@@ -114,7 +115,7 @@ const Home = () => {
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
-      setThinking({...thinking, edit: true});
+      setThinking({ ...thinking, edit: true });
       await API.deleteEvent(jwt, eventID);
       const { data } = await API.addEvent(
         jwt,
@@ -126,11 +127,11 @@ const Home = () => {
         recurring
       );
       console.log(data);
-      setThinking({...thinking, edit: false});
+      setThinking({ ...thinking, edit: false });
       handleToggle();
       getTableInfo();
     } catch (err) {
-      setThinking({...thinking, edit: false});
+      setThinking({ ...thinking, edit: false });
       console.log(err);
     }
   };
@@ -138,13 +139,13 @@ const Home = () => {
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
-      setThinking({...thinking, delete: true});
+      setThinking({ ...thinking, delete: true });
       await API.deleteEvent(jwt, eventID);
-      setThinking({...thinking, delete: false});
+      setThinking({ ...thinking, delete: false });
       getTableInfo();
       handleToggle();
     } catch (err) {
-      setThinking({...thinking, delete: false});
+      setThinking({ ...thinking, delete: false });
       console.log(err);
     }
   };
@@ -197,104 +198,112 @@ const Home = () => {
     setRecurring(!recurring);
   };
 
+  const handleLogOut = () => {
+    removeCookie("c1");
+    setJwt("");
+  };
+
   return (
-    <Container>
-      <Row className="type-col">
-        <AddEvent
-          handleToggle={handleToggle}
-          modal={modal}
-          handleSetEvent={handleSetEvent}
-          setDate={setDate}
-          date={date}
-          event={event}
-          page={page}
-          handleNextPage={handleNextPage}
-          handleAddReminder={handleAddReminder}
-          handleNameChange={handleNameChange}
-          name={name}
-          handleMessageInput={handleMessageInput}
-          message={message}
-          reminders={reminders}
-          edit={edit}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
-          handleRecurringCheck={handleRecurringCheck}
-          recurring={recurring}
-        />
-      </Row>
-      <Row>
-        <Col xs="12" md="6">
-          <div className="type-col">
-            <h2>&#127874; Birthdays</h2>
-            <div className="table-box">
-              {thinking.table ? (
-                <LoadingTable name="Name" />
-              ) : (
-                <TableBody
-                  name="Name"
-                  eventType="Birthday"
-                  dateItems={dateItems}
-                  handleSelectEvent={handleSelectEvent}
-                />
-              )}
+    <div>
+      <NavBarAuth handleLogOut={handleLogOut}/>
+      <Container>
+        <Row className="type-col">
+          <AddEvent
+            handleToggle={handleToggle}
+            modal={modal}
+            handleSetEvent={handleSetEvent}
+            setDate={setDate}
+            date={date}
+            event={event}
+            page={page}
+            handleNextPage={handleNextPage}
+            handleAddReminder={handleAddReminder}
+            handleNameChange={handleNameChange}
+            name={name}
+            handleMessageInput={handleMessageInput}
+            message={message}
+            reminders={reminders}
+            edit={edit}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            handleRecurringCheck={handleRecurringCheck}
+            recurring={recurring}
+          />
+        </Row>
+        <Row>
+          <Col xs="12" md="6">
+            <div className="type-col">
+              <h2>&#127874; Birthdays</h2>
+              <div className="table-box">
+                {thinking.table ? (
+                  <LoadingTable name="Name" />
+                ) : (
+                  <TableBody
+                    name="Name"
+                    eventType="Birthday"
+                    dateItems={dateItems}
+                    handleSelectEvent={handleSelectEvent}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        </Col>
-        <Col xs="12" md="6">
-          <div className="type-col">
-            <h2>&#127881; Holidays</h2>
-            <div className="table-box">
-              {thinking.table ? (
-                <LoadingTable name="Name" />
-              ) : (
-                <TableBody
-                  name="Name"
-                  eventType="Holiday"
-                  dateItems={dateItems}
-                  handleSelectEvent={handleSelectEvent}
-                />
-              )}
+          </Col>
+          <Col xs="12" md="6">
+            <div className="type-col">
+              <h2>&#127881; Holidays</h2>
+              <div className="table-box">
+                {thinking.table ? (
+                  <LoadingTable name="Name" />
+                ) : (
+                  <TableBody
+                    name="Name"
+                    eventType="Holiday"
+                    dateItems={dateItems}
+                    handleSelectEvent={handleSelectEvent}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Col xs="12" md="6">
-          <div className="type-col">
-            <h2>&#128198; Other</h2>
-            <div className="table-box">
-              {thinking.table ? (
-                <LoadingTable name="Name" />
-              ) : (
-                <TableBody
-                  name="Name"
-                  eventType="Other"
-                  dateItems={dateItems}
-                  handleSelectEvent={handleSelectEvent}
-                />
-              )}
+          </Col>
+        </Row>
+        <Row>
+          <Col xs="12" md="6">
+            <div className="type-col">
+              <h2>&#128198; Other</h2>
+              <div className="table-box">
+                {thinking.table ? (
+                  <LoadingTable name="Name" />
+                ) : (
+                  <TableBody
+                    name="Name"
+                    eventType="Other"
+                    dateItems={dateItems}
+                    handleSelectEvent={handleSelectEvent}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        </Col>
-        <Col xs="12" md="6">
-          <div className="type-col">
-            <h2>&#10071; Cancel Subscriptions</h2>
-            <div className="table-box">
-              {thinking.table ? (
-                <LoadingTable name="Service" />
-              ) : (
-                <TableBody
-                  name="Service"
-                  eventType="Cancel Subscription"
-                  dateItems={dateItems}
-                  handleSelectEvent={handleSelectEvent}
-                />
-              )}
+          </Col>
+          <Col xs="12" md="6">
+            <div className="type-col">
+              <h2>&#10071; Cancel Subscriptions</h2>
+              <div className="table-box">
+                {thinking.table ? (
+                  <LoadingTable name="Service" />
+                ) : (
+                  <TableBody
+                    name="Service"
+                    eventType="Cancel Subscription"
+                    dateItems={dateItems}
+                    handleSelectEvent={handleSelectEvent}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 
