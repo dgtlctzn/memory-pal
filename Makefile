@@ -45,6 +45,11 @@ text_events:
 	cd functions && zip ../memory-text-events.zip text_events.py
 	aws lambda update-function-code --function-name MemoryTextEvents --zip-file fileb://memory-text-events.zip
 
+get_user:
+	.venv/bin/pytest ./tests/setup_tests.py ./tests/get_user_tests.py
+	cd functions && zip ../memory-get-user.zip get_user.py
+	aws lambda update-function-code --function-name MemoryGetUser --zip-file fileb://memory-get-user.zip
+
 test:
 	.venv/bin/pytest ./tests/*tests.py
 
