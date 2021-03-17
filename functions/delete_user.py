@@ -4,6 +4,7 @@ import os
 import jwt
 from dotenv import load_dotenv
 from mysql.connector import connect, Error
+from twilio.rest import Client
 
 load_dotenv()
 
@@ -13,6 +14,10 @@ password = os.getenv('MYSQL_PASS')
 database = 'memory_db'
 
 jwt_secret = os.getenv('JWT_SECRET')
+
+twilio_SID = os.getenv('TWILIO_SID')
+twilio_auth = os.getenv('TWILIO_AUTH')
+twilio_number = os.getenv('TWILIO_NUMBER')
 
 
 def send_res(status, body):
@@ -30,6 +35,20 @@ def send_res(status, body):
     }
 
 
+class SendText:
+
+    def __init__(self, number, sid, auth):
+        self.__client = Client(sid, auth)
+        self.__phone_number = number
+
+    def text(self, phone, message):
+        self.__client.messages.create(
+            to=phone,
+            from_=self.__phone_number,
+            body=message
+        )
+
+
 class SqlConnect:
 
     def __init__(self, host, user, password, database):
@@ -38,7 +57,7 @@ class SqlConnect:
         self.password = password
         self.database = database
 
-    def get_user(self, user_email):
+    def delete_user(self, user_email):
         with connect(
             host=self.host,
             user=self.user,
@@ -47,21 +66,16 @@ class SqlConnect:
         ) as cnx:
             with cnx.cursor() as cursor:
                 select_user_query = f"""
-                SELECT name, email, phone, CAST(DATE(birthdate) AS CHAR) FROM Users WHERE email = "{user_email}"
+                SELECT phone FROM Users WHERE email = "{user_email}"
                 """
                 cursor.execute(select_user_query)
-                result = cursor.fetchall()
-                if len(result):
-                    name, email, phone, birthdate = result[0]
-                    user_info = {
-                        'user_name': name,
-                        'user_email': email,
-                        'user_phone': phone,
-                        'birthdate': birthdate
-                    }
-                    return user_info
-                else:
-                    return None
+                phone = cursor.fetchall()[0][0]
+                delete_user_query = f"""
+                DELETE FROM Users WHERE email = "{user_email}"
+                """
+                cursor.execute(delete_user_query)
+                cnx.commit()
+                return phone
 
 
 def lambda_handler(event, context):
@@ -71,12 +85,14 @@ def lambda_handler(event, context):
         user_email = jwt.decode(user_jwt, jwt_secret, algorithms="HS256")['user_email']
 
         db = SqlConnect(host, user, password, database)
-        user_info = db.get_user(user_email)
-
+        phone = db.delete_user(user_email)
+        message = 'You are now unsubscribed from text alerts. Goodbye from Memory Pal!'
+        st = SendText(twilio_number, twilio_SID, twilio_auth)
+        st.text(phone, message)
         return send_res(200, {
             'success': True,
-            'info': user_info,
-            'message': f'User selected'
+            'info': None,
+            'message': f'User deleted'
         })
     except (Error, Exception) as e:
         print(e)

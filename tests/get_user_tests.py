@@ -13,3 +13,7 @@ db = SqlConnect(local_host, local_user, local_password, database)
 def test_user_info_expect_dict_of_length_4():
     res = db.get_user('test@user.com')
     assert type(res) == dict and len(res) == 4
+
+
+def test_no_user_expect_none():
+    assert not db.get_user('nonexistent@user.com')

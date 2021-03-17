@@ -50,6 +50,11 @@ get_user:
 	cd functions && zip ../memory-get-user.zip get_user.py
 	aws lambda update-function-code --function-name MemoryGetUser --zip-file fileb://memory-get-user.zip
 
+delete_user:
+	.venv/bin/pytest ./tests/setup_tests.py
+	cd functions && zip ../memory-delete-user.zip delete_user.py
+	aws lambda update-function-code --function-name MemoryDeleteUser --zip-file fileb://memory-delete-user.zip
+
 test:
 	.venv/bin/pytest ./tests/*tests.py
 
