@@ -43,7 +43,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
         type: 'asset/resource',
       },
     ],
@@ -58,6 +58,7 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: path.join(__dirname, "public", "index.html"),
       filename: "index.html",
+      favicon: "./public/images/favicon.ico"
     }),
   ],
 };
