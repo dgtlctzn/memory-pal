@@ -83,6 +83,15 @@ const API = {
         Authorization: jwt
       }
     });
+  },
+  getUserInfo: function(jwt) {
+    return axios({
+      method: "GET",
+      url: this.url + "/user",
+      headers: {
+        Authorization: jwt
+      }
+    });
   }
 };
 

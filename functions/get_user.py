@@ -47,7 +47,7 @@ class SqlConnect:
         ) as cnx:
             with cnx.cursor() as cursor:
                 select_user_query = f"""
-                SELECT name, email, phone, CAST(birthdate AS CHAR) FROM Users WHERE email = "{user_email}"
+                SELECT name, email, phone, CAST(DATE(birthdate) AS CHAR) FROM Users WHERE email = "{user_email}"
                 """
                 cursor.execute(select_user_query)
                 print('this is what cursor.withrows prints: ' + str(cursor.with_rows))

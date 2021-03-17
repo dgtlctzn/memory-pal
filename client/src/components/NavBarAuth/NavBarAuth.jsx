@@ -9,8 +9,9 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
+  NavbarText,
   //   NavLink,
-  NavItem,
+//   NavItem,
   // NavbarText,
   UncontrolledDropdown,
 } from "reactstrap";
@@ -30,13 +31,13 @@ const NavBarAuth = ({ handleLogOut }) => {
 
   return (
     <Navbar color="light" light expand="md">
-      <NavbarBrand href="/">Memory</NavbarBrand>
+      <NavbarBrand href="/">Memory Pal</NavbarBrand>
       <NavbarToggler onClick={toggle} />
       <Collapse isOpen={isOpen} navbar>
         <Nav className="me-auto" navbar>
-          <NavItem>
+          <NavbarText>
             <NavLink to="/home">Home</NavLink>
-          </NavItem>
+          </NavbarText>
           {/* <NavItem>
               <NavLink to="https://github.com/reactstrap/reactstrap">
                 GitHub

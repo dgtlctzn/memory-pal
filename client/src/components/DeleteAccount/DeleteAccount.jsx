@@ -24,6 +24,9 @@ const DeleteAccount = ({ toggleDeleteModal, deleteModal }) => {
   );
 };
 
-DeleteAccount.propTypes = {};
+DeleteAccount.propTypes = {
+    toggleDeleteModal: PropTypes.func,
+    deleteModal: PropTypes.bool
+};
 
 export default DeleteAccount;

@@ -1,16 +1,52 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Table, Container } from "reactstrap";
 
+import API from "../../util/API.js";
+import AuthContext from "../../Context/AuthContext.js";
+import CookieContext from "../../Context/CookieContext.js";
 import DeleteAccount from "../../components/DeleteAccount/DeleteAccount.jsx";
 import NavBarAuth from "../../components/NavBarAuth/NavBarAuth.jsx";
 
 const UserSettings = () => {
+  const { cookie, removeCookie } = useContext(CookieContext);
+  const { setJwt } = useContext(AuthContext);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [info, setInfo] = useState({
+    user_name: "",
+    user_email: "",
+    birthdate: "",
+    user_phone: "",
+  });
+
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+
+  const getUserInfo = async () => {
+    try {
+      const { data } = await API.getUserInfo(cookie.c1);
+      const { user_name, user_email, birthdate, user_phone } = data.info;
+      setInfo({
+        user_name,
+        user_email,
+        birthdate,
+        user_phone,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const toggleDeleteModal = () => setDeleteModal(!deleteModal);
+
+  const handleLogOut = () => {
+    removeCookie("c1");
+    setJwt("");
+  };
+
   return (
     <div>
-      <NavBarAuth />
+      <NavBarAuth handleLogOut={handleLogOut}/>
       <Container>
         <h1>Account</h1>
         <Table>
@@ -23,15 +59,19 @@ const UserSettings = () => {
           <tbody>
             <tr>
               <th scope="row">name</th>
-              <td>Joe</td>
+              <td>{info.user_name}</td>
             </tr>
             <tr>
               <th scope="row">email</th>
-              <td>Joe@gmail.com</td>
+              <td>{info.user_email}</td>
             </tr>
             <tr>
               <th scope="row">birthdate</th>
-              <td>7/20/1989</td>
+              <td>{info.birthdate}</td>
+            </tr>
+            <tr>
+              <th scope="row">phone</th>
+              <td>{info.user_phone}</td>
             </tr>
           </tbody>
         </Table>
