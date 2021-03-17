@@ -26,9 +26,6 @@ const NavBar = () => {
             <NavItem>
               <NavLink to="/home">Home</NavLink>
             </NavItem>
-            <NavItem>
-              <NavLink to="/info">Info</NavLink>
-            </NavItem>
             {/* <NavItem>
               <NavLink to="https://github.com/reactstrap/reactstrap">
                 GitHub

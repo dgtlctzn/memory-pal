@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import {
   Collapse,
@@ -12,14 +12,21 @@ import {
   //   NavLink,
   NavItem,
   // NavbarText,
-  UncontrolledDropdown
+  UncontrolledDropdown,
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-const NavBarAuth = ({handleLogOut}) => {
+const NavBarAuth = ({ handleLogOut }) => {
+  const history = useHistory();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
+
+  const handleSettings = () => {
+    history.push("/settings");
+  };
 
   return (
     <Navbar color="light" light expand="md">
@@ -29,9 +36,6 @@ const NavBarAuth = ({handleLogOut}) => {
         <Nav className="me-auto" navbar>
           <NavItem>
             <NavLink to="/home">Home</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to="/info">Info</NavLink>
           </NavItem>
           {/* <NavItem>
               <NavLink to="https://github.com/reactstrap/reactstrap">
@@ -43,7 +47,7 @@ const NavBarAuth = ({handleLogOut}) => {
               Account
             </DropdownToggle>
             <DropdownMenu right>
-              <DropdownItem>Settings</DropdownItem>
+              <DropdownItem onClick={handleSettings}>Settings</DropdownItem>
               <DropdownItem divider />
               <DropdownItem onClick={handleLogOut}>Log out</DropdownItem>
             </DropdownMenu>
@@ -55,7 +59,7 @@ const NavBarAuth = ({handleLogOut}) => {
 };
 
 NavBarAuth.propTypes = {
-    handleLogOut: PropTypes.func
+  handleLogOut: PropTypes.func,
 };
 
 export default NavBarAuth;

@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
 import SignUp from "./containers/SignUp/SignUp.jsx";
 import ThinkingContext from "./Context/ThinkingContext.js";
 import UserInfo from "./containers/UserInfo/UserInfo.jsx";
+import UserSettings from "./containers/UserSettings/UserSettings.jsx";
 
 const App = () => {
   const [cookie, setCookie, removeCookie] = useCookies(["c1"]);
@@ -36,6 +37,7 @@ const App = () => {
               <Route exact path="/login" component={LogIn} />
               <ProtectedRoute exact path="/home" component={Home} />
               <ProtectedRoute exact path="/info" component={UserInfo} />
+              <ProtectedRoute exact path="/settings" component={UserSettings}/>
             </Switch>
           </CookieContext.Provider>
         </ThinkingContext.Provider>
