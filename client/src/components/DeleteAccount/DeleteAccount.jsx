@@ -5,7 +5,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 const DeleteAccount = ({ toggleDeleteModal, deleteModal }) => {
   return (
     <div>
-      <Button color="danger" onClick={toggleDeleteModal}>Delete Account</Button>
+      <Button outline color="danger" onClick={toggleDeleteModal}>Delete Account</Button>
       <Modal isOpen={deleteModal} toggle={toggleDeleteModal}>
         <ModalHeader toggle={toggleDeleteModal}>Delete Account</ModalHeader>
         <ModalBody>
