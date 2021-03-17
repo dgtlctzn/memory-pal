@@ -25,6 +25,7 @@ const App = () => {
     table: false,
     credentials: false,
     info: false,
+    account: false
   });
 
   return (
