@@ -13,7 +13,7 @@ import ThinkingContext from "../../Context/ThinkingContext";
 
 const UserSettings = () => {
   const { cookie, removeCookie } = useContext(CookieContext);
-  const { setJwt } = useContext(AuthContext);
+  const { jwt, setJwt } = useContext(AuthContext);
   const { thinking, setThinking } = useContext(ThinkingContext);
 
   const [deleteModal, setDeleteModal] = useState(false);
@@ -51,6 +51,18 @@ const UserSettings = () => {
   const handleLogOut = () => {
     removeCookie("c1");
     setJwt("");
+  };
+
+  const deleteAccount = async () => {
+    try {
+      setThinking({ ...thinking, delete: true });
+      await API.deleteUser(jwt);
+      handleLogOut();
+      setThinking({ ...thinking, delete: false });
+    } catch (err) {
+      setThinking({ ...thinking, delete: false });
+      console.log(err);
+    }
   };
 
   const format = (key) => {
@@ -99,6 +111,7 @@ const UserSettings = () => {
             <DeleteAccount
               deleteModal={deleteModal}
               toggleDeleteModal={toggleDeleteModal}
+              deleteAccount={deleteAccount}
             />
           </Col>
         </Row>

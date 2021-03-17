@@ -92,6 +92,15 @@ const API = {
         Authorization: jwt
       }
     });
+  },
+  deleteUser: function(jwt) {
+    return axios({
+      method: "DELETE",
+      url: this.url + "/user",
+      headers: {
+        Authorization: jwt
+      }
+    });
   }
 };
 
