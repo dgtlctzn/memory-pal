@@ -14,7 +14,7 @@ import UserCredentials from "../../components/UserCredentials/UserCredentials.js
 const SignUp = () => {
   const history = useHistory();
   const { setCookie } = useContext(CookieContext);
-  const { setJwt, setUsername } = useContext(AuthContext);
+  const { setJwt } = useContext(AuthContext);
   const { thinking, setThinking } = useContext(ThinkingContext);
 
   const [credentials, setCredentials] = useState({
@@ -44,7 +44,6 @@ const SignUp = () => {
         setIsInvalid(true);
       } else {
         setJwt(data.info.jwt);
-        setUsername(data.info.user_name);
         setCookie("c1", data.info.jwt, { path: "/" });
         history.push("/info");
       }

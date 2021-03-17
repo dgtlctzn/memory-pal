@@ -100,7 +100,6 @@ def lambda_handler(event, context):
                 'success': True,
                 'info': {
                     'jwt': compact_jws,
-                    'user_name': user_name
                 },
                 'message': 'New user created'
             }, compact_jws)

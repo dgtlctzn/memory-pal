@@ -30,7 +30,7 @@ const formQuestions = [
 
 const UserInfo = () => {
   const history = useHistory();
-  const { jwt } = useContext(AuthContext);
+  const { jwt, setUsername } = useContext(AuthContext);
   const { thinking, setThinking } = useContext(ThinkingContext);
 
   const [isInvalid, setIsInvalid] = useState(false);
@@ -71,6 +71,7 @@ const UserInfo = () => {
           setIsInvalid(true);
           setPage(2);
         } else {
+          setUsername(data.info);
           history.push("/home");
         }
       }
