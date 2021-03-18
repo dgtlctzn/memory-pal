@@ -67,7 +67,11 @@ const AddEvent = ({
 
   return (
     <div>
-      <Button id="add-event-button" className="text-center" onClick={handleToggle}>
+      <Button
+        id="add-event-button"
+        className="text-center"
+        onClick={handleToggle}
+      >
         Add Reminder Event
       </Button>
       <Modal isOpen={modal} toggle={handleToggle}>
@@ -165,22 +169,13 @@ const AddEvent = ({
               <Label htmlFor="exampleSelect">Time Before Event</Label>
               {radioForm.map((item, index) => (
                 <FormGroup key={index + 1} check>
-                  {reminders.includes(item.val) ? (
-                    <Input
-                      id="InputType-checkbox"
-                      value={item.val}
-                      onChange={handleAddReminder}
-                      type="checkbox"
-                      checked
-                    />
-                  ) : (
-                    <Input
-                      id="InputType-checkbox"
-                      value={item.val}
-                      onChange={handleAddReminder}
-                      type="checkbox"
-                    />
-                  )}
+                  <Input
+                    id="InputType-checkbox"
+                    value={item.val}
+                    onChange={handleAddReminder}
+                    type="checkbox"
+                    checked={reminders.includes(item.val) ? true : false}
+                  />
                   <Label htmlFor="InputType-checkbox" check>
                     {item.label}
                   </Label>
@@ -236,7 +231,8 @@ const AddEvent = ({
                 <div>
                   {thinking.edit ? (
                     <Button color="primary" onClick={handleEdit}>
-                      Save <Spinner className="spinner" size="sm" color="light" />
+                      Save{" "}
+                      <Spinner className="spinner" size="sm" color="light" />
                     </Button>
                   ) : (
                     <Button color="primary" onClick={handleEdit}>
@@ -248,7 +244,8 @@ const AddEvent = ({
                 <div>
                   {thinking.add ? (
                     <Button color="primary" onClick={handleNextPage}>
-                      Add Event <Spinner className="spinner" size="sm" color="light" />
+                      Add Event{" "}
+                      <Spinner className="spinner" size="sm" color="light" />
                     </Button>
                   ) : (
                     <Button color="primary" onClick={handleNextPage}>

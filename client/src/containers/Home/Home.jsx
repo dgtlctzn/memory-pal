@@ -58,7 +58,9 @@ const Home = () => {
     setName("");
     setReminders([]);
     setRecurring(false);
-    setPage(0);
+    setTimeout(() => {
+      setPage(0);
+    }, 500);
   };
 
   const handleSpecials = (event) => {
