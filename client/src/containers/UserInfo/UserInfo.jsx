@@ -64,6 +64,12 @@ const UserInfo = () => {
       } else {
         setThinking({ ...thinking, info: true });
         const { name, phone, birthday } = userInfo;
+        const dateArr = birthday.split("-");
+        const date = new Date(
+          parseInt(dateArr[0]),
+          parseInt(dateArr[1]) - 1,
+          parseInt(dateArr[2])
+        ).toLocaleString();
         const { data } = await API.addUserInfo(jwt, name, phone, birthday);
         console.log(data);
         setThinking({ ...thinking, info: false });
@@ -72,6 +78,7 @@ const UserInfo = () => {
           setPage(2);
         } else {
           setUsername(data.info);
+          API.addEvent(jwt, "", "User Birthday", data.info, [0], date, true);
           history.push("/home");
         }
       }
