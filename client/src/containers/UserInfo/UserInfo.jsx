@@ -71,7 +71,6 @@ const UserInfo = () => {
           parseInt(dateArr[2])
         ).toLocaleString();
         const { data } = await API.addUserInfo(jwt, name, phone, birthday);
-        console.log(data);
         setThinking({ ...thinking, info: false });
         if (!data.success) {
           setIsInvalid(true);

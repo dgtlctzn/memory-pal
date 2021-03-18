@@ -9,6 +9,7 @@ import AuthContext from "../../Context/AuthContext.js";
 import CookieContext from "../../Context/CookieContext.js";
 import LoadingTable from "../../components/LoadingTable/LoadingTable.jsx";
 import NavBarAuth from "../../components/NavBarAuth/NavBarAuth.jsx";
+import NewPopover from "../../components/NewPopover/NewPopover.jsx";
 import TableBody from "../../components/TableBody/TableBody.jsx";
 import ThinkingContext from "../../Context/ThinkingContext";
 
@@ -25,6 +26,7 @@ const Home = () => {
   const [message, setMessage] = useState("");
   const [modal, setModal] = useState(false);
   const [name, setName] = useState("");
+  const [newUser, setNewUser] = useState(false);
   const [page, setPage] = useState(0);
   const [recurring, setRecurring] = useState(false);
   const [reminders, setReminders] = useState([]);
@@ -39,7 +41,8 @@ const Home = () => {
       const datetime = new Date().toLocaleString();
       const { data } = await API.getEvents(cookie.c1, datetime);
       setThinking({ ...thinking, table: false });
-      console.log(data);
+      togglePopover(data);
+      // console.log(data);
       setDateItems(data.info);
     } catch (err) {
       console.log(err);
@@ -88,7 +91,7 @@ const Home = () => {
     if (newPage === 2) {
       try {
         setThinking({ ...thinking, add: true });
-        const { data } = await API.addEvent(
+        await API.addEvent(
           jwt,
           message,
           event,
@@ -97,7 +100,7 @@ const Home = () => {
           date.toLocaleString(),
           recurring
         );
-        console.log(data);
+        // console.log(data);
         setThinking({ ...thinking, add: true });
         handleToggle();
         getTableInfo();
@@ -200,6 +203,15 @@ const Home = () => {
     setJwt("");
   };
 
+  const togglePopover = (res) => {
+    if (!res.info.length || res.info.length === 1) {
+      setNewUser(!newUser);
+      setTimeout(() => {
+        setNewUser(false);
+      }, 6000);
+    }
+  };
+
   return (
     <div>
       <NavBarAuth handleLogOut={handleLogOut} />
@@ -227,6 +239,15 @@ const Home = () => {
               handleRecurringCheck={handleRecurringCheck}
               recurring={recurring}
             />
+            {newUser ? (
+              <NewPopover
+                togglePopover={togglePopover}
+                newUser={newUser}
+                username={username}
+              />
+            ) : (
+              ""
+            )}
           </Col>
           <Col xs="12" md="4">
             <h5 className="calendar-info text-left">
