@@ -92,6 +92,9 @@ class SendText:
                 It\'s {name} today! Wish your {'Dad' if event_type == "Father's Day" else 'Mom'} a good one.
                 '''
                 self.text(phone, text_message)
+        elif event_type == 'User Birthday':
+            text_message = 'Happy Birthday from Memory Pal!'
+            self.text(phone, text_message)
         else:
             if days_till:
                 text_message = f'''
@@ -129,7 +132,7 @@ class SqlConnect:
                 ON Days.user_id = Users.id
                 INNER JOIN Events
                 ON Events.days_id = Days.id
-                WHERE ((Days.type = "Birthday" OR Days.type = "Holiday" OR (Days.type = "Other" AND Days.recurring = TRUE))
+                WHERE ((Days.type = "Birthday" OR Days.type = "Holiday" OR ((Days.type = "Other" OR Days.type = "User Birthday") AND Days.recurring = TRUE))
                 AND DAY(Events.date) = "{today.day}" AND MONTH(Events.date) = "{today.month}" )
                 OR ((Days.type = "Cancel Subscription" OR (Days.type = "Other" AND Days.recurring = FALSE))
                 AND DATE(Events.date) = "{now}" )
