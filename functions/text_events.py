@@ -58,7 +58,7 @@ class SendText:
         if event_type == 'Birthday':
             if days_till:
                 text_message = f'''
-                {days_till} more {day_str} till it\'s {name}'s birthday! They will be {age} years old. {message}
+                {days_till} more {day_str} till it\'s {name}'s birthday! {name} will be {age} years old. {message}
                 '''
                 self.text(phone, text_message)
             else:

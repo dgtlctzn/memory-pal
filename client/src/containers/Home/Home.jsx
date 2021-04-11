@@ -128,7 +128,6 @@ const Home = () => {
         date.toUTCString(),
         recurring
       );
-      console.log(data);
       setThinking({ ...thinking, edit: false });
       handleToggle();
       getTableInfo();
