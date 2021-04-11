@@ -99,7 +99,7 @@ const Home = () => {
           event,
           name,
           reminders,
-          date.toLocaleString(),
+          date.toUTCString(),
           recurring
         );
         // console.log(data);
@@ -125,7 +125,7 @@ const Home = () => {
         event,
         name,
         reminders,
-        date.toLocaleString(),
+        date.toUTCString(),
         recurring
       );
       console.log(data);

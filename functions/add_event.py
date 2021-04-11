@@ -92,7 +92,7 @@ def lambda_handler(event, context):
         user_dt = body.get('date')
         recurring = body.get('recurring')
 
-        date = datetime.strptime(user_dt, '%m/%d/%Y, %I:%M:%S %p')
+        date = datetime.strptime(user_dt, '%a, %d %b %Y %I:%M:%S GMT')
 
         user_email = jwt.decode(user_jwt, jwt_secret, algorithms="HS256")['user_email']
 
