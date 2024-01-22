@@ -2,10 +2,10 @@ import json
 import os
 
 import jwt
+import telnyx
 from dotenv import load_dotenv
 from mysql.connector import connect, Error
-from twilio.rest import Client
-from twilio.base.exceptions import TwilioException
+
 
 load_dotenv()
 
@@ -16,22 +16,21 @@ database = 'memory_db'
 
 jwt_secret = os.getenv('JWT_SECRET')
 
-twilio_SID = os.getenv('TWILIO_SID')
-twilio_auth = os.getenv('TWILIO_AUTH')
-twilio_number = os.getenv('TWILIO_NUMBER')
+telnyx.api_key = os.getenv('TELNYX_API_KEY')
+telnyx_number = os.getenv('TELNYX_NUMBER')
 
 
 class SendText:
 
-    def __init__(self, number, sid, auth):
-        self.__client = Client(sid, auth)
+    def __init__(self, number):
+        self.__client = telnyx
         self.__phone_number = number
 
     def text(self, phone, message):
-        self.__client.messages.create(
-            to=phone,
+        self.__client.Message.create(
+            to=f"+1{phone}",
             from_=self.__phone_number,
-            body=message
+            text=message
         )
 
 
@@ -80,7 +79,7 @@ def lambda_handler(event, context):
 
                 message = 'Hi this is Memory Pal! You are now signed up for text reminders. If you would like to ' \
                           'add reminders or change your settings visit https://memorypal.netlify.app/'
-                st = SendText(twilio_number, twilio_SID, twilio_auth)
+                st = SendText(telnyx_number)
                 st.text(user_phone, message)
 
                 return send_res(200, {
@@ -88,13 +87,6 @@ def lambda_handler(event, context):
                     'info': user_name,
                     'message': f'User updated'
                 })
-    except TwilioException as te:
-        print(te)
-        return send_res(200, {
-            'success': False,
-            'info': None,
-            'message': 'Invalid phone number'
-        })
     except (Error, Exception) as e:
         print(e)
         return send_res(500, {
