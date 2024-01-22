@@ -1,10 +1,9 @@
-import json
 import os
 from datetime import date
 
+import telnyx
 from dotenv import load_dotenv
 from mysql.connector import connect, Error
-from twilio.rest import Client
 
 load_dotenv()
 
@@ -13,9 +12,8 @@ user = os.getenv('MYSQL_USER')
 password = os.getenv('MYSQL_PASS')
 database = 'memory_db'
 
-twilio_SID = os.getenv('TWILIO_SID')
-twilio_auth = os.getenv('TWILIO_AUTH')
-twilio_number = os.getenv('TWILIO_NUMBER')
+telnyx.api_key = os.getenv('TELNYX_API_KEY')
+telnyx_number = os.getenv('TELNYX_NUMBER')
 
 
 def parents_day(my_month, first, last):
@@ -28,15 +26,15 @@ def parents_day(my_month, first, last):
 
 class SendText:
 
-    def __init__(self, number, sid, auth):
-        self.__client = Client(sid, auth)
+    def __init__(self, number):
+        self.__client = telnyx
         self.__phone_number = number
 
     def text(self, phone, message):
-        self.__client.messages.create(
-            to=phone,
+        self.__client.Message.create(
+            to=f"+1{phone}",
             from_=self.__phone_number,
-            body=message
+            text=message
         )
 
     @staticmethod
@@ -159,7 +157,7 @@ def lambda_handler(event, context):
         sql = SqlConnect(host, user, password, database)
         results = sql.get_events(now, fathers_day, mothers_day)
 
-        st = SendText(twilio_number, twilio_SID, twilio_auth)
+        st = SendText(telnyx_number)
         for result in results:
             phone, name, event_type, days_till, birth_date, message = result
             st.text_by_type(event_type, name, days_till, phone, message, curr_year - birth_date.year)
